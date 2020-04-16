@@ -1,27 +1,43 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject"
-  },
-  "dependencies": {
-    "apio-consumer": "0.0.1-beta.1",
-    "axios": "^0.19.2",
-    "expo": "~37.0.3",
-    "qs": "^6.9.3",
-    "react": "~16.9.0",
-    "react-dom": "~16.9.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
-    "react-native-elements": "^1.2.7",
-    "react-native-vector-icons": "^6.6.0",
-    "react-native-web": "~0.11.7"
-  },
-  "devDependencies": {
-    "babel-preset-expo": "~8.1.0",
-    "@babel/core": "^7.8.6"
-  },
-  "private": true
+	"main": "src/Main.js",
+	"scripts": {
+		"start": "expo start",
+		"android": "expo start --android",
+		"ios": "expo start --ios",
+		"web": "expo start --web",
+		"prettier": "prettier --write src/",
+		"eject": "expo eject"
+	},
+	"dependencies": {
+		"@react-native-community/masked-view": "0.1.6",
+		"@react-navigation/drawer": "^5.4.1",
+		"@react-navigation/native": "^5.1.5",
+		"@react-navigation/stack": "^5.2.10",
+		"axios": "^0.19.2",
+		"expo": "~37.0.3",
+		"formik": "^2.1.4",
+		"prop-types": "^15.7.2",
+		"qs": "^6.9.3",
+		"react": "~16.9.0",
+		"react-dom": "~16.9.0",
+		"react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
+		"react-native-elements": "^1.2.7",
+		"react-native-gesture-handler": "~1.6.0",
+		"react-native-reanimated": "~1.7.0",
+		"react-native-render-html": "^4.2.0",
+		"react-native-safe-area-context": "0.7.3",
+		"react-native-screens": "~2.2.0",
+		"react-native-web": "~0.11.7",
+		"react-native-webview": "8.1.1",
+		"@expo/vector-icons": "^10.0.0"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.8.6",
+		"babel-preset-expo": "~8.1.0",
+		"eslint": "^6.8.0",
+		"eslint-config-liferay": "^20.0.1",
+		"eslint-plugin-liferay": "0.0.1",
+		"prettier": "2.0.4"
+	},
+	"private": true
 }
