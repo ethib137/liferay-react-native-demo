@@ -49,7 +49,7 @@ export const asyncMultiSet = async (obj) => {
 		keyValuePairs.push([key, JSON.stringify(obj[key])]);
 	});
 
-	AsyncStorage.multiSet(keyValuePairs).catch((error) => {
+	return AsyncStorage.multiSet(keyValuePairs).catch((error) => {
 		throw new Error(error);
 	});
 };

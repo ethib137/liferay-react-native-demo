@@ -20,8 +20,8 @@ const useFetch = (
 					setLoading(false);
 					setResult(parseResult(res));
 				})
-				.catch(() => {
-					setError('Failed to load resource.');
+				.catch((err) => {
+					setError(err.status);
 					setLoading(false);
 				});
 		}

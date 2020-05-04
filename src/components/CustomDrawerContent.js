@@ -6,26 +6,16 @@ import {
 import React from 'react';
 import {Alert, View} from 'react-native';
 
+import {logoutAction} from '../actions/auth';
 import {useAppState} from '../hooks/appState';
 import {asyncKeys} from '../reducers/appReducer';
 import styles from '../styles/main';
 import {asyncMultiRemove} from '../util/async';
-import {removeAuth} from '../util/request';
 
 function CustomDrawerContent(props) {
 	const [state, dispatch] = useAppState();
 
 	const {loggedIn} = state;
-
-	const handleSignOut = () => {
-		removeAuth()
-			.then(() => {
-				dispatch({type: 'LOGGED_OUT'});
-			})
-			.catch(() => {
-				throw new Error('failed to logout');
-			});
-	};
 
 	function handleClearData() {
 		Alert.alert(
@@ -58,11 +48,11 @@ function CustomDrawerContent(props) {
 				<DrawerItemList {...props} />
 			</View>
 
-			{loggedIn && (
+			{loggedIn.value && (
 				<View>
 					<DrawerItem
 						label="Log Out"
-						onPress={() => handleSignOut()}
+						onPress={() => dispatch(logoutAction())}
 					/>
 
 					<DrawerItem

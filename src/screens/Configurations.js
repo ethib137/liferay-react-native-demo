@@ -1,28 +1,21 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import {Formik} from 'formik';
 import React from 'react';
-import {
-	Keyboard,
-	KeyboardAvoidingView,
-	Platform,
-	StyleSheet,
-	Text,
-	TouchableWithoutFeedback,
-	View,
-} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
-import {ScrollView} from 'react-native-gesture-handler';
 
-import FormikTextInput from '../components/FormikTextInput';
+import {save} from '../actions/configuration';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
+import FormContainer from '../components/form/FormContainer';
+import FormikPicker from '../components/form/FormikPicker';
+import FormikTextInput from '../components/form/FormikTextInput';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import {asyncMultiSet} from '../util/async';
 
 const Configurations = () => {
 	const [state, dispatch] = useAppState();
 
-	const {clientId, isConfigured, liferayURL} = state;
+	const {authenticationType, clientId, isConfigured, liferayURL} = state;
 
 	function hasUnsavedChanges(values) {
 		let retVal;
@@ -41,96 +34,110 @@ const Configurations = () => {
 	}
 
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<KeyboardAvoidingView
-				behavior={Platform.Os == 'ios' ? 'padding' : 'height'}
-				style={{flex: 1}}
+		<FormContainer>
+			<Formik
+				initialValues={{
+					authenticationType,
+					clientId,
+					liferayURL,
+				}}
+				onSubmit={(values, {setSubmitting}) => {
+					dispatch(save(values)).then(() => {
+						setSubmitting(false);
+					});
+				}}
+				validate={(values) => {
+					const errors = {};
+
+					if (
+						!values.clientId &&
+						values.authenticationType === 'oauth'
+					) {
+						errors.clientId = 'Required';
+					}
+
+					if (!values.liferayURL) {
+						errors.liferayURL = 'Required';
+					}
+
+					return errors;
+				}}
 			>
-				<ScrollView>
-					<Formik
-						initialValues={{
-							clientId,
-							liferayURL,
-						}}
-						onSubmit={(values, {setSubmitting}) => {
-							dispatch({
-								data: values,
-								type: 'SAVE_CONFIGURATION',
-							});
+				{(formikObj) => (
+					<View>
+						<Text
+							style={[
+								configurationStyles.status,
+								styles.p2,
+								styles.mb2,
+							]}
+						>
+							{hasUnsavedChanges(formikObj.values)
+								? 'You have unsaved changes to your configurations.'
+								: 'All changes saved.'}
 
-							asyncMultiSet(values).then(() => {
-								setSubmitting(false);
-							});
-						}}
-						validate={(values) => {
-							const errors = {};
+							{formikObj.isSubmitting && 'Saving...'}
+						</Text>
 
-							if (!values.clientId) {
-								errors.clientId = 'Required';
-							}
+						<FormikPicker
+							label="Authentication Type"
+							name="authenticationType"
+							options={[
+								{
+									label: 'Basic',
+									value: 'basic',
+								},
+								{
+									label: 'OAuth',
+									value: 'oauth',
+								},
+							]}
+							required={true}
+							{...formikObj}
+						/>
 
-							if (!values.liferayURL) {
-								errors.liferayURL = 'Required';
-							}
-
-							return errors;
-						}}
-					>
-						{(formikObj) => (
-							<View>
-								<Text
-									style={[
-										configurationStyles.status,
-										styles.p2,
-									]}
-								>
-									{hasUnsavedChanges(formikObj.values)
-										? 'You have unsaved changes to your configurations.'
-										: 'All changes saved.'}
-
-									{formikObj.isSubmitting && 'Saving...'}
-								</Text>
-
-								<FormikTextInput
-									autoCapitalize="none"
-									autoComplete="off"
-									autoCorrect={false}
-									containerStyle={styles.m2}
-									label="OAuth Client ID"
-									name={'clientId'}
-									required={true}
-									spellCheck={false}
-									{...formikObj}
-								/>
-
-								<FormikTextInput
-									autoCapitalize="none"
-									autoComplete="off"
-									autoCorrect={false}
-									containerStyle={styles.m2}
-									label="Liferay Server URL"
-									name={'liferayURL'}
-									required={true}
-									spellCheck={false}
-									{...formikObj}
-								/>
-
-								<Button
-									disabled={
-										Object.keys(formikObj.errors).length >
-											0 ||
-										!hasUnsavedChanges(formikObj.values)
-									}
-									onPress={formikObj.handleSubmit}
-									style={styles.m2}
-									title="Save Configurations"
-								/>
-							</View>
+						{formikObj.values.authenticationType === 'oauth' && (
+							<FormikTextInput
+								autoCapitalize="none"
+								autoComplete="off"
+								autoCorrect={false}
+								display="ios"
+								label="OAuth Client ID"
+								name={'clientId'}
+								required={
+									formikObj.values.authenticationType ===
+									'oauth'
+								}
+								spellCheck={false}
+								{...formikObj}
+							/>
 						)}
-					</Formik>
-				</ScrollView>
-			</KeyboardAvoidingView>
-		</TouchableWithoutFeedback>
+
+						<FormikTextInput
+							autoCapitalize="none"
+							autoComplete="off"
+							autoCorrect={false}
+							display="ios"
+							label="Liferay Server URL"
+							name={'liferayURL'}
+							required={true}
+							spellCheck={false}
+							{...formikObj}
+						/>
+
+						<Button
+							disabled={
+								Object.keys(formikObj.errors).length > 0 ||
+								!hasUnsavedChanges(formikObj.values)
+							}
+							onPress={formikObj.handleSubmit}
+							style={styles.m2}
+							title="Save Configurations"
+						/>
+					</View>
+				)}
+			</Formik>
+		</FormContainer>
 	);
 };
 

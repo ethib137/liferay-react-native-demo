@@ -1,38 +1,33 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Button, Card} from 'react-native-elements';
 
+import {loadBlogsAction} from '../actions/blogs';
 import Blog from '../components/Blog';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
-import useFetch from '../hooks/useFetch';
 import styles from '../styles/main';
 import Liferay from '../util/liferay-config';
-import {request} from '../util/request';
 
 function Blogs({navigation}) {
-	const [state] = useAppState();
+	const [state, dispatch] = useAppState();
 
-	const {site} = state;
+	const {blogs, site} = state;
 
 	const siteId = site ? site.id : null;
 
-	const [blogEntries, loading, error, handleRequest] = useFetch(
-		() => {
-			if (siteId) {
-				return request({
-					url: `/o/headless-delivery/v1.0/sites/${siteId}/blog-postings`,
-				});
-			} else {
-				return Promise.reject();
-			}
-		},
-		[siteId],
-		(res) => res.items
-	);
+	const {error, items, loading} = blogs;
+
+	const dispatchBlogs = useCallback(() => {
+		if (!loading) {
+			dispatch(loadBlogsAction());
+		}
+	}, [dispatch, loading]);
+
+	useEffect(dispatchBlogs, [siteId]);
 
 	const renderItem = ({item}) => (
 		<Card
@@ -64,22 +59,22 @@ function Blogs({navigation}) {
 	return (
 		<>
 			{error && (
-				<ErrorDisplay error={error} onRetry={() => handleRequest()} />
+				<ErrorDisplay error={error} onRetry={() => dispatchBlogs()} />
 			)}
 
-			{blogEntries && blogEntries.length === 0 && !loading && !error && (
+			{items && items.length === 0 && !loading && !error && (
 				<Text style={[styles.m2, styles.textCenter]}>
 					There are no blog entries to display.
 				</Text>
 			)}
 
-			{blogEntries && (
+			{items && (
 				<FlatList
-					data={blogEntries}
+					data={items}
 					keyExtractor={({id}) => id.toString()}
 					refreshControl={
 						<RefreshControl
-							onRefresh={() => handleRequest()}
+							onRefresh={() => dispatchBlogs()}
 							refreshing={loading}
 						/>
 					}

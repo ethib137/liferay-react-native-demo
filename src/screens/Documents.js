@@ -10,7 +10,7 @@ import {useAppState} from '../hooks/appState';
 import useFetch from '../hooks/useFetch';
 import styles from '../styles/main';
 import Liferay from '../util/liferay-config';
-import {request} from '../util/request';
+import {statefulRequest} from '../util/request';
 
 const Documents = () => {
 	const [state] = useAppState();
@@ -22,9 +22,9 @@ const Documents = () => {
 	const [documents, loading, error, handleRequest] = useFetch(
 		() => {
 			if (siteId) {
-				return request({
-					url: `/o/headless-delivery/v1.0/sites/${siteId}/documents`,
-				});
+				return statefulRequest(state)(
+					`/o/headless-delivery/v1.0/sites/${siteId}/documents`
+				);
 			} else {
 				return Promise.reject();
 			}

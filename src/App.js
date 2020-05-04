@@ -1,15 +1,16 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import React, {useEffect} from 'react';
 
+import hydrate from './actions/hydrate';
 import CustomDrawerContent from './components/CustomDrawerContent';
 import {useAppState} from './hooks/appState';
-import {asyncInit} from './reducers/appReducer';
 import Blogs from './screens/Blogs';
 import Configurations from './screens/Configurations';
 import ContentSets from './screens/ContentSets';
 import Documents from './screens/Documents';
+import FormsScreen from './screens/FormsScreen';
 import Home from './screens/Home';
-import Login from './screens/Login';
+import LoginScreen from './screens/LoginScreen';
 import Sites from './screens/Sites';
 import Splash from './screens/Splash';
 
@@ -21,18 +22,18 @@ const App = () => {
 	const {isLoading, loggedIn} = state;
 
 	useEffect(() => {
-		asyncInit(dispatch);
+		dispatch(hydrate());
 	}, [dispatch]);
 
 	return (
 		<Drawer.Navigator
 			drawerContent={(props) => <CustomDrawerContent {...props} />}
 			drawerType="back"
-			initialRouteName={loggedIn ? 'Home' : 'Home'}
+			initialRouteName={loggedIn.value ? 'Home' : 'Login'}
 		>
 			{isLoading && <Drawer.Screen component={Splash} name="Splash" />}
 
-			{!isLoading && loggedIn && (
+			{!isLoading && loggedIn.value && (
 				<>
 					<Drawer.Screen
 						component={Home}
@@ -55,6 +56,11 @@ const App = () => {
 						options={{title: 'Documents'}}
 					/>
 					<Drawer.Screen
+						component={FormsScreen}
+						name="Forms"
+						options={{title: 'Forms'}}
+					/>
+					<Drawer.Screen
 						component={Sites}
 						name="Sites"
 						options={{title: 'Select a Site'}}
@@ -62,8 +68,8 @@ const App = () => {
 				</>
 			)}
 
-			{!isLoading && !loggedIn && (
-				<Drawer.Screen component={Login} name="Login" />
+			{!isLoading && !loggedIn.value && (
+				<Drawer.Screen component={LoginScreen} name="Login" />
 			)}
 
 			<Drawer.Screen

@@ -1,73 +1,135 @@
-import {asyncMultiGet} from '../util/async';
 import Liferay from '../util/liferay-config';
 
 const initialState = {
+	authenticationType: 'basic',
+	blogs: {
+		error: null,
+		items: [],
+		loading: false,
+	},
 	clientId: undefined,
+	contentSets: {
+		error: null,
+		items: [],
+		loading: false,
+	},
 	error: undefined,
 	isConfigured: false,
 	isLoading: true,
 	liferayURL: undefined,
-	loggedIn: false,
+	loggedIn: {
+		error: null,
+		loading: true,
+		value: false,
+	},
 	site: {},
-};
-
-export const asyncKeys = ['auth', 'clientId', 'liferayURL', 'site'];
-
-const asyncInit = (dispatch) => {
-	asyncMultiGet(asyncKeys)
-		.then((resObj) => {
-			const {auth, clientId, liferayURL, site} = resObj;
-
-			dispatch({
-				data: {
-					clientId: clientId || Liferay.clientId,
-					isConfigured: clientId && liferayURL ? true : false,
-					isLoading: false,
-					liferayURL: liferayURL || Liferay.url,
-					loggedIn: auth ? true : false,
-					site: site || {},
-				},
-				type: 'ASYNC_INIT',
-			});
-		})
-		.catch(() => {
-			dispatch({
-				data: {
-					error: 'Unable to load user preferences.',
-					isLoading: false,
-				},
-				type: 'ERROR',
-			});
-		});
 };
 
 const appStateReducer = (state, action) => {
 	const {data = {}, type} = action;
 
 	switch (type) {
-		case 'ASYNC_INIT': {
-			return {
-				...state,
-				...data,
-			};
-		}
 		case 'ERROR': {
 			return {
 				...state,
 				...data,
 			};
 		}
+		case 'HYDRATE': {
+			return {
+				...state,
+				authenticationType:
+					data.authenticationType || state.authenticationType,
+				clientId: data.clientId || Liferay.clientId,
+				isConfigured: data.clientId && data.liferayURL ? true : false,
+				isLoading: false,
+				liferayURL: data.liferayURL || Liferay.url,
+				loggedIn: {
+					error: null,
+					loading: false,
+					value: data.auth ? true : false,
+				},
+				site: data.site || state.site,
+			};
+		}
+		case 'LOADED_BLOGS': {
+			return {
+				...state,
+				blogs: {
+					error: data.error,
+					items: data.items || state.blogs.items,
+					loading: false,
+				},
+			};
+		}
+		case 'LOADED_CONTENT_SETS': {
+			return {
+				...state,
+				contentSets: {
+					error: data.error,
+					items: data.items || state.contentSets.items,
+					loading: false,
+				},
+			};
+		}
+		case 'LOADING_BLOGS': {
+			return {
+				...state,
+				blogs: {
+					...state.blogs,
+					error: null,
+					loading: true,
+				},
+			};
+		}
+		case 'LOADING_CONTENT_SETS': {
+			return {
+				...state,
+				contentSets: {
+					...state.contentSets,
+					error: null,
+					loading: true,
+				},
+			};
+		}
 		case 'LOGGED_IN': {
 			return {
 				...state,
-				loggedIn: true,
+				loggedIn: {
+					error: null,
+					loading: false,
+					value: true,
+				},
 			};
 		}
 		case 'LOGGED_OUT': {
 			return {
 				...state,
-				loggedIn: false,
+				loggedIn: {
+					error: data.error,
+					loading: false,
+					value: false,
+				},
 				panelOpen: false,
+			};
+		}
+		case 'LOGGING_IN': {
+			return {
+				...state,
+				loggedIn: {
+					...state.loggedIn,
+					error: null,
+					loading: true,
+				},
+			};
+		}
+		case 'LOGGING_OUT': {
+			return {
+				...state,
+				loggedIn: {
+					...state.loggedIn,
+					loading: true,
+				},
 			};
 		}
 		case 'RESET': {
@@ -75,9 +137,10 @@ const appStateReducer = (state, action) => {
 				initialState,
 			};
 		}
-		case 'SAVE_CONFIGURATION': {
+		case 'SAVED_CONFIGURATION': {
 			return {
 				...state,
+				authenticationType: data.authenticationType,
 				clientId: data.clientId,
 				isConfigured: true,
 				liferayURL: data.liferayURL,
@@ -94,6 +157,6 @@ const appStateReducer = (state, action) => {
 	}
 };
 
-export {asyncInit, initialState};
+export {initialState};
 
 export default appStateReducer;

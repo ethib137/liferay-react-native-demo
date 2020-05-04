@@ -9,7 +9,7 @@ import {useAppState} from '../hooks/appState';
 import useFetch from '../hooks/useFetch';
 import styles from '../styles/main';
 import {asyncSet} from '../util/async';
-import {request} from '../util/request';
+import {statefulRequest} from '../util/request';
 
 const Sites = () => {
 	const [state, dispatch] = useAppState();
@@ -20,9 +20,9 @@ const Sites = () => {
 
 	const [sites, loading, error, handleRequest] = useFetch(
 		() =>
-			request({
-				url: `/o/headless-admin-user/v1.0/my-user-account/sites`,
-			}),
+			statefulRequest(state)(
+				`/o/headless-admin-user/v1.0/my-user-account/sites`
+			),
 		[],
 		(res) => res.items
 	);

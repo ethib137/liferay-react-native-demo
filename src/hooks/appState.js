@@ -1,9 +1,11 @@
-import React, {createContext, useContext, useReducer} from 'react';
+import React, {createContext, useContext} from 'react';
+
+import useThunkReducer from './useThunkReducer';
 
 const Context = createContext();
 
 export function AppStateProvider({reducer, initialState = {}, children}) {
-	const value = useReducer(reducer, initialState);
+	const value = useThunkReducer(reducer, initialState);
 
 	return <Context.Provider value={value}>{children}</Context.Provider>;
 }

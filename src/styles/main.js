@@ -1,5 +1,7 @@
 import {StyleSheet} from 'react-native';
 
+import {spacing} from './values';
+
 const stylesObj = {};
 
 const types = [
@@ -7,7 +9,7 @@ const types = [
 	['p', 'padding'],
 ];
 
-const values = [0, 8, 16, 24, 32, 40];
+const values = spacing;
 
 types.forEach((type) => {
 	values.forEach((val, i) => {

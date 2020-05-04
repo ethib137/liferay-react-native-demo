@@ -3,17 +3,20 @@ import React from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Card} from 'react-native-elements';
 
+import {useAppState} from '../hooks/appState';
 import useFetch from '../hooks/useFetch';
 import styles from '../styles/main';
-import {request} from '../util/request';
+import {statefulRequest} from '../util/request';
 import ErrorDisplay from './ErrorDisplay';
 
 const ContentSet = ({contentSetId}) => {
+	const [state] = useAppState();
+
 	const [elements, loading, error, handleRequest] = useFetch(
 		() =>
-			request({
-				url: `/o/headless-delivery/v1.0/content-sets/${contentSetId}/content-set-elements`,
-			}),
+			statefulRequest(state)(
+				`/o/headless-delivery/v1.0/content-sets/${contentSetId}/content-set-elements`
+			),
 		[contentSetId],
 		(res) => res.items
 	);
