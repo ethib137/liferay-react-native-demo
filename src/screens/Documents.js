@@ -9,7 +9,6 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import useFetch from '../hooks/useFetch';
 import styles from '../styles/main';
-import Liferay from '../util/liferay-config';
 import {statefulRequest} from '../util/request';
 
 const Documents = () => {

@@ -4,12 +4,12 @@ import {Dimensions, ScrollView, Text, View} from 'react-native';
 import {Image} from 'react-native-elements';
 import HTML from 'react-native-render-html';
 
-import styles from '../styles/main';
-import Liferay from '../util/liferay-config';
 import {useAppState} from '../hooks/appState';
+import styles from '../styles/main';
 
 const Blog = (props) => {
-	const [state, dispatch] = useAppState();
+	const [state] = useAppState();
+
 	return (
 		<ScrollView>
 			{props.image && (
@@ -20,7 +20,6 @@ const Blog = (props) => {
 			)}
 
 			<Text style={[styles.m2, styles.h1]}>{props.headline}</Text>
-			<Text></Text>
 
 			<Text style={[styles.mx2, styles.h4]}>
 				{props.alternativeHeadline}

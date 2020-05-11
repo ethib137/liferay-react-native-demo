@@ -10,7 +10,6 @@ import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import Liferay from '../util/liferay-config';
 
 function Blogs({navigation}) {
 	const [state, dispatch] = useAppState();
@@ -32,13 +31,16 @@ function Blogs({navigation}) {
 	const renderItem = ({item}) => (
 		<Card
 			image={
-				item.image ? {uri: state.liferayURL + item.image.contentUrl} : null
+				item.image
+					? {uri: state.liferayURL + item.image.contentUrl}
+					: null
 			}
 			style={[styles.m1, {width: '100%'}]}
 			title={item.headline}
 		>
 			<View>
 				<Text style={styles.mb2}>{item.alternativeHeadline}</Text>
+
 				<Button
 					onPress={() =>
 						navigation.navigate('BlogEntry', {
