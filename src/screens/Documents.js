@@ -37,7 +37,7 @@ const Documents = () => {
 		<Card
 			image={
 				item.adaptedImages[0]
-					? {uri: Liferay.url + item.adaptedImages[0].contentUrl}
+					? {uri: state.liferayURL + item.adaptedImages[0].contentUrl}
 					: null
 			}
 			style={[styles.m1, {width: '100%'}]}
