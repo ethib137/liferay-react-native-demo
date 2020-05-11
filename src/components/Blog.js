@@ -6,18 +6,21 @@ import HTML from 'react-native-render-html';
 
 import styles from '../styles/main';
 import Liferay from '../util/liferay-config';
+import {useAppState} from '../hooks/appState';
 
 const Blog = (props) => {
+	const [state, dispatch] = useAppState();
 	return (
 		<ScrollView>
 			{props.image && (
 				<Image
-					source={{uri: Liferay.url + props.image.contentUrl}}
+					source={{uri: state.liferayURL + props.image.contentUrl}}
 					style={{height: 200, width: '100%'}}
 				/>
 			)}
 
 			<Text style={[styles.m2, styles.h1]}>{props.headline}</Text>
+			<Text></Text>
 
 			<Text style={[styles.mx2, styles.h4]}>
 				{props.alternativeHeadline}

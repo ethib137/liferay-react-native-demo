@@ -32,14 +32,13 @@ function Blogs({navigation}) {
 	const renderItem = ({item}) => (
 		<Card
 			image={
-				item.image ? {uri: Liferay.url + item.image.contentUrl} : null
+				item.image ? {uri: state.liferayURL + item.image.contentUrl} : null
 			}
 			style={[styles.m1, {width: '100%'}]}
 			title={item.headline}
 		>
 			<View>
 				<Text style={styles.mb2}>{item.alternativeHeadline}</Text>
-
 				<Button
 					onPress={() =>
 						navigation.navigate('BlogEntry', {
