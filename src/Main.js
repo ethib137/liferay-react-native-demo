@@ -5,6 +5,7 @@ import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import App from './App';
+import ErrorBoundary from './components/ErrorBoundary';
 import {AppStateProvider} from './hooks/appState';
 import appStateReducer, {initialState} from './reducers/appReducer';
 
@@ -12,14 +13,16 @@ class Main extends React.Component {
 	render() {
 		return (
 			<SafeAreaProvider>
-				<NavigationContainer>
-					<AppStateProvider
-						initialState={initialState}
-						reducer={appStateReducer}
-					>
-						<App />
-					</AppStateProvider>
-				</NavigationContainer>
+				<ErrorBoundary>
+					<NavigationContainer>
+						<AppStateProvider
+							initialState={initialState}
+							reducer={appStateReducer}
+						>
+							<App />
+						</AppStateProvider>
+					</NavigationContainer>
+				</ErrorBoundary>
 			</SafeAreaProvider>
 		);
 	}
