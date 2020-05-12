@@ -134,7 +134,7 @@ const appStateReducer = (state, action) => {
 		}
 		case 'RESET': {
 			return {
-				initialState,
+				...initialState,
 			};
 		}
 		case 'SAVED_CONFIGURATION': {

@@ -7,8 +7,8 @@ import React from 'react';
 import {Alert, View} from 'react-native';
 
 import {logoutAction} from '../actions/auth';
+import {asyncKeys} from '../actions/hydrate';
 import {useAppState} from '../hooks/appState';
-import {asyncKeys} from '../reducers/appReducer';
 import styles from '../styles/main';
 import {asyncMultiRemove} from '../util/async';
 

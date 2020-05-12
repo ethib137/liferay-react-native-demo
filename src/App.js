@@ -23,7 +23,7 @@ const App = () => {
 
 	useEffect(() => {
 		dispatch(hydrate());
-	}, [dispatch]);
+	}, [dispatch, loggedIn.value]);
 
 	return (
 		<Drawer.Navigator
