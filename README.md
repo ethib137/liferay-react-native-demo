@@ -36,4 +36,12 @@ This Liferay React Native App is built using [Expo](https://expo.io/) which simp
 
 ` $ npm start`
 
+## Contributing Guidlines
+
+Before sending a pull request please make sure to run the following formatting commands. Fix any errors you see.
+
+` $ npx eslint src`
+
+` $ npm run prettier`
+
 ## Issues & Questions Welcome
