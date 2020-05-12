@@ -1,3 +1,4 @@
+import base64 from 'base-64';
 import qs from 'qs';
 
 const AUTH_URL = '/o/oauth2/token';
@@ -20,7 +21,7 @@ export default function (options = {}) {
 	}
 
 	function loginBasic({password, username}) {
-		const access_token = btoa(`${username}:${password}`);
+		const access_token = base64.encode(`${username}:${password}`);
 
 		return request('/o/headless-admin-user/v1.0/my-user-account', {
 			headers: {
