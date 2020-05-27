@@ -2,7 +2,7 @@ import {asyncRemove} from '../util/async';
 import {statefulLogin} from '../util/request';
 
 export const loginAction = (username, password) => (dispatch, getState) => {
-	dispatch('LOGGING_IN');
+	dispatch({type: 'LOGGING_IN'});
 
 	statefulLogin(getState())({
 		password,
@@ -22,7 +22,7 @@ export const loginAction = (username, password) => (dispatch, getState) => {
 };
 
 export const logoutAction = () => (dispatch) => {
-	dispatch('LOGGING_OUT');
+	dispatch({type: 'LOGGING_OUT'});
 
 	asyncRemove('auth')
 		.then(() => {
