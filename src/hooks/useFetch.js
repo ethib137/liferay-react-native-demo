@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 
 const useFetch = (
 	request,
-	dependencies = [],
+	deps = [],
 	parseResult = (res) => res,
 	defaultResult
 ) => {
@@ -33,10 +33,13 @@ const useFetch = (
 		savedCallback.current = handleRequest;
 	});
 
-	useEffect(() => {
-		savedCallback.current();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, dependencies);
+	useEffect(
+		() => {
+			savedCallback.current();
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		},
+		deps ? [savedCallback, ...deps] : [savedCallback]
+	);
 
 	return [result, loading, error, () => savedCallback.current()];
 };
