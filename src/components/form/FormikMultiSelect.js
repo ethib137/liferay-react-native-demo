@@ -5,15 +5,16 @@ import {CheckBox} from 'react-native-elements';
 
 import {colors} from '../../styles/values';
 import CollapsibleField from './CollapsibleField';
+import {getSelectedOption} from './form-util';
 
 function FormikMultiSelect(props) {
 	const {
 		containerStyle,
 		errors,
 		handleBlur,
-		items,
 		label,
 		name,
+		options,
 		required,
 		setFieldValue,
 		values,
@@ -22,23 +23,19 @@ function FormikMultiSelect(props) {
 
 	const value = values[name];
 
-	const stringValue = Object.keys(value)
-		.filter((key) => value[key])
-		.join(', ');
-
 	return (
 		<CollapsibleField
 			containerStyle={containerStyle}
 			error={errors[name]}
 			label={label}
 			required={required}
-			value={stringValue}
+			value={getSelectedOption(value, options)}
 		>
 			<View>
-				{items.map((item) => (
+				{options.map((option) => (
 					<CheckBox
 						{...otherProps}
-						checked={value[item.value]}
+						checked={value.includes(option.value)}
 						checkedIcon={
 							<Ionicons
 								color={colors.primary}
@@ -47,16 +44,26 @@ function FormikMultiSelect(props) {
 							/>
 						}
 						iconType="ionicon"
-						key={item.value}
+						key={option.value}
 						name={name}
 						onBlur={handleBlur(name)}
-						onPress={() =>
-							setFieldValue(name, {
-								...value,
-								[item.value]: !value[item.value],
-							})
-						}
-						title={item.label}
+						onPress={() => {
+							const newValue = [];
+
+							options.forEach((opt) => {
+								if (
+									(!value.includes(opt.value) &&
+										option.value === opt.value) ||
+									(value.includes(opt.value) &&
+										option.value !== opt.value)
+								) {
+									newValue.push(opt.value);
+								}
+							});
+
+							setFieldValue(name, newValue);
+						}}
+						title={option.label}
 						uncheckedIcon={
 							<Ionicons
 								color={colors.secondary}

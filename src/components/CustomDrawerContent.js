@@ -49,18 +49,18 @@ function CustomDrawerContent(props) {
 			</View>
 
 			{loggedIn.value && (
-				<View>
-					<DrawerItem
-						label="Log Out"
-						onPress={() => dispatch(logoutAction())}
-					/>
-
-					<DrawerItem
-						label="Remove All Local Data"
-						onPress={() => handleClearData()}
-					/>
-				</View>
+				<DrawerItem
+					label="Log Out"
+					onPress={() => dispatch(logoutAction())}
+				/>
 			)}
+
+			<View>
+				<DrawerItem
+					label="Remove All Local Data"
+					onPress={() => handleClearData()}
+				/>
+			</View>
 		</DrawerContentScrollView>
 	);
 }

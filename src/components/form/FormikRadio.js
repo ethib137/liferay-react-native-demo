@@ -5,15 +5,16 @@ import {CheckBox} from 'react-native-elements';
 
 import {colors} from '../../styles/values';
 import CollapsibleField from './CollapsibleField';
+import {getSelectedOption} from './form-util';
 
 function FormikRadio(props) {
 	const {
 		containerStyle,
 		errors,
 		handleBlur,
-		items,
 		label,
 		name,
+		options,
 		required,
 		setFieldValue,
 		values,
@@ -26,10 +27,10 @@ function FormikRadio(props) {
 			error={errors[name]}
 			label={label}
 			required={required}
-			value={values[name]}
+			value={getSelectedOption([values[name]], options)}
 		>
 			<View>
-				{items.map((item) => (
+				{options.map((item) => (
 					<CheckBox
 						{...otherProps}
 						checked={values[name] === item.value}

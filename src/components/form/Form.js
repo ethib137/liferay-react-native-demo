@@ -1,6 +1,6 @@
 import {Formik} from 'formik';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
 
@@ -17,120 +17,200 @@ import FormikRadio from './FormikRadio';
 import FormikTextInput from './FormikTextInput';
 import Paragraph from './Paragraph';
 
-function FormField({autoFocus, field, formikObj}) {
-	switch (field.inputControl) {
-		case 'checkbox_multiple': {
-			return (
-				<FormikMultiSelect
-					items={field.formFieldOptions}
-					label={field.label}
-					name={field.name}
-					required={field.required}
-					{...formikObj}
-				/>
-			);
-		}
-		case 'date': {
-			return (
-				<FormikDate
-					label={field.label}
-					name={field.name}
-					required={field.required}
-					{...formikObj}
-				/>
-			);
-		}
-		case 'paragraph': {
-			return (
-				<Paragraph
-					containerStyle={[styles.mx2, styles.mb1]}
-					label={field.label}
-					text={field.text}
-				/>
-			);
-		}
-		case 'select': {
-			return (
-				<FormikPicker
-					label={field.label}
-					name={field.name}
-					options={field.formFieldOptions}
-					required={field.required}
-					{...formikObj}
-				/>
-			);
-		}
-		case 'text': {
-			return (
-				<FormikTextInput
-					autoFocus={autoFocus}
-					containerStyle={[
-						styles.mb1,
-						{backgroundColor: 'rgba(0,0,0,0.1)'},
-					]}
-					multiline={field.displayStyle === 'multiline'}
-					name={field.name}
-					placeholder={field.label}
-					required={field.required}
-					style={{
-						borderRadius: 0,
-						borderWidth: 0,
-						marginTop: 8,
-						padding: 16,
-						paddingTop: 8,
-					}}
-					{...formikObj}
-				/>
-			);
-		}
-		case 'radio': {
-			return (
-				<FormikRadio
-					items={field.formFieldOptions}
-					label={field.label}
-					name={field.name}
-					required={field.required}
-					{...formikObj}
-				/>
-			);
-		}
-		default:
-			return null;
+const checkboxMultipleInput = {
+	getPredefinedValue: (formField) => {
+		return JSON.parse(formField.predefinedValue);
+	},
+	getValueForSubmit: (value) => JSON.stringify(value),
+	inputControl: 'checkbox_multiple',
+	render: (field, formikObj) => (
+		<FormikMultiSelect
+			key={field.name}
+			label={field.label}
+			name={field.name}
+			options={field.formFieldOptions}
+			required={field.required}
+			{...formikObj}
+		/>
+	),
+};
+
+const dateInput = {
+	getPredefinedValue: (formField) => {
+		return new Date(formField.predefinedValue);
+	},
+	getValueForSubmit: (value) => value.toISOString(),
+	inputControl: 'date',
+	render: (field, formikObj) => (
+		<FormikDate
+			key={field.name}
+			label={field.label}
+			name={field.name}
+			required={field.required}
+			{...formikObj}
+		/>
+	),
+};
+
+const paragraph = {
+	inputControl: 'paragraph',
+	render: (field) => (
+		<Paragraph
+			containerStyle={[styles.mx2, styles.mb1]}
+			key={field.name}
+			label={field.label}
+			text={field.text}
+		/>
+	),
+};
+
+const radioInput = {
+	getPredefinedValue: (formField) => {
+		return JSON.parse(formField.predefinedValue)[0];
+	},
+	getValueForSubmit: (value) => value,
+	inputControl: 'radio',
+	render: (field, formikObj) => (
+		<FormikRadio
+			key={field.name}
+			label={field.label}
+			name={field.name}
+			options={field.formFieldOptions}
+			required={field.required}
+			{...formikObj}
+		/>
+	),
+};
+
+const selectInput = {
+	getPredefinedValue: (formField) => {
+		return JSON.parse(formField.predefinedValue)[0];
+	},
+	getValueForSubmit: (value) => JSON.stringify([value]),
+	inputControl: 'select',
+	render: (field, formikObj) => (
+		<FormikPicker
+			key={field.name}
+			label={field.label}
+			name={field.name}
+			options={field.formFieldOptions}
+			required={field.required}
+			{...formikObj}
+		/>
+	),
+};
+
+const textInput = {
+	getPredefinedValue: (formField) => formField.predefinedValue,
+	getValueForSubmit: (value) => value,
+	inputControl: 'text',
+	render: (field, formikObj) => (
+		<FormikTextInput
+			containerStyle={[styles.mb1, {backgroundColor: 'rgba(0,0,0,0.1)'}]}
+			key={field.name}
+			multiline={field.displayStyle === 'multiline'}
+			name={field.name}
+			placeholder={field.label + (field.required ? ' (Required)' : '')}
+			required={field.required}
+			style={{
+				borderRadius: 0,
+				borderWidth: 0,
+				marginTop: 8,
+				padding: 16,
+				paddingTop: 8,
+			}}
+			{...formikObj}
+		/>
+	),
+};
+
+const fields = {};
+
+[
+	checkboxMultipleInput,
+	dateInput,
+	paragraph,
+	radioInput,
+	selectInput,
+	textInput,
+].forEach((input) => {
+	fields[input.inputControl] = input;
+});
+
+function FormField({field, formikObj}) {
+	if (fields[field.inputControl]) {
+		return fields[field.inputControl].render(field, formikObj);
+	} else {
+		return null;
 	}
+}
+
+function getInitialValues(form) {
+	const initialValues = {};
+
+	if (form) {
+		form.structure.formPages.forEach((formPage) => {
+			formPage.formFields.forEach((formField) => {
+				if (fields[formField.inputControl]) {
+					const {getPredefinedValue} = fields[formField.inputControl];
+
+					if (getPredefinedValue) {
+						initialValues[formField.name] = getPredefinedValue(
+							formField
+						);
+					}
+				}
+			});
+		});
+	}
+
+	return initialValues;
+}
+
+function submitForm(formId, values, form, state) {
+	const formFieldValues = [];
+
+	if (form) {
+		form.structure.formPages.forEach((formPage) => {
+			formPage.formFields.forEach(({inputControl, name}) => {
+				if (fields[inputControl]) {
+					const {getValueForSubmit} = fields[inputControl];
+
+					const value = values[name];
+
+					if (getValueForSubmit && value) {
+						formFieldValues.push({
+							name,
+							value: getValueForSubmit(value),
+						});
+					}
+				}
+			});
+		});
+	}
+
+	return statefulRequest(state)(
+		`/o/headless-form/v1.0/forms/${formId}/form-records`,
+		{
+			data: {
+				draft: false,
+				formFieldValues,
+			},
+			method: 'POST',
+		}
+	);
 }
 
 function Form({formId}) {
 	const [state] = useAppState();
 
-	const [form, loading, error, handleRequest] = useFetch(
+	const [form, , error, handleRequest] = useFetch(
 		() => statefulRequest(state)(`/o/headless-form/v1.0/forms/${formId}`),
 		[formId],
 		(res) => res
 	);
 
-	const initialValues = {};
-
-	if (form) {
-		form.structure.formPages.map((formPage) => {
-			formPage.formFields.map((formField) => {
-				let initialValue = '';
-
-				const {inputControl} = formField;
-
-				if (inputControl === 'date') {
-					initialValue = new Date();
-				} else if (inputControl === 'checkbox_multiple') {
-					initialValue = {};
-
-					formField.formFieldOptions.map(({value}) => {
-						initialValue[value] = false;
-					});
-				}
-
-				initialValues[formField.name] = initialValue;
-			});
-		});
-	}
+	const [loading, setLoading] = useState(false);
 
 	return (
 		<View>
@@ -141,23 +221,41 @@ function Form({formId}) {
 			{form && (
 				<FormContainer>
 					<Formik
-						initialValues={initialValues}
-						onSubmit={() => {}}
-						validate={() => {
+						initialValues={getInitialValues(form)}
+						onSubmit={(values, {resetForm, setSubmitting}) => {
+							setLoading(true);
+
+							submitForm(formId, values, form, state).then(() => {
+								resetForm();
+								setSubmitting(false);
+								setLoading(false);
+							});
+						}}
+						validate={(values) => {
 							const errors = {};
+
+							form.structure.formPages.forEach((formPage) => {
+								formPage.formFields.forEach(
+									({name, required}) => {
+										if (required && !values[name]) {
+											errors[name] = 'Required';
+										}
+									}
+								);
+							});
 
 							return errors;
 						}}
 					>
 						{(formikObj) => (
 							<>
-								<Text style={[styles.m2, styles.mb0]}>
-									{form.name}
-								</Text>
+								<Text style={[styles.m2]}>{form.name}</Text>
 
-								<Text style={[styles.mb2]}>
-									{form.description}
-								</Text>
+								{form.description.length > 0 && (
+									<Text style={[styles.mb2, styles.mx2]}>
+										{form.description}
+									</Text>
+								)}
 
 								{form.structure.formPages.map((formPage, i) => (
 									<View key={i}>
@@ -215,7 +313,7 @@ function Form({formId}) {
 }
 
 Form.propTypes = {
-	formId: PropTypes.string,
+	formId: PropTypes.number,
 };
 
 export default Form;

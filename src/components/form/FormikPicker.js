@@ -2,6 +2,7 @@ import React from 'react';
 import {Picker} from 'react-native';
 
 import CollapsibleField from './CollapsibleField';
+import {getSelectedOption} from './form-util';
 
 function FormikPicker(props) {
 	const {
@@ -16,17 +17,13 @@ function FormikPicker(props) {
 		...otherProps
 	} = props;
 
-	const selectedOption = options.find(
-		(option) => option.value === values[name]
-	);
-
 	return (
 		<CollapsibleField
 			containerStyle={containerStyle}
 			error={errors[name]}
 			label={label}
 			required={required}
-			value={selectedOption ? selectedOption.label : ''}
+			value={getSelectedOption([values[name]], options)}
 		>
 			<Picker
 				{...otherProps}

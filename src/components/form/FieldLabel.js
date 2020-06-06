@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
+import {colors, greys} from '../../styles/values';
+
 function FieldLabel(props) {
 	const {containerStyle = {}, label, required} = props;
 
@@ -20,10 +22,10 @@ const inputStyles = StyleSheet.create({
 		marginBottom: 8,
 	},
 	label: {
-		color: '#777',
+		color: greys[4],
 	},
 	required: {
-		color: '#777',
+		color: colors.danger.text,
 		marginLeft: 4,
 	},
 });

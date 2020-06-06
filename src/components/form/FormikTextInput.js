@@ -52,7 +52,9 @@ function FormikTextInput(props) {
 const inputStyles = StyleSheet.create({
 	error: {
 		color: '#F00',
-		marginTop: 8,
+		marginBottom: spacing[1],
+		marginLeft: spacing[2],
+		marginRight: spacing[2],
 	},
 	input: {
 		borderColor: '#999',

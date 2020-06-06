@@ -78,11 +78,22 @@ export default function (options = {}) {
 	}
 
 	async function request(url, options = {}) {
-		const {body, headers, method = 'GET', ...otherOptions} = options;
+		const {
+			body,
+			contentType = 'application/json',
+			data = {},
+			headers,
+			method = 'GET',
+			...otherOptions
+		} = options;
 
 		let requestHeaders = headers;
 
 		const request = {method};
+
+		if (method === 'POST') {
+			request.body = body || JSON.stringify(data);
+		}
 
 		if (!requestHeaders) {
 			const auth = await getAuth();
@@ -93,14 +104,11 @@ export default function (options = {}) {
 
 			requestHeaders = {
 				Authorization: `${auth.token_type} ${auth.access_token}`,
+				'Content-Type': contentType,
 			};
 		}
 
 		request.headers = requestHeaders;
-
-		if (body) {
-			request.body = body;
-		}
 
 		const response = await fetch(baseURL + url, {
 			...request,

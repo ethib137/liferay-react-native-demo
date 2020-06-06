@@ -3,7 +3,7 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import styles from '../../styles/main';
-import {spacing} from '../../styles/values';
+import {greys, spacing} from '../../styles/values';
 import Collapsible from '../Collapsible';
 import FieldLabel from './FieldLabel';
 
@@ -58,7 +58,9 @@ const fieldStyles = StyleSheet.create({
 	},
 	error: {
 		color: '#F00',
-		marginTop: 8,
+		marginBottom: spacing[1],
+		marginLeft: spacing[2],
+		marginRight: spacing[2],
 	},
 	header: {
 		flex: 1,
@@ -68,7 +70,7 @@ const fieldStyles = StyleSheet.create({
 		paddingBottom: spacing[1],
 	},
 	label: {
-		color: '#AAA',
+		color: greys[0],
 	},
 });
 
