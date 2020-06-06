@@ -20,13 +20,14 @@ const FormsScreen = ({navigation}) => {
 
 	const siteId = site ? site.id : null;
 
-	const {data, error, refetch, status} = useQuery('forms', () => {
-		if (siteId) {
+	const {data, error, refetch, status} = useQuery(
+		siteId && ['forms', siteId],
+		() => {
 			return statefulRequest(state)(
 				`/o/headless-form/v1.0/sites/${siteId}/forms`
 			);
 		}
-	});
+	);
 
 	const items = data ? data.items : [];
 

@@ -2,12 +2,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Card} from 'react-native-elements';
+import {useQuery} from 'react-query';
 
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
-import useFetch from '../hooks/useFetch';
 import styles from '../styles/main';
 import {statefulRequest} from '../util/request';
 
@@ -18,19 +18,16 @@ const Documents = () => {
 
 	const siteId = site ? site.id : null;
 
-	const [documents, loading, error, handleRequest] = useFetch(
+	const {data, error, refetch, status} = useQuery(
+		siteId && ['documents', siteId],
 		() => {
-			if (siteId) {
-				return statefulRequest(state)(
-					`/o/headless-delivery/v1.0/sites/${siteId}/documents`
-				);
-			} else {
-				return Promise.reject();
-			}
-		},
-		[siteId],
-		(res) => res.items
+			return statefulRequest(state)(
+				`/o/headless-delivery/v1.0/sites/${siteId}/documents`
+			);
+		}
 	);
+
+	const items = data ? data.items : [];
 
 	const renderItem = ({item}) => (
 		<Card
@@ -54,24 +51,22 @@ const Documents = () => {
 
 	return (
 		<View style={{flex: 1}}>
-			{error && (
-				<ErrorDisplay error={error} onRetry={() => handleRequest()} />
-			)}
+			{error && <ErrorDisplay error={error} onRetry={() => refetch()} />}
 
-			{documents && documents.length === 0 && !loading && !error && (
+			{items && items.length === 0 && status === 'success' && (
 				<Text style={[styles.m2, styles.textCenter]}>
 					There are no documents to display.
 				</Text>
 			)}
 
-			{documents && (
+			{items && (
 				<FlatList
-					data={documents}
+					data={items}
 					keyExtractor={({id}) => id.toString()}
 					refreshControl={
 						<RefreshControl
-							onRefresh={() => handleRequest()}
-							refreshing={loading}
+							onRefresh={() => refetch()}
+							refreshing={status === 'loading'}
 						/>
 					}
 					renderItem={(obj) => renderItem(obj)}

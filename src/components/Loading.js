@@ -28,7 +28,7 @@ function Loading(props) {
 			</View>
 		);
 	} else {
-		return children;
+		return children || null;
 	}
 }
 

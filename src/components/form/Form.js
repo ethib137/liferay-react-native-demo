@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
+import {useQuery} from 'react-query';
 
 import {useAppState} from '../../hooks/appState';
-import useFetch from '../../hooks/useFetch';
 import styles from '../../styles/main';
 import {statefulRequest} from '../../util/request';
 import ErrorDisplay from '../ErrorDisplay';
+import Loading from '../Loading';
 import FormContainer from './FormContainer';
 import FormikDate from './FormikDate';
 import FormikMultiSelect from './FormikMultiSelect';
@@ -204,110 +205,123 @@ function submitForm(formId, values, form, state) {
 function Form({formId}) {
 	const [state] = useAppState();
 
-	const [form, , error, handleRequest] = useFetch(
-		() => statefulRequest(state)(`/o/headless-form/v1.0/forms/${formId}`),
-		[formId],
-		(res) => res
+	const {data, error, refetch, status} = useQuery(
+		formId && ['form', formId],
+		() => {
+			return statefulRequest(state)(
+				`/o/headless-form/v1.0/forms/${formId}`
+			);
+		}
 	);
+
+	const form = data;
 
 	const [loading, setLoading] = useState(false);
 
 	return (
 		<View>
-			{error && (
-				<ErrorDisplay error={error} onRetry={() => handleRequest()} />
-			)}
+			{error && <ErrorDisplay error={error} onRetry={() => refetch()} />}
 
-			{form && (
-				<FormContainer>
-					<Formik
-						initialValues={getInitialValues(form)}
-						onSubmit={(values, {resetForm, setSubmitting}) => {
-							setLoading(true);
+			<Loading loading={status === 'loading'}>
+				{form && (
+					<FormContainer>
+						<Formik
+							initialValues={getInitialValues(form)}
+							onSubmit={(values, {resetForm, setSubmitting}) => {
+								setLoading(true);
 
-							submitForm(formId, values, form, state).then(() => {
-								resetForm();
-								setSubmitting(false);
-								setLoading(false);
-							});
-						}}
-						validate={(values) => {
-							const errors = {};
-
-							form.structure.formPages.forEach((formPage) => {
-								formPage.formFields.forEach(
-									({name, required}) => {
-										if (required && !values[name]) {
-											errors[name] = 'Required';
-										}
+								submitForm(formId, values, form, state).then(
+									() => {
+										resetForm();
+										setSubmitting(false);
+										setLoading(false);
 									}
 								);
-							});
+							}}
+							validate={(values) => {
+								const errors = {};
 
-							return errors;
-						}}
-					>
-						{(formikObj) => (
-							<>
-								<Text style={[styles.m2]}>{form.name}</Text>
+								form.structure.formPages.forEach((formPage) => {
+									formPage.formFields.forEach(
+										({name, required}) => {
+											if (required && !values[name]) {
+												errors[name] = 'Required';
+											}
+										}
+									);
+								});
 
-								{form.description.length > 0 && (
-									<Text style={[styles.mb2, styles.mx2]}>
-										{form.description}
-									</Text>
-								)}
+								return errors;
+							}}
+						>
+							{(formikObj) => (
+								<>
+									<Text style={[styles.m2]}>{form.name}</Text>
 
-								{form.structure.formPages.map((formPage, i) => (
-									<View key={i}>
-										{formPage.headline.length > 0 && (
-											<Text
-												style={[
-													styles.m2,
-													styles.textCenter,
-												]}
-											>
-												{formPage.headline}
-											</Text>
-										)}
-										{formPage.text.length > 0 && (
-											<Text
-												style={[
-													styles.m2,
-													styles.textCenter,
-												]}
-											>
-												{formPage.text}
-											</Text>
-										)}
+									{form.description.length > 0 && (
+										<Text style={[styles.mb2, styles.mx2]}>
+											{form.description}
+										</Text>
+									)}
 
-										{formPage.formFields.map(
-											(formField, i) => (
-												<FormField
-													autoFocus={i === 0}
-													field={formField}
-													formikObj={formikObj}
-													key={formField.name}
-												/>
-											)
-										)}
-									</View>
-								))}
+									{form.structure.formPages.map(
+										(formPage, i) => (
+											<View key={i}>
+												{formPage.headline.length >
+													0 && (
+													<Text
+														style={[
+															styles.m2,
+															styles.textCenter,
+														]}
+													>
+														{formPage.headline}
+													</Text>
+												)}
+												{formPage.text.length > 0 && (
+													<Text
+														style={[
+															styles.m2,
+															styles.textCenter,
+														]}
+													>
+														{formPage.text}
+													</Text>
+												)}
 
-								<Button
-									disabled={
-										Object.keys(formikObj.errors).length >
-											0 && !formikObj.isSubmitting
-									}
-									loading={loading}
-									onPress={formikObj.handleSubmit}
-									style={styles.m2}
-									title="Submit"
-								/>
-							</>
-						)}
-					</Formik>
-				</FormContainer>
-			)}
+												{formPage.formFields.map(
+													(formField, i) => (
+														<FormField
+															autoFocus={i === 0}
+															field={formField}
+															formikObj={
+																formikObj
+															}
+															key={formField.name}
+														/>
+													)
+												)}
+											</View>
+										)
+									)}
+
+									<Button
+										disabled={
+											Object.keys(formikObj.errors)
+												.length > 0 &&
+											!formikObj.isSubmitting
+										}
+										loading={loading}
+										onPress={formikObj.handleSubmit}
+										style={styles.m2}
+										title="Submit"
+									/>
+								</>
+							)}
+						</Formik>
+					</FormContainer>
+				)}
+			</Loading>
 		</View>
 	);
 }

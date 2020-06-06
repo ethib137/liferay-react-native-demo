@@ -48,14 +48,14 @@ function CustomDrawerContent(props) {
 				<DrawerItemList {...props} />
 			</View>
 
-			{loggedIn.value && (
-				<DrawerItem
-					label="Log Out"
-					onPress={() => dispatch(logoutAction())}
-				/>
-			)}
-
 			<View>
+				{loggedIn.value && (
+					<DrawerItem
+						label="Log Out"
+						onPress={() => dispatch(logoutAction())}
+					/>
+				)}
+
 				<DrawerItem
 					label="Remove All Local Data"
 					onPress={() => handleClearData()}

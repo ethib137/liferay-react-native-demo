@@ -2,17 +2,7 @@ import Liferay from '../util/liferay-config';
 
 const initialState = {
 	authenticationType: 'basic',
-	blogs: {
-		error: null,
-		items: [],
-		loading: false,
-	},
 	clientId: undefined,
-	contentSets: {
-		error: null,
-		items: [],
-		loading: false,
-	},
 	error: undefined,
 	isConfigured: false,
 	isLoading: true,
@@ -50,46 +40,6 @@ const appStateReducer = (state, action) => {
 					value: data.auth ? true : false,
 				},
 				site: data.site || state.site,
-			};
-		}
-		case 'LOADED_BLOGS': {
-			return {
-				...state,
-				blogs: {
-					error: data.error,
-					items: data.items || state.blogs.items,
-					loading: false,
-				},
-			};
-		}
-		case 'LOADED_CONTENT_SETS': {
-			return {
-				...state,
-				contentSets: {
-					error: data.error,
-					items: data.items || state.contentSets.items,
-					loading: false,
-				},
-			};
-		}
-		case 'LOADING_BLOGS': {
-			return {
-				...state,
-				blogs: {
-					...state.blogs,
-					error: null,
-					loading: true,
-				},
-			};
-		}
-		case 'LOADING_CONTENT_SETS': {
-			return {
-				...state,
-				contentSets: {
-					...state.contentSets,
-					error: null,
-					loading: true,
-				},
 			};
 		}
 		case 'LOGGED_IN': {

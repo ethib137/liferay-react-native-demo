@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Card} from 'react-native-elements';
+import {useQuery} from 'react-query';
 
 import {useAppState} from '../hooks/appState';
-import useFetch from '../hooks/useFetch';
 import styles from '../styles/main';
 import {statefulRequest} from '../util/request';
 import ErrorDisplay from './ErrorDisplay';
@@ -12,35 +12,35 @@ import ErrorDisplay from './ErrorDisplay';
 const ContentSet = ({contentSetId}) => {
 	const [state] = useAppState();
 
-	const [elements, loading, error, handleRequest] = useFetch(
-		() =>
-			statefulRequest(state)(
+	const {data, error, refetch, status} = useQuery(
+		contentSetId && ['contentSet', contentSetId],
+		() => {
+			return statefulRequest(state)(
 				`/o/headless-delivery/v1.0/content-sets/${contentSetId}/content-set-elements`
-			),
-		[contentSetId],
-		(res) => res.items
+			);
+		}
 	);
+
+	const items = data ? data.items : [];
 
 	return (
 		<View>
-			{error && (
-				<ErrorDisplay error={error} onRetry={() => handleRequest()} />
-			)}
+			{error && <ErrorDisplay error={error} onRetry={() => refetch()} />}
 
-			{elements && elements.length === 0 && !loading && !error && (
+			{items && items.length === 0 && status === 'success' && (
 				<Text style={[styles.m2, styles.textCenter]}>
 					There are no items to display.
 				</Text>
 			)}
 
-			{elements && (
+			{items && (
 				<FlatList
-					data={elements}
+					data={items}
 					keyExtractor={({id}) => id.toString()}
 					refreshControl={
 						<RefreshControl
-							onRefresh={() => handleRequest()}
-							refreshing={loading}
+							onRefresh={() => refetch()}
+							refreshing={status === 'loading'}
 						/>
 					}
 					renderItem={({item}) => (

@@ -2,11 +2,11 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Button, Card} from 'react-native-elements';
+import {useQuery} from 'react-query';
 
 import ErrorDisplay from '../components/ErrorDisplay';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
-import useFetch from '../hooks/useFetch';
 import styles from '../styles/main';
 import {asyncSet} from '../util/async';
 import {statefulRequest} from '../util/request';
@@ -18,14 +18,13 @@ const Sites = () => {
 
 	const siteId = site ? site.id : null;
 
-	const [sites, loading, error, handleRequest] = useFetch(
-		() =>
-			statefulRequest(state)(
-				`/o/headless-admin-user/v1.0/my-user-account/sites`
-			),
-		[],
-		(res) => res.items
-	);
+	const {data, error, refetch, status} = useQuery(['sites'], () => {
+		return statefulRequest(state)(
+			`/o/headless-admin-user/v1.0/my-user-account/sites`
+		);
+	});
+
+	const items = data ? data.items : [];
 
 	const selectSite = (site) => {
 		const siteObj = {
@@ -74,24 +73,22 @@ const Sites = () => {
 				</Text>
 			)}
 
-			{error && (
-				<ErrorDisplay error={error} onRetry={() => handleRequest()} />
-			)}
+			{error && <ErrorDisplay error={error} onRetry={() => refetch()} />}
 
-			{sites && sites.length === 0 && !loading && !error && (
+			{items && items.length === 0 && status === 'success' && (
 				<Text style={[styles.m2, styles.textCenter]}>
 					There are no sites to display.
 				</Text>
 			)}
 
-			{sites && (
+			{items && (
 				<FlatList
-					data={sites}
+					data={items}
 					keyExtractor={({id}) => id.toString()}
 					refreshControl={
 						<RefreshControl
-							onRefresh={() => handleRequest()}
-							refreshing={loading}
+							onRefresh={() => refetch()}
+							refreshing={status === 'loading'}
 						/>
 					}
 					renderItem={(obj) => renderItem(obj)}

@@ -1,32 +1,34 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {FlatList, RefreshControl, Text} from 'react-native';
 import {Button, Card} from 'react-native-elements';
+import {useQuery} from 'react-query';
 
-import {loadContentSetsAction} from '../actions/content-sets';
 import ContentSet from '../components/ContentSet';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
+import {statefulRequest} from '../util/request';
 
 function ContentSets({navigation}) {
-	const [state, dispatch] = useAppState();
+	const [state] = useAppState();
 
-	const {contentSets, site} = state;
+	const {site} = state;
 
 	const siteId = site ? site.id : null;
 
-	const {error, items, loading} = contentSets;
-
-	const dispatchContentSets = useCallback(() => {
-		if (!loading) {
-			dispatch(loadContentSetsAction());
+	const {data, error, refetch, status} = useQuery(
+		siteId && ['contentSets', siteId],
+		() => {
+			return statefulRequest(state)(
+				`/api/jsonws/assetlist.assetlistentry/get-asset-list-entries/group-id/${siteId}/start/-1/end/-1/-order-by-comparator`
+			);
 		}
-	}, [dispatch, loading]);
+	);
 
-	useEffect(dispatchContentSets, [siteId]);
+	const items = data ? data : [];
 
 	const renderItem = ({item}) => (
 		<Card style={[styles.m1, styles.w100]} title={item.title}>
@@ -48,14 +50,9 @@ function ContentSets({navigation}) {
 
 	return (
 		<>
-			{error && (
-				<ErrorDisplay
-					error={error}
-					onRetry={() => dispatchContentSets()}
-				/>
-			)}
+			{error && <ErrorDisplay error={error} onRetry={() => refetch()} />}
 
-			{items && items.length === 0 && !loading && !error && (
+			{items && items.length === 0 && status === 'success' && (
 				<Text style={[styles.m2, styles.textCenter]}>
 					There are no content sets to display.
 				</Text>
@@ -67,8 +64,8 @@ function ContentSets({navigation}) {
 					keyExtractor={({assetListEntryId}) => assetListEntryId}
 					refreshControl={
 						<RefreshControl
-							onRefresh={() => dispatchContentSets()}
-							refreshing={loading}
+							onRefresh={() => refetch()}
+							refreshing={status === 'loading'}
 						/>
 					}
 					renderItem={(obj) => renderItem(obj)}
