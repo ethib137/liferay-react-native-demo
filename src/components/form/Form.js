@@ -38,7 +38,9 @@ const checkboxMultipleInput = {
 
 const dateInput = {
 	getPredefinedValue: (formField) => {
-		return new Date(formField.predefinedValue);
+		const {predefinedValue} = formField;
+
+		return predefinedValue ? new Date(predefinedValue) : new Date();
 	},
 	getValueForSubmit: (value) => value.toISOString(),
 	inputControl: 'date',
