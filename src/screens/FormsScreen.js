@@ -16,9 +16,7 @@ import {statefulRequest} from '../util/request';
 const FormsScreen = ({navigation}) => {
 	const [state] = useAppState();
 
-	const {site} = state;
-
-	const siteId = site ? site.id : null;
+	const {siteId} = state;
 
 	const {data, error, refetch, status} = useQuery(
 		siteId && ['forms', siteId],
@@ -57,23 +55,30 @@ const FormsScreen = ({navigation}) => {
 
 	return (
 		<>
-			{error && (
-				<ErrorDisplay
-					error={status === 'error'}
-					onRetry={() => refetch()}
-				/>
-			)}
-
-			{items && items.length === 0 && status === 'success' && (
-				<Text style={[styles.m2, styles.textCenter]}>
-					There are no forms to display.
-				</Text>
-			)}
-
 			{items && (
 				<FlatList
 					data={items}
 					keyExtractor={({id}) => id.toString()}
+					ListHeaderComponent={
+						<>
+							{error && (
+								<ErrorDisplay
+									error={status === 'error'}
+									onRetry={() => refetch()}
+								/>
+							)}
+
+							{items &&
+								items.length === 0 &&
+								status === 'success' && (
+									<Text
+										style={[styles.m2, styles.textCenter]}
+									>
+										There are no forms to display.
+									</Text>
+								)}
+						</>
+					}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

@@ -222,7 +222,9 @@ function Form({formId}) {
 
 	return (
 		<View>
-			{error && <ErrorDisplay error={error} onRetry={() => refetch()} />}
+			{status === 'error' && (
+				<ErrorDisplay error={error.message} onRetry={() => refetch()} />
+			)}
 
 			<Loading loading={status === 'loading'}>
 				{form && (

@@ -116,7 +116,11 @@ export default function (options = {}) {
 		});
 
 		if (response.ok) {
-			return response.json();
+			if (method === 'DELETE') {
+				return Promise.resolve('deleted-successfully');
+			} else {
+				return response.json();
+			}
 		} else {
 			const text = await response.text();
 

@@ -1,26 +1,23 @@
 import {asyncMultiGet} from '../util/async';
 
 export const asyncKeys = [
+	'accountId',
 	'auth',
 	'authenticationType',
+	'cartId',
+	'channelId',
 	'clientId',
 	'liferayURL',
-	'site',
+	'siteId',
+	'userId',
+	'username',
 ];
 
 const hydrate = () => (dispatch) => {
 	asyncMultiGet(asyncKeys)
 		.then((resObj) => {
-			const {
-				auth,
-				authenticationType,
-				clientId,
-				liferayURL,
-				site,
-			} = resObj;
-
 			dispatch({
-				data: {auth, authenticationType, clientId, liferayURL, site},
+				data: {...resObj},
 				type: 'HYDRATE',
 			});
 		})

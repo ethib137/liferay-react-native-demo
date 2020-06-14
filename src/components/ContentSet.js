@@ -25,7 +25,9 @@ const ContentSet = ({contentSetId}) => {
 
 	return (
 		<View>
-			{error && <ErrorDisplay error={error} onRetry={() => refetch()} />}
+			{status === 'error' && (
+				<ErrorDisplay error={error.message} onRetry={() => refetch()} />
+			)}
 
 			{items && items.length === 0 && status === 'success' && (
 				<Text style={[styles.m2, styles.textCenter]}>

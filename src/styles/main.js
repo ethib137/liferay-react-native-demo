@@ -1,18 +1,22 @@
 import {StyleSheet} from 'react-native';
 
-import {spacing} from './values';
+import {greys, spacing} from './values';
 
 const stylesObj = {};
+
+greys.forEach((grey, i) => {
+	stylesObj[`textGrey${i}`] = {
+		color: grey,
+	};
+});
 
 const types = [
 	['m', 'margin'],
 	['p', 'padding'],
 ];
 
-const values = spacing;
-
 types.forEach((type) => {
-	values.forEach((val, i) => {
+	spacing.forEach((val, i) => {
 		stylesObj[`${type[0]}${i}`] = {
 			[`${type[1]}`]: val,
 		};
@@ -54,6 +58,10 @@ const styles = StyleSheet.create({
 	centerH: {
 		alignContent: 'center',
 	},
+	flexWrap: {
+		flex: 1,
+		flexWrap: 'wrap',
+	},
 	h1: {
 		fontSize: 32,
 	},
@@ -73,8 +81,19 @@ const styles = StyleSheet.create({
 	h6: {
 		fontSize: 16,
 	},
+	pAbsolute: {
+		position: 'absolute',
+	},
+	pRelative: {
+		position: 'relative',
+	},
 	spaceBetween: {
 		flex: 1,
+		justifyContent: 'space-between',
+	},
+	spaceBetweenH: {
+		flex: 1,
+		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
 	textCenter: {

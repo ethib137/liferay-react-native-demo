@@ -4,19 +4,18 @@ import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Button, Card} from 'react-native-elements';
 import {useQuery} from 'react-query';
 
+import {setChannelAction} from '../actions/channel';
+import {setSiteAction} from '../actions/site';
 import ErrorDisplay from '../components/ErrorDisplay';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import {asyncSet} from '../util/async';
 import {statefulRequest} from '../util/request';
 
 const Sites = () => {
 	const [state, dispatch] = useAppState();
 
-	const {site} = state;
-
-	const siteId = site ? site.id : null;
+	const {siteId} = state;
 
 	const {data, error, refetch, status} = useQuery(['sites'], () => {
 		return statefulRequest(state)(
@@ -24,67 +23,86 @@ const Sites = () => {
 		);
 	});
 
+	const {data: channels} = useQuery(['channels'], () => {
+		return statefulRequest(state)(
+			`/api/jsonws/commerce.commercechannel/get-commerce-channels/start/-1/end/-1`
+		);
+	});
+
+	function selectSite(id) {
+		dispatch(setSiteAction(id));
+
+		if (channels) {
+			const curChannel = channels.find(
+				({siteGroupId}) => parseInt(siteGroupId, 10) === id
+			);
+
+			dispatch(
+				setChannelAction(
+					curChannel ? curChannel.commerceChannelId : null
+				)
+			);
+		}
+	}
+
 	const items = data ? data.items : [];
 
-	const selectSite = (site) => {
-		const siteObj = {
-			id: site.id,
-			name: site.name,
-		};
+	const renderItem = ({item}) => {
+		const selectedSite = siteId === item.id;
 
-		asyncSet('site', siteObj);
+		return (
+			<Card style={[styles.m1, {width: '100%'}]} title={item.name}>
+				<View>
+					{!!item.description && <Text>{item.description}</Text>}
 
-		dispatch({
-			data: {site: siteObj},
-			type: 'SELECT_SITE',
-		});
+					<Button
+						disabled={selectedSite}
+						onPress={() => selectSite(item.id)}
+						title={selectedSite ? 'Selected Site' : 'Select Site'}
+					/>
+				</View>
+			</Card>
+		);
 	};
 
-	const renderItem = ({item}) => (
-		<Card style={[styles.m1, {width: '100%'}]} title={item.name}>
-			<View>
-				<Text>{item.description}</Text>
-
-				{siteId === item.id && (
-					<Text style={styles.textCenter}>
-						Currently Selected Site
-					</Text>
-				)}
-
-				{siteId !== item.id && (
-					<Button
-						onPress={() => selectSite(item)}
-						title="Select Site"
-					/>
-				)}
-			</View>
-		</Card>
-	);
+	const curSite = items.find(({id}) => id === siteId);
 
 	return (
 		<View>
-			{site && site.name ? (
-				<Text style={[styles.textCenter, styles.m2]}>
-					Current Site: {site.name}
-				</Text>
-			) : (
-				<Text style={[styles.textCenter, styles.m2]}>
-					Select a Site.
-				</Text>
-			)}
-
-			{error && <ErrorDisplay error={error} onRetry={() => refetch()} />}
-
-			{items && items.length === 0 && status === 'success' && (
-				<Text style={[styles.m2, styles.textCenter]}>
-					There are no sites to display.
-				</Text>
-			)}
-
 			{items && (
 				<FlatList
 					data={items}
 					keyExtractor={({id}) => id.toString()}
+					ListHeaderComponent={
+						<>
+							{curSite ? (
+								<Text style={[styles.textCenter, styles.m2]}>
+									Current Site: {curSite.name}
+								</Text>
+							) : (
+								<Text style={[styles.textCenter, styles.m2]}>
+									Select a Site.
+								</Text>
+							)}
+
+							{status === 'error' && (
+								<ErrorDisplay
+									error={error.message}
+									onRetry={() => refetch()}
+								/>
+							)}
+
+							{items &&
+								items.length === 0 &&
+								status === 'success' && (
+									<Text
+										style={[styles.m2, styles.textCenter]}
+									>
+										There are no sites to display.
+									</Text>
+								)}
+						</>
+					}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}
@@ -92,6 +110,7 @@ const Sites = () => {
 						/>
 					}
 					renderItem={(obj) => renderItem(obj)}
+					style={styles.mb5}
 				/>
 			)}
 		</View>

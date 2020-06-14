@@ -21,6 +21,7 @@
 		"expo": "~37.0.3",
 		"expo-font": "~8.1.0",
 		"formik": "^2.1.4",
+		"moment-timezone": "^0.5.31",
 		"prop-types": "^15.7.2",
 		"qs": "^6.9.3",
 		"react": "~16.9.0",
@@ -34,6 +35,7 @@
 		"react-native-render-html": "^4.2.0",
 		"react-native-safe-area-context": "0.7.3",
 		"react-native-screens": "~2.2.0",
+		"react-native-url-polyfill": "^1.1.2",
 		"react-native-web": "~0.11.7",
 		"react-native-webview": "8.1.1",
 		"react-query": "^1.5.5"

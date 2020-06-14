@@ -15,9 +15,7 @@ import {statefulRequest} from '../util/request';
 function ContentSets({navigation}) {
 	const [state] = useAppState();
 
-	const {site} = state;
-
-	const siteId = site ? site.id : null;
+	const {siteId} = state;
 
 	const {data, error, refetch, status} = useQuery(
 		siteId && ['contentSets', siteId],
@@ -50,18 +48,30 @@ function ContentSets({navigation}) {
 
 	return (
 		<>
-			{error && <ErrorDisplay error={error} onRetry={() => refetch()} />}
-
-			{items && items.length === 0 && status === 'success' && (
-				<Text style={[styles.m2, styles.textCenter]}>
-					There are no content sets to display.
-				</Text>
-			)}
-
 			{items && (
 				<FlatList
 					data={items}
 					keyExtractor={({assetListEntryId}) => assetListEntryId}
+					ListHeaderComponent={
+						<>
+							{status === 'error' && (
+								<ErrorDisplay
+									error={error.message}
+									onRetry={() => refetch()}
+								/>
+							)}
+
+							{items &&
+								items.length === 0 &&
+								status === 'success' && (
+									<Text
+										style={[styles.m2, styles.textCenter]}
+									>
+										There are no content sets to display.
+									</Text>
+								)}
+						</>
+					}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

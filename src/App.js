@@ -4,13 +4,17 @@ import React, {useEffect} from 'react';
 import hydrate from './actions/hydrate';
 import CustomDrawerContent from './components/CustomDrawerContent';
 import {useAppState} from './hooks/appState';
+import AccountsScreen from './screens/AccountsScreen';
 import Blogs from './screens/Blogs';
+import CartScreen from './screens/CartScreen';
+import CatalogScreen from './screens/CatalogScreen';
 import Configurations from './screens/Configurations';
 import ContentSets from './screens/ContentSets';
 import Documents from './screens/Documents';
 import FormsScreen from './screens/FormsScreen';
 import Home from './screens/Home';
 import LoginScreen from './screens/LoginScreen';
+import MyOrdersScreen from './screens/MyOrdersScreen';
 import Sites from './screens/Sites';
 import Splash from './screens/Splash';
 
@@ -19,7 +23,7 @@ const Drawer = createDrawerNavigator();
 const App = () => {
 	const [state, dispatch] = useAppState();
 
-	const {isLoading, loggedIn} = state;
+	const {channelId, isLoading, loggedIn} = state;
 
 	useEffect(() => {
 		dispatch(hydrate());
@@ -60,10 +64,34 @@ const App = () => {
 						name="Forms"
 						options={{title: 'Forms'}}
 					/>
+					{channelId && (
+						<>
+							<Drawer.Screen
+								component={AccountsScreen}
+								name="Accounts"
+								options={{title: 'Accounts'}}
+							/>
+							<Drawer.Screen
+								component={CatalogScreen}
+								name="Catalog"
+								options={{title: 'Catalog'}}
+							/>
+							<Drawer.Screen
+								component={MyOrdersScreen}
+								name="MyOrders"
+								options={{title: 'My Orders'}}
+							/>
+							<Drawer.Screen
+								component={CartScreen}
+								name="Cart"
+								options={{title: 'Cart'}}
+							/>
+						</>
+					)}
 					<Drawer.Screen
 						component={Sites}
 						name="Sites"
-						options={{title: 'Select a Site'}}
+						options={{title: 'Sites'}}
 					/>
 				</>
 			)}

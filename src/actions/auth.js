@@ -1,5 +1,5 @@
-import {asyncRemove} from '../util/async';
-import {statefulLogin} from '../util/request';
+import {asyncMultiSet, asyncRemove} from '../util/async';
+import {statefulLogin, statefulRequest} from '../util/request';
 
 export const loginAction = (username, password) => (dispatch, getState) => {
 	dispatch({type: 'LOGGING_IN'});
@@ -9,7 +9,18 @@ export const loginAction = (username, password) => (dispatch, getState) => {
 		username,
 	})
 		.then(() => {
-			dispatch({type: 'LOGGED_IN'});
+			dispatch({
+				data: username,
+				type: 'LOGGED_IN',
+			});
+
+			statefulRequest(getState())(
+				'/o/headless-admin-user/v1.0/my-user-account'
+			).then((res) => {
+				dispatch(setUserAction(res.id));
+			});
+
+			asyncMultiSet({username});
 		})
 		.catch(() => {
 			dispatch({
@@ -36,4 +47,13 @@ export const logoutAction = () => (dispatch) => {
 				type: 'LOGGED_OUT',
 			});
 		});
+};
+
+const setUserAction = (userId) => (dispatch) => {
+	asyncMultiSet({userId}).then(() => {
+		dispatch({
+			data: userId,
+			type: 'SET_USER_ID',
+		});
+	});
 };

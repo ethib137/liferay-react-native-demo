@@ -16,11 +16,13 @@ function Login() {
 
 	const {error, loading} = state.loggedIn;
 
+	const {username} = state;
+
 	return (
 		<FormContainer>
 			<Formik
 				initialValues={{
-					email: 'ali@liferay.com',
+					email: username,
 					password: 'test',
 				}}
 				onSubmit={(values) => {

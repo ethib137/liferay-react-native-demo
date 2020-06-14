@@ -1,26 +1,38 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import {FlatList, RefreshControl, Text, View} from 'react-native';
+import {
+	FlatList,
+	RefreshControl,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import {Card} from 'react-native-elements';
 import {useQuery} from 'react-query';
 
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
+import Product from '../components/commerce/Product';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
 import {statefulRequest} from '../util/request';
+import {getRelativeURL} from '../util/url';
 
-const Documents = () => {
+const Catalog = ({navigation}) => {
 	const [state] = useAppState();
 
-	const {siteId} = state;
+	const {accountId, channelId, siteId, userId} = state;
+
+	const identifier = accountId || userId;
 
 	const {data, error, refetch, status} = useQuery(
-		siteId && ['documents', siteId],
+		identifier && channelId && ['products', identifier, channelId],
 		() => {
 			return statefulRequest(state)(
-				`/o/headless-delivery/v1.0/sites/${siteId}/documents`
+				`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?nestedFields=skus${
+					accountId ? '&accountId=' + accountId : ''
+				}`
 			);
 		}
 	);
@@ -28,22 +40,38 @@ const Documents = () => {
 	const items = data ? data.items : [];
 
 	const renderItem = ({item}) => (
-		<Card
-			image={
-				item.adaptedImages[0]
-					? {uri: state.liferayURL + item.adaptedImages[0].contentUrl}
-					: null
-			}
-			style={[styles.m1, {width: '100%'}]}
-			title={item.title}
+		<TouchableOpacity
+			onPress={() => {
+				navigation.navigate('Product', {
+					...item,
+				});
+			}}
 		>
-			<View>
-				<Text>{item.description}</Text>
-			</View>
-		</Card>
+			<Card
+				image={
+					item.urlImage
+						? {
+								uri:
+									state.liferayURL +
+									getRelativeURL(
+										item.urlImage,
+										state.liferayURL
+									),
+						  }
+						: null
+				}
+				style={[styles.m1, {width: '100%'}]}
+				title={item.name}
+			>
+				<View>
+					<Text>{item.shortDescription}</Text>
+					<Text>{item.commerceChannelId}</Text>
+				</View>
+			</Card>
+		</TouchableOpacity>
 	);
 
-	if (!siteId) {
+	if (!channelId || !siteId) {
 		return <NoSiteSelected />;
 	}
 
@@ -68,7 +96,7 @@ const Documents = () => {
 									<Text
 										style={[styles.m2, styles.textCenter]}
 									>
-										There are no documents to display.
+										There are no products to display.
 									</Text>
 								)}
 						</>
@@ -86,12 +114,16 @@ const Documents = () => {
 	);
 };
 
+function ViewProduct({route}) {
+	return <Product {...route.params} />;
+}
+
 const Stack = createStackNavigator();
 
-function DocumentsNavigation({navigation}) {
+function CatalogNavigation({navigation}) {
 	return (
 		<Stack.Navigator
-			initialRouteName="Documents"
+			initialRouteName="Catalog"
 			screenOptions={{
 				headerRight: () => (
 					<ToggleDrawerButton navigation={navigation} />
@@ -99,12 +131,19 @@ function DocumentsNavigation({navigation}) {
 			}}
 		>
 			<Stack.Screen
-				component={Documents}
-				name="Documents"
-				options={{title: 'Documents'}}
+				component={Catalog}
+				name="Catalog"
+				options={{title: 'Catalog'}}
+			/>
+			<Stack.Screen
+				component={ViewProduct}
+				name="Product"
+				options={({route}) => {
+					return {title: `${route.params.name}`};
+				}}
 			/>
 		</Stack.Navigator>
 	);
 }
 
-export default DocumentsNavigation;
+export default CatalogNavigation;

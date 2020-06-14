@@ -1,26 +1,36 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import {FlatList, RefreshControl, Text, View} from 'react-native';
+import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {Card} from 'react-native-elements';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useQuery} from 'react-query';
 
+import {setAccountAction} from '../actions/account';
+import CardItemRow from '../components/CardItemRow';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
+import {colors} from '../styles/values';
 import {statefulRequest} from '../util/request';
+import {getRelativeURL} from '../util/url';
 
-const Documents = () => {
-	const [state] = useAppState();
+const ACCOUNT_TYPE_MAP = {
+	1: 'Personal',
+	2: 'Business',
+};
 
-	const {siteId} = state;
+const Accounts = () => {
+	const [state, dispatch] = useAppState();
+
+	const {accountId, siteId, userId} = state;
 
 	const {data, error, refetch, status} = useQuery(
-		siteId && ['documents', siteId],
+		['accounts', userId],
 		() => {
 			return statefulRequest(state)(
-				`/o/headless-delivery/v1.0/sites/${siteId}/documents`
+				`/o/headless-commerce-admin-account/v1.0/accounts`
 			);
 		}
 	);
@@ -28,19 +38,35 @@ const Documents = () => {
 	const items = data ? data.items : [];
 
 	const renderItem = ({item}) => (
-		<Card
-			image={
-				item.adaptedImages[0]
-					? {uri: state.liferayURL + item.adaptedImages[0].contentUrl}
-					: null
-			}
-			style={[styles.m1, {width: '100%'}]}
-			title={item.title}
-		>
-			<View>
-				<Text>{item.description}</Text>
-			</View>
-		</Card>
+		<TouchableOpacity onPress={() => dispatch(setAccountAction(item.id))}>
+			<Card
+				containerStyle={
+					accountId === item.id ? accountStyles.selected : {}
+				}
+				image={
+					item.urlImage
+						? {
+								uri:
+									state.liferayURL +
+									getRelativeURL(
+										item.urlImage,
+										state.liferayURL
+									),
+						  }
+						: null
+				}
+				style={[styles.m1, {width: '100%'}]}
+				title={item.name}
+			>
+				<View>
+					<CardItemRow
+						label="Account Type"
+						value={ACCOUNT_TYPE_MAP[item.type]}
+					/>
+					<CardItemRow label="Account ID" value={item.id} />
+				</View>
+			</Card>
+		</TouchableOpacity>
 	);
 
 	if (!siteId) {
@@ -68,7 +94,7 @@ const Documents = () => {
 									<Text
 										style={[styles.m2, styles.textCenter]}
 									>
-										There are no documents to display.
+										There are no products to display.
 									</Text>
 								)}
 						</>
@@ -86,12 +112,18 @@ const Documents = () => {
 	);
 };
 
+const accountStyles = StyleSheet.create({
+	selected: {
+		borderColor: colors.primary,
+	},
+});
+
 const Stack = createStackNavigator();
 
-function DocumentsNavigation({navigation}) {
+function AccountsNavigation({navigation}) {
 	return (
 		<Stack.Navigator
-			initialRouteName="Documents"
+			initialRouteName="Accounts"
 			screenOptions={{
 				headerRight: () => (
 					<ToggleDrawerButton navigation={navigation} />
@@ -99,12 +131,12 @@ function DocumentsNavigation({navigation}) {
 			}}
 		>
 			<Stack.Screen
-				component={Documents}
-				name="Documents"
-				options={{title: 'Documents'}}
+				component={Accounts}
+				name="Accounts"
+				options={{title: 'Accounts'}}
 			/>
 		</Stack.Navigator>
 	);
 }
 
-export default DocumentsNavigation;
+export default AccountsNavigation;

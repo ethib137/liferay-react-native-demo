@@ -23,6 +23,16 @@ export const colors = {
 	},
 };
 
-export const greys = ['#e5e6e6', '#caccce', '#b0b3b5', '#969a9c', '#7b8084'];
+export const greys = [
+	'#e5e6e6',
+	'#caccce',
+	'#b0b3b5',
+	'#969a9c',
+	'#7b8084',
+	'#666',
+	'#444',
+	'#222',
+	'#000',
+];
 
 export const spacing = [0, 8, 16, 24, 32, 40];

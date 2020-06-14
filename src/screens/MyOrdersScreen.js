@@ -1,26 +1,31 @@
 import {createStackNavigator} from '@react-navigation/stack';
+import moment from 'moment-timezone';
 import React from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Card} from 'react-native-elements';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useQuery} from 'react-query';
 
+import CardItemRow from '../components/CardItemRow';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
+import NoAccountSelected from '../components/commerce/NoAccountSelected';
+import Order from '../components/commerce/Order';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
 import {statefulRequest} from '../util/request';
 
-const Documents = () => {
+const MyOrders = ({navigation}) => {
 	const [state] = useAppState();
 
-	const {siteId} = state;
+	const {accountId, channelId, siteId} = state;
 
 	const {data, error, refetch, status} = useQuery(
-		siteId && ['documents', siteId],
+		['orders', accountId, channelId],
 		() => {
 			return statefulRequest(state)(
-				`/o/headless-delivery/v1.0/sites/${siteId}/documents`
+				`/o/headless-commerce-admin-order/v1.0/orders?filter=accountId eq ${accountId} and channelId eq ${channelId} and orderStatus eq 1`
 			);
 		}
 	);
@@ -28,23 +33,38 @@ const Documents = () => {
 	const items = data ? data.items : [];
 
 	const renderItem = ({item}) => (
-		<Card
-			image={
-				item.adaptedImages[0]
-					? {uri: state.liferayURL + item.adaptedImages[0].contentUrl}
-					: null
-			}
-			style={[styles.m1, {width: '100%'}]}
-			title={item.title}
+		<TouchableOpacity
+			onPress={() => {
+				navigation.navigate('Order', {
+					...item,
+				});
+			}}
 		>
-			<View>
-				<Text>{item.description}</Text>
-			</View>
-		</Card>
+			<Card
+				style={[styles.m1, {width: '100%'}]}
+				title={`Order ${item.id}`}
+			>
+				<View>
+					<CardItemRow
+						label="Created"
+						value={moment(item.createDate).fromNow()}
+					/>
+					<CardItemRow
+						label="Modified"
+						value={moment(item.modifiedDate).fromNow()}
+					/>
+					<CardItemRow label="Total" value={item.totalFormatted} />
+				</View>
+			</Card>
+		</TouchableOpacity>
 	);
 
-	if (!siteId) {
+	if (!channelId || !siteId) {
 		return <NoSiteSelected />;
+	}
+
+	if (!accountId) {
+		return <NoAccountSelected />;
 	}
 
 	return (
@@ -68,7 +88,7 @@ const Documents = () => {
 									<Text
 										style={[styles.m2, styles.textCenter]}
 									>
-										There are no documents to display.
+										There are no orders to display.
 									</Text>
 								)}
 						</>
@@ -86,12 +106,16 @@ const Documents = () => {
 	);
 };
 
+function ViewOrder({route}) {
+	return <Order {...route.params} />;
+}
+
 const Stack = createStackNavigator();
 
-function DocumentsNavigation({navigation}) {
+function MyOrdersNavigation({navigation}) {
 	return (
 		<Stack.Navigator
-			initialRouteName="Documents"
+			initialRouteName="MyOrders"
 			screenOptions={{
 				headerRight: () => (
 					<ToggleDrawerButton navigation={navigation} />
@@ -99,12 +123,19 @@ function DocumentsNavigation({navigation}) {
 			}}
 		>
 			<Stack.Screen
-				component={Documents}
-				name="Documents"
-				options={{title: 'Documents'}}
+				component={MyOrders}
+				name="MyOrders"
+				options={{title: 'My Orders'}}
+			/>
+			<Stack.Screen
+				component={ViewOrder}
+				name="Order"
+				options={({route}) => {
+					return {title: `Order ${route.params.id}`};
+				}}
 			/>
 		</Stack.Navigator>
 	);
 }
 
-export default DocumentsNavigation;
+export default MyOrdersNavigation;
