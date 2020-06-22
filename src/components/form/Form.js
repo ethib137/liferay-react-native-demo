@@ -7,7 +7,6 @@ import {useQuery} from 'react-query';
 
 import {useAppState} from '../../hooks/appState';
 import styles from '../../styles/main';
-import {statefulRequest} from '../../util/request';
 import ErrorDisplay from '../ErrorDisplay';
 import Loading from '../Loading';
 import FormContainer from './FormContainer';
@@ -170,49 +169,36 @@ function getInitialValues(form) {
 	return initialValues;
 }
 
-function submitForm(formId, values, form, state) {
+function prepareValuesForSubmit(values, formPages) {
 	const formFieldValues = [];
 
-	if (form) {
-		form.structure.formPages.forEach((formPage) => {
-			formPage.formFields.forEach(({inputControl, name}) => {
-				if (fields[inputControl]) {
-					const {getValueForSubmit} = fields[inputControl];
+	formPages.forEach((formPage) => {
+		formPage.formFields.forEach(({inputControl, name}) => {
+			if (fields[inputControl]) {
+				const {getValueForSubmit} = fields[inputControl];
 
-					const value = values[name];
+				const value = values[name];
 
-					if (getValueForSubmit && value) {
-						formFieldValues.push({
-							name,
-							value: getValueForSubmit(value),
-						});
-					}
+				if (getValueForSubmit && value) {
+					formFieldValues.push({
+						name,
+						value: getValueForSubmit(value),
+					});
 				}
-			});
+			}
 		});
-	}
+	});
 
-	return statefulRequest(state)(
-		`/o/headless-form/v1.0/forms/${formId}/form-records`,
-		{
-			data: {
-				draft: false,
-				formFieldValues,
-			},
-			method: 'POST',
-		}
-	);
+	return formFieldValues;
 }
 
 function Form({formId}) {
-	const [state] = useAppState();
+	const [, , request] = useAppState();
 
 	const {data, error, refetch, status} = useQuery(
 		formId && ['form', formId],
 		() => {
-			return statefulRequest(state)(
-				`/o/headless-form/v1.0/forms/${formId}`
-			);
+			return request(`/o/headless-form/v1.0/forms/${formId}`);
 		}
 	);
 
@@ -232,15 +218,27 @@ function Form({formId}) {
 						<Formik
 							initialValues={getInitialValues(form)}
 							onSubmit={(values, {resetForm, setSubmitting}) => {
-								setLoading(true);
+								if (form) {
+									setLoading(true);
 
-								submitForm(formId, values, form, state).then(
-									() => {
+									request(
+										`/o/headless-form/v1.0/forms/${formId}/form-records`,
+										{
+											data: {
+												draft: false,
+												formFieldValues: prepareValuesForSubmit(
+													values,
+													form.structure.formPages
+												),
+											},
+											method: 'POST',
+										}
+									).then(() => {
 										resetForm();
 										setSubmitting(false);
 										setLoading(false);
-									}
-								);
+									});
+								}
 							}}
 							validate={(values) => {
 								const errors = {};

@@ -6,16 +6,15 @@ import {useQuery} from 'react-query';
 
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import {statefulRequest} from '../util/request';
 import ErrorDisplay from './ErrorDisplay';
 
 const ContentSet = ({contentSetId}) => {
-	const [state] = useAppState();
+	const [, , request] = useAppState();
 
 	const {data, error, refetch, status} = useQuery(
 		contentSetId && ['contentSet', contentSetId],
 		() => {
-			return statefulRequest(state)(
+			return request(
 				`/o/headless-delivery/v1.0/content-sets/${contentSetId}/content-set-elements`
 			);
 		}

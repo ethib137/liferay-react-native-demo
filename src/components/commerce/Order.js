@@ -5,17 +5,16 @@ import {useQuery} from 'react-query';
 
 import {useAppState} from '../../hooks/appState';
 import styles from '../../styles/main';
-import {statefulRequest} from '../../util/request';
 import ErrorDisplay from '../ErrorDisplay';
 import OrderItem from './OrderItem';
 
 const Order = (item) => {
-	const [state] = useAppState();
+	const [, , request] = useAppState();
 
 	const {data, error, refetch, status} = useQuery(
 		['orderItems', item.id],
 		() => {
-			return statefulRequest(state)(
+			return request(
 				`/o/headless-commerce-admin-order/v1.0/orders/${item.id}/orderItems`
 			);
 		}

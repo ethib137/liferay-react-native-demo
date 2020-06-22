@@ -1,5 +1,7 @@
 import {useCallback, useReducer, useRef} from 'react';
 
+import {statefulRequest} from '../util/request';
+
 function useThunkReducer(reducer, initialState) {
 	const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -7,20 +9,25 @@ function useThunkReducer(reducer, initialState) {
 
 	preState.current = state;
 
+	const request = useCallback(
+		(...args) => statefulRequest(preState.current)(...args),
+		[]
+	);
+
 	const dispatchWithThunk = useCallback(
 		(action) => {
 			if (typeof action === 'function') {
-				action(dispatchWithThunk, () => preState.current);
+				action(dispatchWithThunk, () => preState.current, request);
 			}
 
 			dispatch(action);
 
 			return Promise.resolve();
 		},
-		[dispatch]
+		[dispatch, request]
 	);
 
-	return [state, dispatchWithThunk];
+	return [state, dispatchWithThunk, request];
 }
 
 export default useThunkReducer;

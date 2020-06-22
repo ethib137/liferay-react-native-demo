@@ -10,21 +10,18 @@ import ErrorDisplay from '../components/ErrorDisplay';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import {statefulRequest} from '../util/request';
 
 const Sites = () => {
-	const [state, dispatch] = useAppState();
+	const [state, dispatch, request] = useAppState();
 
 	const {siteId} = state;
 
 	const {data, error, refetch, status} = useQuery(['sites'], () => {
-		return statefulRequest(state)(
-			`/o/headless-admin-user/v1.0/my-user-account/sites`
-		);
+		return request(`/o/headless-admin-user/v1.0/my-user-account/sites`);
 	});
 
 	const {data: channels} = useQuery(['channels'], () => {
-		return statefulRequest(state)(
+		return request(
 			`/api/jsonws/commerce.commercechannel/get-commerce-channels/start/-1/end/-1`
 		);
 	});

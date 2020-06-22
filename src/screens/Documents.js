@@ -9,17 +9,16 @@ import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import {statefulRequest} from '../util/request';
 
 const Documents = () => {
-	const [state] = useAppState();
+	const [state, , request] = useAppState();
 
 	const {siteId} = state;
 
 	const {data, error, refetch, status} = useQuery(
 		siteId && ['documents', siteId],
 		() => {
-			return statefulRequest(state)(
+			return request(
 				`/o/headless-delivery/v1.0/sites/${siteId}/documents`
 			);
 		}

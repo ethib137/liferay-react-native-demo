@@ -11,19 +11,16 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import Form from '../components/form/Form';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import {statefulRequest} from '../util/request';
 
 const FormsScreen = ({navigation}) => {
-	const [state] = useAppState();
+	const [state, , request] = useAppState();
 
 	const {siteId} = state;
 
 	const {data, error, refetch, status} = useQuery(
 		siteId && ['forms', siteId],
 		() => {
-			return statefulRequest(state)(
-				`/o/headless-form/v1.0/sites/${siteId}/forms`
-			);
+			return request(`/o/headless-form/v1.0/sites/${siteId}/forms`);
 		}
 	);
 

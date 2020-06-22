@@ -7,12 +7,11 @@ import {Button, CheckBox, Image} from 'react-native-elements';
 import {useAppState} from '../../hooks/appState';
 import styles from '../../styles/main';
 import {colors} from '../../styles/values';
-import {statefulRequest} from '../../util/request';
 import {getRelativeURL} from '../../util/url';
 import NoCartSelected from './NoCartSelected';
 
 const Product = (item) => {
-	const [state] = useAppState();
+	const [state, , request] = useAppState();
 
 	const {cartId} = state;
 
@@ -32,7 +31,7 @@ const Product = (item) => {
 	function addToCart() {
 		setLoading(true);
 
-		statefulRequest(state)(
+		request(
 			`/o/headless-commerce-delivery-cart/v1.0/carts/${cartId}/items`,
 			{
 				data: {

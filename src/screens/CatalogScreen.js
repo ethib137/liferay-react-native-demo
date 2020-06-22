@@ -16,11 +16,10 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import Product from '../components/commerce/Product';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import {statefulRequest} from '../util/request';
 import {getRelativeURL} from '../util/url';
 
 const Catalog = ({navigation}) => {
-	const [state] = useAppState();
+	const [state, , request] = useAppState();
 
 	const {accountId, channelId, siteId, userId} = state;
 
@@ -29,7 +28,7 @@ const Catalog = ({navigation}) => {
 	const {data, error, refetch, status} = useQuery(
 		identifier && channelId && ['products', identifier, channelId],
 		() => {
-			return statefulRequest(state)(
+			return request(
 				`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?nestedFields=skus${
 					accountId ? '&accountId=' + accountId : ''
 				}`

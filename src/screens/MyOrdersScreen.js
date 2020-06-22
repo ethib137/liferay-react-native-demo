@@ -14,17 +14,16 @@ import NoAccountSelected from '../components/commerce/NoAccountSelected';
 import Order from '../components/commerce/Order';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import {statefulRequest} from '../util/request';
 
 const MyOrders = ({navigation}) => {
-	const [state] = useAppState();
+	const [state, , request] = useAppState();
 
 	const {accountId, channelId, siteId} = state;
 
 	const {data, error, refetch, status} = useQuery(
 		['orders', accountId, channelId],
 		() => {
-			return statefulRequest(state)(
+			return request(
 				`/o/headless-commerce-admin-order/v1.0/orders?filter=accountId eq ${accountId} and channelId eq ${channelId} and orderStatus eq 1`
 			);
 		}

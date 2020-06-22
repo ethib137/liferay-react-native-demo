@@ -1,7 +1,11 @@
 import {asyncMultiSet, asyncRemove} from '../util/async';
-import {statefulLogin, statefulRequest} from '../util/request';
+import {statefulLogin} from '../util/request';
 
-export const loginAction = (username, password) => (dispatch, getState) => {
+export const loginAction = (username, password) => (
+	dispatch,
+	getState,
+	request
+) => {
 	dispatch({type: 'LOGGING_IN'});
 
 	statefulLogin(getState())({
@@ -14,11 +18,11 @@ export const loginAction = (username, password) => (dispatch, getState) => {
 				type: 'LOGGED_IN',
 			});
 
-			statefulRequest(getState())(
-				'/o/headless-admin-user/v1.0/my-user-account'
-			).then((res) => {
-				dispatch(setUserAction(res.id));
-			});
+			request('/o/headless-admin-user/v1.0/my-user-account').then(
+				(res) => {
+					dispatch(setUserAction(res.id));
+				}
+			);
 
 			asyncMultiSet({username});
 		})

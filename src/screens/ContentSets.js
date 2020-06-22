@@ -10,17 +10,16 @@ import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import {statefulRequest} from '../util/request';
 
 function ContentSets({navigation}) {
-	const [state] = useAppState();
+	const [state, , request] = useAppState();
 
 	const {siteId} = state;
 
 	const {data, error, refetch, status} = useQuery(
 		siteId && ['contentSets', siteId],
 		() => {
-			return statefulRequest(state)(
+			return request(
 				`/api/jsonws/assetlist.assetlistentry/get-asset-list-entries/group-id/${siteId}/start/-1/end/-1/-order-by-comparator`
 			);
 		}

@@ -24,13 +24,12 @@ import Order from '../components/commerce/Order';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
 import {colors} from '../styles/values';
-import {statefulRequest} from '../util/request';
 
 const Cart = ({navigation}) => {
-	const [state, dispatch] = useAppState();
+	const [state, dispatch, request] = useAppState();
 
 	function newCart() {
-		statefulRequest(state)(
+		request(
 			`/o/headless-commerce-delivery-cart/v1.0/channels/${channelId}/carts`,
 			{
 				data: {
@@ -57,9 +56,7 @@ const Cart = ({navigation}) => {
 				},
 				{
 					onPress: () => {
-						statefulRequest(
-							state
-						)(
+						request(
 							`/o/headless-commerce-admin-order/v1.0/orders/${id}`,
 							{method: 'DELETE'}
 						).then(() => {
@@ -78,7 +75,7 @@ const Cart = ({navigation}) => {
 	const {data, error, refetch, status} = useQuery(
 		['carts', accountId, channelId],
 		() => {
-			return statefulRequest(state)(
+			return request(
 				`/o/headless-commerce-admin-order/v1.0/orders?filter=accountId eq ${accountId} and channelId eq ${channelId} and orderStatus eq 2`
 			);
 		}

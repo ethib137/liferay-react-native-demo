@@ -13,7 +13,6 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
 import {colors} from '../styles/values';
-import {statefulRequest} from '../util/request';
 import {getRelativeURL} from '../util/url';
 
 const ACCOUNT_TYPE_MAP = {
@@ -22,16 +21,14 @@ const ACCOUNT_TYPE_MAP = {
 };
 
 const Accounts = () => {
-	const [state, dispatch] = useAppState();
+	const [state, dispatch, request] = useAppState();
 
 	const {accountId, siteId, userId} = state;
 
 	const {data, error, refetch, status} = useQuery(
 		['accounts', userId],
 		() => {
-			return statefulRequest(state)(
-				`/o/headless-commerce-admin-account/v1.0/accounts`
-			);
+			return request(`/o/headless-commerce-admin-account/v1.0/accounts`);
 		}
 	);
 
