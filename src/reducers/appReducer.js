@@ -1,16 +1,14 @@
-import Liferay from '../util/liferay-config';
-
 const initialState = {
 	accountId: null,
 	authenticationType: 'basic',
 	cartId: null,
 	channelId: null,
-	clientId: undefined,
+	clientId: 'id-2d52e3e0-6e9f-4d2b-7daf-6371d2eb3213',
 	error: undefined,
 	isConfigured: false,
 	isLoading: true,
 	lang: 'en_US',
-	liferayURL: undefined,
+	liferayURL: 'http://127.0.0.1:8080',
 	loggedIn: {
 		error: null,
 		loading: true,
@@ -39,10 +37,10 @@ const appStateReducer = (state, action) => {
 					data.authenticationType || state.authenticationType,
 				cartId: data.cartId || state.cartId,
 				channelId: data.channelId || state.channelId,
-				clientId: data.clientId || Liferay.clientId,
+				clientId: data.clientId || state.clientId,
 				isConfigured: data.clientId && data.liferayURL ? true : false,
 				isLoading: false,
-				liferayURL: data.liferayURL || Liferay.url,
+				liferayURL: data.liferayURL || state.liferayURL,
 				loggedIn: {
 					error: null,
 					loading: false,
