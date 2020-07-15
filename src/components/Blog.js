@@ -6,6 +6,8 @@ import HTML from 'react-native-render-html';
 
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
+import {spacing} from '../styles/values';
+import {getFullURL} from '../util/url';
 
 const Blog = (props) => {
 	const [state] = useAppState();
@@ -27,8 +29,25 @@ const Blog = (props) => {
 
 			<View style={styles.m2}>
 				<HTML
+					alterNode={(node) => {
+						const {name} = node;
+
+						if (name === 'img') {
+							node.attribs = {
+								...(node.attribs || {}),
+								src: getFullURL(
+									node.attribs.src,
+									state.liferayURL
+								),
+							};
+						}
+
+						return node;
+					}}
 					html={props.articleBody}
-					imagesMaxWidth={Dimensions.get('window').width}
+					imagesMaxWidth={
+						Dimensions.get('window').width - 2 * spacing[2]
+					}
 				/>
 			</View>
 		</ScrollView>
