@@ -101,10 +101,8 @@ const appStateReducer = (state, action) => {
 		case 'SAVED_CONFIGURATION': {
 			return {
 				...state,
-				authenticationType: data.authenticationType,
-				clientId: data.clientId,
+				...data,
 				isConfigured: true,
-				liferayURL: data.liferayURL,
 			};
 		}
 		case 'SET_ACCOUNT': {
