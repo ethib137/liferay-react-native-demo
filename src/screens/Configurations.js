@@ -59,6 +59,9 @@ const Configurations = () => {
 					if (!values.liferayURL) {
 						errors.liferayURL = 'Required';
 					}
+					else if (values.liferayURL.endsWith('/')) {
+						errors.liferayURL = 'The Liferay server URL must not end with a slash.';
+					}
 
 					return errors;
 				}}
