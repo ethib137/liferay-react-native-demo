@@ -49,8 +49,6 @@ function ContentSets({navigation}) {
 		<>
 			{items && (
 				<FlatList
-					data={items}
-					keyExtractor={({assetListEntryId}) => assetListEntryId}
 					ListHeaderComponent={
 						<>
 							{status === 'error' && (
@@ -71,6 +69,8 @@ function ContentSets({navigation}) {
 								)}
 						</>
 					}
+					data={items}
+					keyExtractor={({assetListEntryId}) => assetListEntryId}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

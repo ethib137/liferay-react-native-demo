@@ -74,8 +74,6 @@ const Accounts = () => {
 		<View style={{flex: 1}}>
 			{items && (
 				<FlatList
-					data={items}
-					keyExtractor={({id}) => id.toString()}
 					ListHeaderComponent={
 						<>
 							{status === 'error' && (
@@ -96,6 +94,8 @@ const Accounts = () => {
 								)}
 						</>
 					}
+					data={items}
+					keyExtractor={({id}) => id.toString()}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

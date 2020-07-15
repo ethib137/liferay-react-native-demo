@@ -4,9 +4,11 @@ module.exports = {
   es6: true,
   },
   "extends": [
-    "liferay/react"
+    "liferay/react",
+    "plugin:jest/recommended"
   ],
   "globals": {
     "require": "readonly"
-  }
+  },
+  "plugins": ["jest"]
 };

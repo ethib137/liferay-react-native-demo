@@ -54,8 +54,6 @@ const FormsScreen = ({navigation}) => {
 		<>
 			{items && (
 				<FlatList
-					data={items}
-					keyExtractor={({id}) => id.toString()}
 					ListHeaderComponent={
 						<>
 							{error && (
@@ -76,6 +74,8 @@ const FormsScreen = ({navigation}) => {
 								)}
 						</>
 					}
+					data={items}
+					keyExtractor={({id}) => id.toString()}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

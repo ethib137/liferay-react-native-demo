@@ -68,8 +68,6 @@ const Sites = () => {
 		<View>
 			{items && (
 				<FlatList
-					data={items}
-					keyExtractor={({id}) => id.toString()}
 					ListHeaderComponent={
 						<>
 							{curSite ? (
@@ -100,6 +98,8 @@ const Sites = () => {
 								)}
 						</>
 					}
+					data={items}
+					keyExtractor={({id}) => id.toString()}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

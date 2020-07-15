@@ -60,8 +60,6 @@ function Blogs({navigation}) {
 		<>
 			{items && (
 				<FlatList
-					data={items}
-					keyExtractor={({id}) => id.toString()}
 					ListHeaderComponent={
 						<>
 							{status === 'error' && (
@@ -82,6 +80,8 @@ function Blogs({navigation}) {
 								)}
 						</>
 					}
+					data={items}
+					keyExtractor={({id}) => id.toString()}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

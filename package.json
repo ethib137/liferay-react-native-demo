@@ -7,6 +7,7 @@
     "web": "expo start --web",
     "lint": "eslint --fix src",
     "prettier": "prettier --write src/",
+    "test": "jest",
     "eject": "expo eject"
   },
   "dependencies": {
@@ -37,6 +38,7 @@
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
     "react-native-url-polyfill": "^1.1.2",
+    "react-native-vector-icons": "^6.6.0",
     "react-native-web": "~0.11.7",
     "react-native-webview": "9.4.0",
     "react-query": "^1.5.5"
@@ -46,7 +48,9 @@
     "babel-preset-expo": "^8.2.3",
     "eslint": "^6.8.0",
     "eslint-config-liferay": "^20.0.1",
+    "eslint-plugin-jest": "^23.17.1",
     "eslint-plugin-liferay": "0.0.1",
+    "jest": "^26.1.0",
     "prettier": "2.0.4"
   },
   "private": true
