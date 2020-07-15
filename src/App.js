@@ -5,18 +5,18 @@ import hydrate from './actions/hydrate';
 import CustomDrawerContent from './components/CustomDrawerContent';
 import {useAppState} from './hooks/appState';
 import AccountsScreen from './screens/AccountsScreen';
-import Blogs from './screens/Blogs';
+import BlogsScreen from './screens/BlogsScreen';
 import CartScreen from './screens/CartScreen';
 import CatalogScreen from './screens/CatalogScreen';
-import Configurations from './screens/Configurations';
-import ContentSets from './screens/ContentSets';
-import Documents from './screens/Documents';
+import ConfigurationsScreen from './screens/ConfigurationsScreen';
+import ContentSetsScreen from './screens/ContentSetsScreen';
+import DocumentsScreen from './screens/DocumentsScreen';
 import FormsScreen from './screens/FormsScreen';
-import Home from './screens/Home';
+import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import MyOrdersScreen from './screens/MyOrdersScreen';
-import Sites from './screens/Sites';
-import Splash from './screens/Splash';
+import SitesScreen from './screens/SitesScreen';
+import SplashScreen from './screens/SplashScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -35,27 +35,29 @@ const App = () => {
 			drawerType="back"
 			initialRouteName={loggedIn.value ? 'Home' : 'Login'}
 		>
-			{isLoading && <Drawer.Screen component={Splash} name="Splash" />}
+			{isLoading && (
+				<Drawer.Screen component={SplashScreen} name="Splash" />
+			)}
 
 			{!isLoading && loggedIn.value && (
 				<>
 					<Drawer.Screen
-						component={Home}
+						component={HomeScreen}
 						name="Home"
 						options={{title: 'Home'}}
 					/>
 					<Drawer.Screen
-						component={Blogs}
+						component={BlogsScreen}
 						name="Blogs"
 						options={{title: 'Blogs'}}
 					/>
 					<Drawer.Screen
-						component={ContentSets}
+						component={ContentSetsScreen}
 						name="ContentSets"
 						options={{title: 'Content Sets'}}
 					/>
 					<Drawer.Screen
-						component={Documents}
+						component={DocumentsScreen}
 						name="Documents"
 						options={{title: 'Documents'}}
 					/>
@@ -89,7 +91,7 @@ const App = () => {
 						</>
 					)}
 					<Drawer.Screen
-						component={Sites}
+						component={SitesScreen}
 						name="Sites"
 						options={{title: 'Sites'}}
 					/>
@@ -101,7 +103,7 @@ const App = () => {
 			)}
 
 			<Drawer.Screen
-				component={Configurations}
+				component={ConfigurationsScreen}
 				name="Configurations"
 				options={{title: 'Configurations'}}
 			/>
