@@ -1,14 +1,15 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import moment from 'moment-timezone';
-import React from 'react';
+import React, {useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Card} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useQuery} from 'react-query';
+import {usePaginatedQuery} from 'react-query';
 
 import CardItemRow from '../components/CardItemRow';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
+import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import NoAccountSelected from '../components/commerce/NoAccountSelected';
 import Order from '../components/commerce/Order';
@@ -20,18 +21,20 @@ const MyOrders = ({navigation}) => {
 
 	const {accountId, channelId, siteId} = state;
 
-	const {data, error, refetch, status} = useQuery(
-		['orders', accountId, channelId],
+	const [page, setPage] = useState(1);
+
+	const {error, refetch, resolvedData, status} = usePaginatedQuery(
+		['orders', accountId, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-admin-order/v1.0/orders?filter=accountId eq ${accountId} and channelId eq ${channelId} and orderStatus eq 1`
+				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=accountId eq ${accountId} and channelId eq ${channelId} and orderStatus eq 1`
 			);
 		}
 	);
 
-	const items = data ? data.items : [];
+	const items = resolvedData ? resolvedData.items : [];
 
-	const renderItem = ({item}) => (
+	const renderItem = ({index, item}) => (
 		<TouchableOpacity
 			onPress={() => {
 				navigation.navigate('Order', {
@@ -40,6 +43,10 @@ const MyOrders = ({navigation}) => {
 			}}
 		>
 			<Card
+				containerStyle={[
+					index === items.length - 1 ? styles.mb2 : null,
+					styles.m2,
+				]}
 				style={[styles.m1, {width: '100%'}]}
 				title={`Order ${item.id}`}
 			>
@@ -99,6 +106,16 @@ const MyOrders = ({navigation}) => {
 						/>
 					}
 					renderItem={(obj) => renderItem(obj)}
+				/>
+			)}
+
+			{resolvedData && (
+				<Pagination
+					lastPage={resolvedData.lastPage}
+					page={resolvedData.page}
+					pageSize={resolvedData.pageSize}
+					setPage={setPage}
+					totalCount={resolvedData.totalCount}
 				/>
 			)}
 		</View>

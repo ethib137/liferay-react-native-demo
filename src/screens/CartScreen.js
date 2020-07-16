@@ -1,7 +1,7 @@
 import {Ionicons} from '@expo/vector-icons';
 import {createStackNavigator} from '@react-navigation/stack';
 import moment from 'moment-timezone';
-import React from 'react';
+import React, {useState} from 'react';
 import {
 	Alert,
 	FlatList,
@@ -12,12 +12,13 @@ import {
 	View,
 } from 'react-native';
 import {Button, Card} from 'react-native-elements';
-import {useQuery} from 'react-query';
+import {usePaginatedQuery} from 'react-query';
 
 import {setCartAction} from '../actions/cart';
 import CardItemRow from '../components/CardItemRow';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
+import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import NoAccountSelected from '../components/commerce/NoAccountSelected';
 import Order from '../components/commerce/Order';
@@ -72,18 +73,20 @@ const Cart = ({navigation}) => {
 
 	const {accountId, cartId, channelId, siteId} = state;
 
-	const {data, error, refetch, status} = useQuery(
-		['carts', accountId, channelId],
+	const [page, setPage] = useState(1);
+
+	const {error, refetch, resolvedData, status} = usePaginatedQuery(
+		['carts', accountId, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-admin-order/v1.0/orders?filter=accountId eq ${accountId} and channelId eq ${channelId} and orderStatus eq 2`
+				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=accountId eq ${accountId} and channelId eq ${channelId} and orderStatus eq 2`
 			);
 		}
 	);
 
-	const items = data ? data.items : [];
+	const items = resolvedData ? resolvedData.items : [];
 
-	const renderItem = ({item}) => {
+	const renderItem = ({index, item}) => {
 		const selectedCart = cartId === item.id;
 
 		return (
@@ -96,10 +99,11 @@ const Cart = ({navigation}) => {
 			>
 				<Card
 					containerStyle={[
+						index === items.length - 1 ? styles.mb2 : null,
 						selectedCart ? cartStyles.selected : {},
+						styles.m2,
 						styles.pRelative,
 					]}
-					style={[styles.m1, {width: '100%'}]}
 					title={`Cart ${item.id}`}
 				>
 					<Button
@@ -183,6 +187,16 @@ const Cart = ({navigation}) => {
 						/>
 					}
 					renderItem={(obj) => renderItem(obj)}
+				/>
+			)}
+
+			{resolvedData && (
+				<Pagination
+					lastPage={resolvedData.lastPage}
+					page={resolvedData.page}
+					pageSize={resolvedData.pageSize}
+					setPage={setPage}
+					totalCount={resolvedData.totalCount}
 				/>
 			)}
 		</View>

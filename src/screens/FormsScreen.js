@@ -1,12 +1,13 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
+import React, {useState} from 'react';
 import {RefreshControl, Text, View} from 'react-native';
 import {Button, Card} from 'react-native-elements';
 import {FlatList} from 'react-native-gesture-handler';
-import {useQuery} from 'react-query';
+import {usePaginatedQuery} from 'react-query';
 
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
+import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import Form from '../components/form/Form';
 import {useAppState} from '../hooks/appState';
@@ -17,17 +18,27 @@ const FormsScreen = ({navigation}) => {
 
 	const {siteId} = state;
 
-	const {data, error, refetch, status} = useQuery(
-		siteId && ['forms', siteId],
+	const [page, setPage] = useState(1);
+
+	const {error, refetch, resolvedData, status} = usePaginatedQuery(
+		siteId && ['forms', siteId, page],
 		() => {
-			return request(`/o/headless-form/v1.0/sites/${siteId}/forms`);
+			return request(
+				`/o/headless-form/v1.0/sites/${siteId}/forms?page=${page}`
+			);
 		}
 	);
 
-	const items = data ? data.items : [];
+	const items = resolvedData ? resolvedData.items : [];
 
-	const renderItem = ({item}) => (
-		<Card style={[styles.m1, styles.w100]} title={item.name}>
+	const renderItem = ({index, item}) => (
+		<Card
+			containerStyle={[
+				index === items.length - 1 ? styles.mb2 : null,
+				styles.m2,
+			]}
+			title={item.name}
+		>
 			<View>
 				{item.description.length > 0 && (
 					<Text style={styles.mb2}>{item.description}</Text>
@@ -83,6 +94,16 @@ const FormsScreen = ({navigation}) => {
 						/>
 					}
 					renderItem={(obj) => renderItem(obj)}
+				/>
+			)}
+
+			{resolvedData && (
+				<Pagination
+					lastPage={resolvedData.lastPage}
+					page={resolvedData.page}
+					pageSize={resolvedData.pageSize}
+					setPage={setPage}
+					totalCount={resolvedData.totalCount}
 				/>
 			)}
 		</>

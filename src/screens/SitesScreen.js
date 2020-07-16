@@ -1,12 +1,13 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
+import React, {useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Button, Card} from 'react-native-elements';
-import {useQuery} from 'react-query';
+import {usePaginatedQuery, useQuery} from 'react-query';
 
 import {setChannelAction} from '../actions/channel';
 import {setSiteAction} from '../actions/site';
 import ErrorDisplay from '../components/ErrorDisplay';
+import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
@@ -16,9 +17,16 @@ const Sites = () => {
 
 	const {siteId} = state;
 
-	const {data, error, refetch, status} = useQuery(['sites'], () => {
-		return request(`/o/headless-admin-user/v1.0/my-user-account/sites`);
-	});
+	const [page, setPage] = useState(1);
+
+	const {error, refetch, resolvedData, status} = usePaginatedQuery(
+		['sites', page],
+		() => {
+			return request(
+				`/o/headless-admin-user/v1.0/my-user-account/sites?page=${page}&pageSize=20`
+			);
+		}
+	);
 
 	const {data: channels} = useQuery(['channels'], () => {
 		return request(
@@ -42,7 +50,7 @@ const Sites = () => {
 		}
 	}
 
-	const items = data ? data.items : [];
+	const items = resolvedData ? resolvedData.items : [];
 
 	const renderItem = ({item}) => {
 		const selectedSite = siteId === item.id;
@@ -65,7 +73,7 @@ const Sites = () => {
 	const curSite = items.find(({id}) => id === siteId);
 
 	return (
-		<View>
+		<View style={{flex: 1}}>
 			{items && (
 				<FlatList
 					ListHeaderComponent={
@@ -107,7 +115,16 @@ const Sites = () => {
 						/>
 					}
 					renderItem={(obj) => renderItem(obj)}
-					style={styles.mb5}
+				/>
+			)}
+
+			{resolvedData && (
+				<Pagination
+					lastPage={resolvedData.lastPage}
+					page={resolvedData.page}
+					pageSize={resolvedData.pageSize}
+					setPage={setPage}
+					totalCount={resolvedData.totalCount}
 				/>
 			)}
 		</View>

@@ -1,14 +1,15 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
+import React, {useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import {Card} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useQuery} from 'react-query';
+import {usePaginatedQuery} from 'react-query';
 
 import {setAccountAction} from '../actions/account';
 import CardItemRow from '../components/CardItemRow';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
+import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
@@ -25,21 +26,27 @@ const Accounts = () => {
 
 	const {accountId, siteId, userId} = state;
 
-	const {data, error, refetch, status} = useQuery(
-		['accounts', userId],
+	const [page, setPage] = useState(1);
+
+	const {error, refetch, resolvedData, status} = usePaginatedQuery(
+		['accounts', userId, page],
 		() => {
-			return request(`/o/headless-commerce-admin-account/v1.0/accounts`);
+			return request(
+				`/o/headless-commerce-admin-account/v1.0/accounts?page=${page}&pageSize=10`
+			);
 		}
 	);
 
-	const items = data ? data.items : [];
+	const items = resolvedData ? resolvedData.items : [];
 
-	const renderItem = ({item}) => (
+	const renderItem = ({index, item}) => (
 		<TouchableOpacity onPress={() => dispatch(setAccountAction(item.id))}>
 			<Card
-				containerStyle={
-					accountId === item.id ? accountStyles.selected : {}
-				}
+				containerStyle={[
+					accountId === item.id ? accountStyles.selected : null,
+					index === items.length - 1 ? styles.mb2 : null,
+					styles.m2,
+				]}
 				image={
 					item.urlImage
 						? {
@@ -103,6 +110,16 @@ const Accounts = () => {
 						/>
 					}
 					renderItem={(obj) => renderItem(obj)}
+				/>
+			)}
+
+			{resolvedData && (
+				<Pagination
+					lastPage={resolvedData.lastPage}
+					page={resolvedData.page}
+					pageSize={resolvedData.pageSize}
+					setPage={setPage}
+					totalCount={resolvedData.totalCount}
 				/>
 			)}
 		</View>

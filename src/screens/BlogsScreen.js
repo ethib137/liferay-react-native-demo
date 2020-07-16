@@ -1,12 +1,13 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
+import React, {useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Button, Card} from 'react-native-elements';
-import {useQuery} from 'react-query';
+import {usePaginatedQuery} from 'react-query';
 
 import Blog from '../components/Blog';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
+import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
@@ -16,25 +17,30 @@ function Blogs({navigation}) {
 
 	const {siteId} = state;
 
-	const {data, error, refetch, status} = useQuery(
-		siteId && ['blogs', siteId],
+	const [page, setPage] = useState(1);
+
+	const {error, refetch, resolvedData, status} = usePaginatedQuery(
+		siteId && ['blogs', siteId, page],
 		() => {
 			return request(
-				`/o/headless-delivery/v1.0/sites/${siteId}/blog-postings`
+				`/o/headless-delivery/v1.0/sites/${siteId}/blog-postings?page=${page}`
 			);
 		}
 	);
 
-	const items = data ? data.items : [];
+	const items = resolvedData ? resolvedData.items : [];
 
-	const renderItem = ({item}) => (
+	const renderItem = ({index, item}) => (
 		<Card
+			containerStyle={[
+				index === items.length - 1 ? styles.mb2 : null,
+				styles.m2,
+			]}
 			image={
 				item.image
 					? {uri: state.liferayURL + item.image.contentUrl}
 					: null
 			}
-			style={[styles.m1, {width: '100%'}]}
 			title={item.headline}
 		>
 			<View>
@@ -57,7 +63,7 @@ function Blogs({navigation}) {
 	}
 
 	return (
-		<>
+		<View style={{flex: 1}}>
 			{items && (
 				<FlatList
 					ListHeaderComponent={
@@ -91,7 +97,17 @@ function Blogs({navigation}) {
 					renderItem={(obj) => renderItem(obj)}
 				/>
 			)}
-		</>
+
+			{resolvedData && (
+				<Pagination
+					lastPage={resolvedData.lastPage}
+					page={resolvedData.page}
+					pageSize={resolvedData.pageSize}
+					setPage={setPage}
+					totalCount={resolvedData.totalCount}
+				/>
+			)}
+		</View>
 	);
 }
 

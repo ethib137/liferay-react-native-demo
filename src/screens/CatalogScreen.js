@@ -1,5 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
+import React, {useState} from 'react';
 import {
 	FlatList,
 	RefreshControl,
@@ -8,10 +8,11 @@ import {
 	View,
 } from 'react-native';
 import {Card} from 'react-native-elements';
-import {useQuery} from 'react-query';
+import {usePaginatedQuery} from 'react-query';
 
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
+import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import Product from '../components/commerce/Product';
 import {useAppState} from '../hooks/appState';
@@ -23,22 +24,24 @@ const Catalog = ({navigation}) => {
 
 	const {accountId, channelId, siteId, userId} = state;
 
+	const [page, setPage] = useState(1);
+
 	const identifier = accountId || userId;
 
-	const {data, error, refetch, status} = useQuery(
-		identifier && channelId && ['products', identifier, channelId],
+	const {error, refetch, resolvedData, status} = usePaginatedQuery(
+		identifier && channelId && ['products', identifier, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?nestedFields=skus${
+				`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?page=${page}&nestedFields=skus${
 					accountId ? '&accountId=' + accountId : ''
 				}`
 			);
 		}
 	);
 
-	const items = data ? data.items : [];
+	const items = resolvedData ? resolvedData.items : [];
 
-	const renderItem = ({item}) => (
+	const renderItem = ({index, item}) => (
 		<TouchableOpacity
 			onPress={() => {
 				navigation.navigate('Product', {
@@ -47,6 +50,10 @@ const Catalog = ({navigation}) => {
 			}}
 		>
 			<Card
+				containerStyle={[
+					index === items.length - 1 ? styles.mb2 : null,
+					styles.m2,
+				]}
 				image={
 					item.urlImage
 						? {
@@ -107,6 +114,16 @@ const Catalog = ({navigation}) => {
 						/>
 					}
 					renderItem={(obj) => renderItem(obj)}
+				/>
+			)}
+
+			{resolvedData && (
+				<Pagination
+					lastPage={resolvedData.lastPage}
+					page={resolvedData.page}
+					pageSize={resolvedData.pageSize}
+					setPage={setPage}
+					totalCount={resolvedData.totalCount}
 				/>
 			)}
 		</View>
