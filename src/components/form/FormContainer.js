@@ -1,25 +1,11 @@
 import React from 'react';
-import {
-	Keyboard,
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
-	TouchableWithoutFeedback,
-} from 'react-native';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
+import {Keyboard, TouchableWithoutFeedback} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 function FormContainer(props) {
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<ScrollView>
-				<KeyboardAvoidingView
-					behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-				>
-					{props.children}
-
-					<KeyboardSpacer />
-				</KeyboardAvoidingView>
-			</ScrollView>
+			<KeyboardAwareScrollView>{props.children}</KeyboardAwareScrollView>
 		</TouchableWithoutFeedback>
 	);
 }
