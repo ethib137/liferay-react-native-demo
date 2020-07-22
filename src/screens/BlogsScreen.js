@@ -10,6 +10,7 @@ import NoSiteSelected from '../components/NoSiteSelected';
 import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
+import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 
 function Blogs({navigation}) {
@@ -27,6 +28,8 @@ function Blogs({navigation}) {
 			);
 		}
 	);
+
+	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
 
 	const items = resolvedData ? resolvedData.items : [];
 
@@ -88,6 +91,7 @@ function Blogs({navigation}) {
 					}
 					data={items}
 					keyExtractor={({id}) => id.toString()}
+					ref={flatList}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

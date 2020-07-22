@@ -12,6 +12,7 @@ import NoSiteSelected from '../components/NoSiteSelected';
 import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
+import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 import {colors} from '../styles/values';
 import {getRelativeURL} from '../util/url';
@@ -36,6 +37,8 @@ const Accounts = () => {
 			);
 		}
 	);
+
+	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
 
 	const items = resolvedData ? resolvedData.items : [];
 
@@ -103,6 +106,7 @@ const Accounts = () => {
 					}
 					data={items}
 					keyExtractor={({id}) => id.toString()}
+					ref={flatList}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

@@ -16,6 +16,7 @@ import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import Product from '../components/commerce/Product';
 import {useAppState} from '../hooks/appState';
+import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 import {getRelativeURL} from '../util/url';
 
@@ -38,6 +39,8 @@ const Catalog = ({navigation}) => {
 			);
 		}
 	);
+
+	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
 
 	const items = resolvedData ? resolvedData.items : [];
 
@@ -107,6 +110,7 @@ const Catalog = ({navigation}) => {
 					}
 					data={items}
 					keyExtractor={({id}) => id.toString()}
+					ref={flatList}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

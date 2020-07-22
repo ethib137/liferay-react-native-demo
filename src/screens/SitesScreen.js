@@ -10,6 +10,7 @@ import ErrorDisplay from '../components/ErrorDisplay';
 import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
+import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 
 const Sites = () => {
@@ -49,6 +50,8 @@ const Sites = () => {
 			);
 		}
 	}
+
+	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
 
 	const items = resolvedData ? resolvedData.items : [];
 
@@ -108,6 +111,7 @@ const Sites = () => {
 					}
 					data={items}
 					keyExtractor={({id}) => id.toString()}
+					ref={flatList}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

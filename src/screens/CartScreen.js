@@ -23,6 +23,7 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import NoAccountSelected from '../components/commerce/NoAccountSelected';
 import Order from '../components/commerce/Order';
 import {useAppState} from '../hooks/appState';
+import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 import {colors} from '../styles/values';
 
@@ -83,6 +84,8 @@ const Cart = ({navigation}) => {
 			);
 		}
 	);
+
+	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
 
 	const items = resolvedData ? resolvedData.items : [];
 
@@ -180,6 +183,7 @@ const Cart = ({navigation}) => {
 					}
 					data={items}
 					keyExtractor={({id}) => id.toString()}
+					ref={flatList}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}

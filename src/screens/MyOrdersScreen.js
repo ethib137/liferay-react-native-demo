@@ -14,6 +14,7 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import NoAccountSelected from '../components/commerce/NoAccountSelected';
 import Order from '../components/commerce/Order';
 import {useAppState} from '../hooks/appState';
+import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 
 const MyOrders = ({navigation}) => {
@@ -31,6 +32,8 @@ const MyOrders = ({navigation}) => {
 			);
 		}
 	);
+
+	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
 
 	const items = resolvedData ? resolvedData.items : [];
 
@@ -99,6 +102,7 @@ const MyOrders = ({navigation}) => {
 					}
 					data={items}
 					keyExtractor={({id}) => id.toString()}
+					ref={flatList}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}
