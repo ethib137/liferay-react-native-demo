@@ -89,7 +89,7 @@ const Catalog = ({navigation}) => {
 						<>
 							{status === 'error' && (
 								<ErrorDisplay
-									error={error.message}
+									error={error.title}
 									onRetry={() => refetch()}
 								/>
 							)}

@@ -127,14 +127,12 @@ export default function (options = {}) {
 			let error;
 
 			try {
-				const errorObj = JSON.parse(text);
-
-				error = errorObj.error;
+				error = JSON.parse(text);
 			} catch (e) {
 				error = text;
 			}
 
-			throw new Error(error);
+			return Promise.reject(error);
 		}
 	}
 

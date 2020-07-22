@@ -33,9 +33,13 @@ class ErrorBoundary extends React.Component {
 				<View>
 					<Alert displayType="warning" text="Something went wrong." />
 
-					<Text>{this.state.error.toString()}</Text>
+					{this.state.error &&
+						<Text>{this.state.error.toString()}</Text>
+					}
 
-					<Text>{this.state.errorInfo.toString()}</Text>
+					{this.state.errorInfo &&
+						<Text>{this.state.errorInfo.toString()}</Text>
+					}
 				</View>
 			);
 		}
