@@ -1,9 +1,10 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
-import {Card} from 'react-native-elements';
+import {Button, Card} from 'react-native-elements';
 import {usePaginatedQuery} from 'react-query';
 
+import Document from '../components/Document';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import Pagination from '../components/Pagination';
@@ -12,7 +13,7 @@ import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 
-const Documents = () => {
+const Documents = ({navigation}) => {
 	const [state, , request] = useAppState();
 
 	const {siteId} = state;
@@ -47,8 +48,16 @@ const Documents = () => {
 		>
 			<View>
 				<Text>{item.description}</Text>
-				<Text selectable={true}>{item.id}</Text>
 			</View>
+
+			<Button
+				onPress={() =>
+					navigation.navigate('DocumentEntry', {
+						...item,
+					})
+				}
+				title="View Document"
+			/>
 		</Card>
 	);
 
@@ -106,6 +115,10 @@ const Documents = () => {
 	);
 };
 
+function ViewDocument({route}) {
+	return <Document {...route.params} />;
+}
+
 const Stack = createStackNavigator();
 
 function DocumentsNavigation({navigation}) {
@@ -122,6 +135,13 @@ function DocumentsNavigation({navigation}) {
 				component={Documents}
 				name="Documents"
 				options={{title: 'Documents'}}
+			/>
+			<Stack.Screen
+				component={ViewDocument}
+				name="DocumentEntry"
+				options={({route}) => {
+					return {title: route.params.title};
+				}}
 			/>
 		</Stack.Navigator>
 	);
