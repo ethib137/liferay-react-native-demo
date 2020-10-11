@@ -1,47 +1,60 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
-import {Card} from 'react-native-elements';
-import {useQuery} from 'react-query';
+import {Button, Card} from 'react-native-elements';
+import {usePaginatedQuery} from 'react-query';
 
 import {useAppState} from '../hooks/appState';
+import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 import ErrorDisplay from './ErrorDisplay';
+import Pagination from './Pagination';
 
-const ContentSet = ({contentSetId}) => {
+const ContentSet = ({contentSetId, navigation}) => {
 	const [, , request] = useAppState();
 
-	const {data, error, refetch, status} = useQuery(
-		contentSetId && ['contentSet', contentSetId],
+	const [page, setPage] = useState(1);
+
+	const {error, refetch, resolvedData, status} = usePaginatedQuery(
+		contentSetId && ['contentSet', contentSetId, page],
 		() => {
 			return request(
-				`/o/headless-delivery/v1.0/content-sets/${contentSetId}/content-set-elements`
+				`/o/headless-delivery/v1.0/content-sets/${contentSetId}/content-set-elements?page=${page}&pageSize=20`
 			);
 		}
 	);
 
-	const items = data ? data.items : [];
+	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
 
-	items.forEach(item => {
-		console.log(item);
-	})
+	const items = resolvedData ? resolvedData.items : [];
 
 	return (
-		<View>
-			{status === 'error' && (
-				<ErrorDisplay error={error.message} onRetry={() => refetch()} />
-			)}
-
-			{items && items.length === 0 && status === 'success' && (
-				<Text style={[styles.m2, styles.textCenter]}>
-					There are no items to display.
-				</Text>
-			)}
-
+		<View style={{flex: 1}}>
 			{items && (
 				<FlatList
+					ListHeaderComponent={
+						<>
+							{status === 'error' && (
+								<ErrorDisplay
+									error={error.message}
+									onRetry={() => refetch()}
+								/>
+							)}
+
+							{items &&
+								items.length === 0 &&
+								status === 'success' && (
+									<Text
+										style={[styles.m2, styles.textCenter]}
+									>
+										There are no items to display.
+									</Text>
+								)}
+						</>
+					}
 					data={items}
 					keyExtractor={({id}) => id.toString()}
+					ref={flatList}
 					refreshControl={
 						<RefreshControl
 							onRefresh={() => refetch()}
@@ -51,14 +64,36 @@ const ContentSet = ({contentSetId}) => {
 					renderItem={({item}) => (
 						<Card
 							key={item.id}
-							style={styles.m1}
+							style={styles.m2}
 							title={item.title}
 						>
-							{item.description && item.description !== '' && (
-								<Text>{item.description}</Text>
-							)}
+							{item.content &&
+								!!item.content.description &&
+								item.content.description !== '' && (
+									<Text>{item.content.description}</Text>
+								)}
+
+							<Button
+								onPress={() =>
+									navigation.navigate('ContentSetEntry', {
+										item,
+										title: item.title,
+									})
+								}
+								title="View Entry"
+							/>
 						</Card>
 					)}
+				/>
+			)}
+
+			{resolvedData && (
+				<Pagination
+					lastPage={resolvedData.lastPage}
+					page={resolvedData.page}
+					pageSize={resolvedData.pageSize}
+					setPage={setPage}
+					totalCount={resolvedData.totalCount}
 				/>
 			)}
 		</View>

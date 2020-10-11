@@ -1,18 +1,16 @@
 import PropTypes from 'prop-types';
 import React, {useCallback} from 'react';
-import {Dimensions, Text, View} from 'react-native';
-import {Image} from 'react-native-elements';
+import {Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import HTML from 'react-native-render-html';
 
 import Comments from '../comments';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
-import {spacing} from '../styles/values';
-import {getFullURL} from '../util/url';
+import HTML from './HTML';
+import Image from './Image';
 
 const Blog = (props) => {
-	const [state, , request] = useAppState();
+	const [, , request] = useAppState();
 
 	const blogId = props.id;
 
@@ -42,12 +40,7 @@ const Blog = (props) => {
 
 	return (
 		<KeyboardAwareScrollView extraScrollHeight={20}>
-			{props.image && (
-				<Image
-					source={{uri: state.liferayURL + props.image.contentUrl}}
-					style={{height: 200, width: '100%'}}
-				/>
-			)}
+			{props.image && <Image relativeURL={props.image.contentUrl} />}
 
 			<Text style={[styles.m2, styles.h1]}>{props.headline}</Text>
 
@@ -56,27 +49,7 @@ const Blog = (props) => {
 			</Text>
 
 			<View style={styles.m2}>
-				<HTML
-					alterNode={(node) => {
-						const {name} = node;
-
-						if (name === 'img') {
-							node.attribs = {
-								...(node.attribs || {}),
-								src: getFullURL(
-									node.attribs.src,
-									state.liferayURL
-								),
-							};
-						}
-
-						return node;
-					}}
-					html={props.articleBody}
-					imagesMaxWidth={
-						Dimensions.get('window').width - 2 * spacing[2]
-					}
-				/>
+				<HTML html={props.articleBody} />
 			</View>
 
 			<Comments
