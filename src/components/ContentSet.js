@@ -22,6 +22,10 @@ const ContentSet = ({contentSetId}) => {
 
 	const items = data ? data.items : [];
 
+	items.forEach(item => {
+		console.log(item);
+	})
+
 	return (
 		<View>
 			{status === 'error' && (
