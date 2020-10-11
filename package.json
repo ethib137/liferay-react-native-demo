@@ -43,7 +43,8 @@
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "~0.13.7",
     "react-native-webview": "10.7.0",
-    "react-query": "^2.23.1"
+    "react-query": "^2.23.1",
+    "react-native-maps": "0.27.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

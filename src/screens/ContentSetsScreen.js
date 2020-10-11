@@ -4,14 +4,21 @@ import {FlatList, RefreshControl, Text} from 'react-native';
 import {Button, Card} from 'react-native-elements';
 import {useQuery} from 'react-query';
 
+import CardItemRow from '../components/CardItemRow';
 import ContentSet from '../components/ContentSet';
+import ContentSetEntry from '../components/ContentSetEntry';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
 
-function ContentSets({navigation}) {
+const TYPE_MAP = {
+	0: 'Dynamic Selction',
+	1: 'Manual Seleciton',
+};
+
+const ContentSets = ({navigation}) => {
 	const [state, , request] = useAppState();
 
 	const {siteId} = state;
@@ -29,6 +36,9 @@ function ContentSets({navigation}) {
 
 	const renderItem = ({item}) => (
 		<Card style={[styles.m1, styles.w100]} title={item.title}>
+			<CardItemRow label="Id" value={item.assetListEntryId} />
+			<CardItemRow label="Type" value={TYPE_MAP[item.type]} />
+
 			<Button
 				onPress={() =>
 					navigation.navigate('ContentSet', {
@@ -82,10 +92,14 @@ function ContentSets({navigation}) {
 			)}
 		</>
 	);
+};
+
+function ContentSetDisplay({navigation, route}) {
+	return <ContentSet navigation={navigation} {...route.params} />;
 }
 
-function ContentSetDisplay({route}) {
-	return <ContentSet {...route.params} />;
+function ViewContentSetEntry({route}) {
+	return <ContentSetEntry {...route.params} />;
 }
 
 const Stack = createStackNavigator();
@@ -105,10 +119,16 @@ function ContentSetsNavigation({navigation}) {
 				name="ContentSets"
 				options={{title: 'Content Sets'}}
 			/>
-
 			<Stack.Screen
 				component={ContentSetDisplay}
 				name="ContentSet"
+				options={({route}) => {
+					return {title: route.params.title};
+				}}
+			/>
+			<Stack.Screen
+				component={ViewContentSetEntry}
+				name="ContentSetEntry"
 				options={({route}) => {
 					return {title: route.params.title};
 				}}
