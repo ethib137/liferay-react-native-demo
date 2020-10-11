@@ -3,10 +3,10 @@ import {Formik} from 'formik';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {save} from '../actions/configuration';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
-import FormContainer from '../components/form/FormContainer';
 import FormikPicker from '../components/form/FormikPicker';
 import FormikTextInput from '../components/form/FormikTextInput';
 import {useAppState} from '../hooks/appState';
@@ -34,7 +34,7 @@ const Configurations = () => {
 	}
 
 	return (
-		<FormContainer>
+		<KeyboardAwareScrollView extraScrollHeight={20}>
 			<Formik
 				initialValues={{
 					authenticationType,
@@ -140,7 +140,7 @@ const Configurations = () => {
 					</View>
 				)}
 			</Formik>
-		</FormContainer>
+		</KeyboardAwareScrollView>
 	);
 };
 

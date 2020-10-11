@@ -21,6 +21,7 @@ export const colors = {
 		border: '#ff8f39',
 		text: '#B95000',
 	},
+	white: '#FFF',
 };
 
 export const greys = [
