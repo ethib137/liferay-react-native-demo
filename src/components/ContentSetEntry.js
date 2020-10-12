@@ -65,9 +65,10 @@ const ContentSetEntry = (props) => {
 			{item.content &&
 				!!item.content.description &&
 				item.content.description !== '' && (
-					<Text style={[styles.mx2, styles.h4]}>
-						{item.content.description}
-					</Text>
+					<HTML
+						containerStyle={[styles.mx2, styles.h4]}
+						html={item.content.description}
+					/>
 				)}
 
 			{item.content &&

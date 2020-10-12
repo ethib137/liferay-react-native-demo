@@ -24,6 +24,7 @@ const HTML = (props) => {
 
 				return node;
 			}}
+			containerStyle={props.containerStyle}
 			html={props.html}
 			imagesMaxWidth={Dimensions.get('window').width - 2 * spacing[2]}
 		/>
@@ -31,6 +32,7 @@ const HTML = (props) => {
 };
 
 HTML.propTypes = {
+	containerStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 	html: PropTypes.string.isRequired,
 };
 

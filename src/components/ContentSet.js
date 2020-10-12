@@ -8,6 +8,7 @@ import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 import ErrorDisplay from './ErrorDisplay';
+import HTML from './HTML';
 import Pagination from './Pagination';
 
 const ContentSet = ({contentSetId, navigation}) => {
@@ -70,7 +71,7 @@ const ContentSet = ({contentSetId, navigation}) => {
 							{item.content &&
 								!!item.content.description &&
 								item.content.description !== '' && (
-									<Text>{item.content.description}</Text>
+									<HTML html={item.content.description} />
 								)}
 
 							<Button
