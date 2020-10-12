@@ -4,6 +4,7 @@ import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Button, Card} from 'react-native-elements';
 import {usePaginatedQuery} from 'react-query';
 
+import CommentThread from '../comments/CommentThread';
 import Blog from '../components/Blog';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
@@ -50,11 +51,7 @@ function Blogs({navigation}) {
 				<Text style={styles.mb2}>{item.alternativeHeadline}</Text>
 
 				<Button
-					onPress={() =>
-						navigation.navigate('BlogEntry', {
-							...item,
-						})
-					}
+					onPress={() => navigation.navigate('BlogEntry', item)}
 					title="Keep Reading"
 				/>
 			</View>
@@ -115,10 +112,6 @@ function Blogs({navigation}) {
 	);
 }
 
-function ViewBlog({route}) {
-	return <Blog {...route.params} />;
-}
-
 const Stack = createStackNavigator();
 
 function BlogsNavigator({navigation}) {
@@ -139,10 +132,19 @@ function BlogsNavigator({navigation}) {
 				}}
 			/>
 			<Stack.Screen
-				component={ViewBlog}
+				component={Blog}
 				name="BlogEntry"
 				options={({route}) => {
-					return {title: route.params.headline};
+					return {
+						title: route.params.headline,
+					};
+				}}
+			/>
+			<Stack.Screen
+				component={CommentThread}
+				name="CommentThread"
+				options={{
+					headerTitle: 'Comment Thread',
 				}}
 			/>
 		</Stack.Navigator>

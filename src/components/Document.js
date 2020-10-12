@@ -10,10 +10,12 @@ import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
 import CardItemRow from './CardItemRow';
 
-const Document = (props) => {
+const Document = ({navigation, route}) => {
 	const [state, , request] = useAppState();
 
-	const documentId = props.id;
+	const {params} = route;
+
+	const documentId = params.id;
 
 	const getComments = useCallback(
 		(key, id, page) => {
@@ -41,14 +43,14 @@ const Document = (props) => {
 
 	return (
 		<KeyboardAwareScrollView extraScrollHeight={20}>
-			{props.adaptedImages[0] && (
+			{params.adaptedImages[0] && (
 				<Image
 					source={
-						props.adaptedImages[0]
+						params.adaptedImages[0]
 							? {
 									uri:
 										state.liferayURL +
-										props.adaptedImages[0].contentUrl,
+										params.adaptedImages[0].contentUrl,
 							  }
 							: null
 					}
@@ -56,33 +58,34 @@ const Document = (props) => {
 				/>
 			)}
 
-			<Text style={[styles.mx2, styles.h4]}>{props.description}</Text>
+			<Text style={[styles.mx2, styles.h4]}>{params.description}</Text>
 
 			<View style={styles.m2}>
-				<CardItemRow label="ID" value={props.id} />
+				<CardItemRow label="ID" value={params.id} />
 				<CardItemRow
 					label="Date Created"
-					value={DateTime.fromISO(props.dateCreated).toRelative()}
+					value={DateTime.fromISO(params.dateCreated).toRelative()}
 				/>
 				<CardItemRow
 					label="Date Modified"
-					value={DateTime.fromISO(props.dateModified).toRelative()}
+					value={DateTime.fromISO(params.dateModified).toRelative()}
 				/>
-				<CardItemRow label="Creator" value={props.creator.name} />
+				<CardItemRow label="Creator" value={params.creator.name} />
 
-				{props.documentType && (
+				{params.documentType && (
 					<CardItemRow
 						label="Document Type"
-						value={props.documentType.name}
+						value={params.documentType.name}
 					/>
 				)}
 
-				<CardItemRow label="Size in Bytes" value={props.sizeInBytes} />
+				<CardItemRow label="Size in Bytes" value={params.sizeInBytes} />
 			</View>
 
 			<Comments
 				addComment={addComment}
 				getComments={getComments}
+				navigation={navigation}
 				parentId={documentId}
 			/>
 		</KeyboardAwareScrollView>

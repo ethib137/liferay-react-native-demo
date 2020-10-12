@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-import {greys, spacing} from './values';
+import {colors, greys, spacing} from './values';
 
 const stylesObj = {};
 
@@ -81,6 +81,9 @@ const styles = StyleSheet.create({
 	h6: {
 		fontSize: 16,
 	},
+	link: {
+		color: colors.blue,
+	},
 	pAbsolute: {
 		position: 'absolute',
 	},
@@ -98,6 +101,12 @@ const styles = StyleSheet.create({
 	},
 	textCenter: {
 		textAlign: 'center',
+	},
+	textLeft: {
+		textAlign: 'left',
+	},
+	textRight: {
+		textAlign: 'right',
 	},
 	w100: {
 		width: '100%',

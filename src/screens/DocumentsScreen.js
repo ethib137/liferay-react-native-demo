@@ -4,6 +4,7 @@ import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Button, Card} from 'react-native-elements';
 import {usePaginatedQuery} from 'react-query';
 
+import CommentThread from '../comments/CommentThread';
 import Document from '../components/Document';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
@@ -51,11 +52,7 @@ const Documents = ({navigation}) => {
 			</View>
 
 			<Button
-				onPress={() =>
-					navigation.navigate('DocumentEntry', {
-						...item,
-					})
-				}
+				onPress={() => navigation.navigate('DocumentEntry', item)}
 				title="View Document"
 			/>
 		</Card>
@@ -115,10 +112,6 @@ const Documents = ({navigation}) => {
 	);
 };
 
-function ViewDocument({route}) {
-	return <Document {...route.params} />;
-}
-
 const Stack = createStackNavigator();
 
 function DocumentsNavigation({navigation}) {
@@ -137,10 +130,17 @@ function DocumentsNavigation({navigation}) {
 				options={{title: 'Documents'}}
 			/>
 			<Stack.Screen
-				component={ViewDocument}
+				component={Document}
 				name="DocumentEntry"
 				options={({route}) => {
 					return {title: route.params.title};
+				}}
+			/>
+			<Stack.Screen
+				component={CommentThread}
+				name="CommentThread"
+				options={{
+					headerTitle: 'Comment Thread',
 				}}
 			/>
 		</Stack.Navigator>

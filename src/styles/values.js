@@ -1,4 +1,5 @@
 export const colors = {
+	blue: '#0b5eff',
 	danger: {
 		background: '#feefef',
 		border: '#f48989',

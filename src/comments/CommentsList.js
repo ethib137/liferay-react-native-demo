@@ -5,7 +5,7 @@ import {StyleSheet, View} from 'react-native';
 import Comment from './Comment';
 
 function CommentsList(props) {
-	const {comments, containerStyle, onDelete} = props;
+	const {comments, containerStyle, navigation, onDelete} = props;
 
 	return (
 		<View style={[commentsListStyles.container, containerStyle]}>
@@ -16,6 +16,7 @@ function CommentsList(props) {
 							comment={comment}
 							key={comment.id}
 							last={index === comments.length - 1}
+							navigation={navigation}
 							onDelete={onDelete}
 						/>
 					))

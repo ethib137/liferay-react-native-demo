@@ -1,19 +1,22 @@
 import {DateTime} from 'luxon';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import HTML from 'react-native-render-html';
 
 import {useAppState} from '../hooks/appState';
+import styles from '../styles/main';
 import {colors, greys, spacing} from '../styles/values';
 
-function Comment(props) {
+const Comment = (props) => {
 	const [state] = useAppState();
 
 	const {userId} = state;
 
-	const {comment, containerStyle, last, onDelete} = props;
+	const {comment, containerStyle, last, navigation, onDelete} = props;
+
+	const {numberOfComments} = comment;
 
 	const html = comment.text.length > 0 ? comment.text : '<p></p>';
 
@@ -47,10 +50,22 @@ function Comment(props) {
 				html={html}
 				tagsStyles={{p: {paddingBottom: 0, paddingTop: 1}}}
 			/>
+
+			{navigation && (
+				<TouchableOpacity
+					onPress={() => navigation.push('CommentThread', {comment})}
+				>
+					<Text style={[styles.link, styles.mt1, styles.textLeft]}>
+						{numberOfComments === 1
+							? `${numberOfComments} Reply`
+							: `${numberOfComments} Replies`}
+					</Text>
+				</TouchableOpacity>
+			)}
 		</View>
 	);
 
-	if (userId === comment.creator.id) {
+	if (userId === comment.creator.id && !!onDelete) {
 		return (
 			<Swipeable
 				onSwipeableRightOpen={() => onDelete(comment.id)}
@@ -62,7 +77,7 @@ function Comment(props) {
 	} else {
 		return commentElement;
 	}
-}
+};
 
 const commentStyles = StyleSheet.create({
 	action: {

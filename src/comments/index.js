@@ -19,7 +19,13 @@ const LATEST_COMMENT_ID = 1234567;
 function Comments(props) {
 	const [, , request] = useAppState();
 
-	const {addComment, containerStyle, getComments, parentId} = props;
+	const {
+		addComment,
+		containerStyle,
+		getComments,
+		navigation,
+		parentId,
+	} = props;
 
 	const queryCache = useQueryCache();
 
@@ -183,6 +189,7 @@ function Comments(props) {
 
 				<CommentsList
 					comments={data}
+					navigation={navigation}
 					onDelete={mutateDeleteComment}
 					parentId={parentId}
 				/>
@@ -196,6 +203,7 @@ function Comments(props) {
 							? 'Load More Comments'
 							: 'Nothing more to load'
 					}
+					type="clear"
 				/>
 			</Loading>
 		</View>

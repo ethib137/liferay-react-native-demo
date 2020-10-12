@@ -9,10 +9,12 @@ import styles from '../styles/main';
 import HTML from './HTML';
 import Image from './Image';
 
-const Blog = (props) => {
+const Blog = ({navigation, route}) => {
 	const [, , request] = useAppState();
 
-	const blogId = props.id;
+	const {params} = route;
+
+	const blogId = params.id;
 
 	const getComments = useCallback(
 		(key, id, page) => {
@@ -40,21 +42,22 @@ const Blog = (props) => {
 
 	return (
 		<KeyboardAwareScrollView extraScrollHeight={20}>
-			{props.image && <Image relativeURL={props.image.contentUrl} />}
+			{params.image && <Image relativeURL={params.image.contentUrl} />}
 
-			<Text style={[styles.m2, styles.h1]}>{props.headline}</Text>
+			<Text style={[styles.m2, styles.h1]}>{params.headline}</Text>
 
 			<Text style={[styles.mx2, styles.h4]}>
-				{props.alternativeHeadline}
+				{params.alternativeHeadline}
 			</Text>
 
 			<View style={styles.m2}>
-				<HTML html={props.articleBody} />
+				<HTML html={params.articleBody} />
 			</View>
 
 			<Comments
 				addComment={addComment}
 				getComments={getComments}
+				navigation={navigation}
 				parentId={blogId}
 			/>
 		</KeyboardAwareScrollView>
