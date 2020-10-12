@@ -106,7 +106,7 @@ const commentStyles = StyleSheet.create({
 
 Comment.propTypes = {
 	comment: PropTypes.object.isRequired,
-	containerStyle: PropTypes.object,
+	containerStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 	onDelete: PropTypes.func,
 };
 

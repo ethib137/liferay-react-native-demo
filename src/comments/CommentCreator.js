@@ -52,7 +52,7 @@ const commentStyles = StyleSheet.create({
 
 CommentCreator.propTypes = {
 	addComment: PropTypes.func.isRequired,
-	containerStyle: PropTypes.object,
+	containerStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 export default CommentCreator;

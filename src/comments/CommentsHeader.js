@@ -26,7 +26,7 @@ const commentsHeaderStyles = StyleSheet.create({
 });
 
 CommentsHeader.propTypes = {
-	containerStyle: PropTypes.object,
+	containerStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 export default CommentsHeader;

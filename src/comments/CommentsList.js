@@ -30,7 +30,7 @@ const commentsListStyles = StyleSheet.create({
 
 CommentsList.propTypes = {
 	comments: PropTypes.array.isRequired,
-	containerStyle: PropTypes.object,
+	containerStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 	onDelete: PropTypes.func.isRequired,
 	parentId: PropTypes.number.isRequired,
 };

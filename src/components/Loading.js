@@ -46,7 +46,7 @@ const loadingStyles = StyleSheet.create({
 
 Loading.propTypes = {
 	color: PropTypes.string,
-	containerStyle: PropTypes.object,
+	containerStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 	loading: PropTypes.bool,
 	size: PropTypes.string,
 };

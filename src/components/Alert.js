@@ -78,7 +78,7 @@ const alertStyles = StyleSheet.create({
 });
 
 Alert.propTypes = {
-	containerStyle: PropTypes.object,
+	containerStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 	displayType: PropTypes.oneOf(DISPLAY_TYPES),
 	text: PropTypes.string.isRequired,
 };

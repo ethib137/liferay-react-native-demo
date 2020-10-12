@@ -68,7 +68,7 @@ const paginationStyles = StyleSheet.create({
 });
 
 Pagination.propTypes = {
-	containerStyle: PropTypes.object,
+	containerStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 export default Pagination;
