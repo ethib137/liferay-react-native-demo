@@ -20,7 +20,7 @@ const Product = ({route}) => {
 	const [loading, setLoading] = useState(false);
 	const [skuId, setSkuId] = useState();
 
-	const {id, productId, skus, shortDescription, urlImage} = params;
+	const {productId, shortDescription, skus, urlImage} = params;
 
 	const items = useMemo(() => (skus ? skus : []), [skus]);
 

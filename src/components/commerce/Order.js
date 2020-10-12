@@ -13,14 +13,11 @@ const Order = ({route}) => {
 
 	const {id, totalFormatted} = route.params;
 
-	const {data, error, refetch, status} = useQuery(
-		['orderItems', id],
-		() => {
-			return request(
-				`/o/headless-commerce-admin-order/v1.0/orders/${id}/orderItems`
-			);
-		}
-	);
+	const {data, error, refetch, status} = useQuery(['orderItems', id], () => {
+		return request(
+			`/o/headless-commerce-admin-order/v1.0/orders/${id}/orderItems`
+		);
+	});
 
 	const items = data ? data.items : [];
 

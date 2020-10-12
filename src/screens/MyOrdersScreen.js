@@ -28,7 +28,7 @@ const MyOrders = ({navigation}) => {
 		['orders', accountId, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=accountId eq ${accountId} and channelId eq ${channelId} and orderStatus eq 1`
+				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=(accountId/any(x:(x eq ${accountId}))) and (channelId eq ${channelId}) and (orderStatus/any(x:(x eq 1)))`
 			);
 		}
 	);
@@ -40,9 +40,7 @@ const MyOrders = ({navigation}) => {
 	const renderItem = ({index, item}) => (
 		<TouchableOpacity
 			onPress={() => {
-				navigation.navigate('Order', {
-					...item,
-				});
+				navigation.navigate('Order', item);
 			}}
 		>
 			<Card
@@ -126,10 +124,6 @@ const MyOrders = ({navigation}) => {
 	);
 };
 
-function ViewOrder({route}) {
-	return <Order {...route.params} />;
-}
-
 const Stack = createStackNavigator();
 
 function MyOrdersNavigation({navigation}) {
@@ -148,7 +142,7 @@ function MyOrdersNavigation({navigation}) {
 				options={{title: 'My Orders'}}
 			/>
 			<Stack.Screen
-				component={ViewOrder}
+				component={Order}
 				name="Order"
 				options={({route}) => {
 					return {title: `Order ${route.params.id}`};

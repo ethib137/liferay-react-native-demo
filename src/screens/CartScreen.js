@@ -80,7 +80,7 @@ const Cart = ({navigation}) => {
 		['carts', accountId, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=accountId eq ${accountId} and channelId eq ${channelId} and orderStatus eq 2`
+				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=(accountId/any(x:(x eq ${accountId}))) and (channelId eq ${channelId}) and (orderStatus/any(x:(x eq 2)))`
 			);
 		}
 	);
@@ -95,9 +95,7 @@ const Cart = ({navigation}) => {
 		return (
 			<TouchableOpacity
 				onPress={() => {
-					navigation.navigate('Cart', {
-						...item,
-					});
+					navigation.navigate('Cart', item);
 				}}
 			>
 				<Card
@@ -213,10 +211,6 @@ const cartStyles = StyleSheet.create({
 	},
 });
 
-function ViewCart({route}) {
-	return <Order {...route.params} />;
-}
-
 const Stack = createStackNavigator();
 
 function CartNavigation({navigation}) {
@@ -235,7 +229,7 @@ function CartNavigation({navigation}) {
 				options={{title: 'Cart'}}
 			/>
 			<Stack.Screen
-				component={ViewCart}
+				component={Order}
 				name="Cart"
 				options={({route}) => {
 					return {title: `Cart ${route.params.id}`};
