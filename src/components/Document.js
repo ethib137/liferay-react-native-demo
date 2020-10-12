@@ -69,10 +69,14 @@ const Document = (props) => {
 					value={DateTime.fromISO(props.dateModified).toRelative()}
 				/>
 				<CardItemRow label="Creator" value={props.creator.name} />
-				<CardItemRow
-					label="Document Type"
-					value={props.documentType.name}
-				/>
+
+				{props.documentType && (
+					<CardItemRow
+						label="Document Type"
+						value={props.documentType.name}
+					/>
+				)}
+
 				<CardItemRow label="Size in Bytes" value={props.sizeInBytes} />
 			</View>
 
