@@ -20,6 +20,8 @@ const Sites = () => {
 
 	const [page, setPage] = useState(1);
 
+	const [infoMessage, setInfoMessage] = useState();
+
 	const {error, refetch, resolvedData, status} = usePaginatedQuery(
 		['sites', page],
 		() => {
@@ -32,7 +34,9 @@ const Sites = () => {
 	const {data: channels} = useQuery(['channels'], () => {
 		return request(
 			`/api/jsonws/commerce.commercechannel/get-commerce-channels/start/-1/end/-1`
-		);
+		).catch(() => {
+			setInfoMessage('Commerce APIs do not exist on this instance.');
+		});
 	});
 
 	function selectSite(id) {
@@ -88,6 +92,12 @@ const Sites = () => {
 							) : (
 								<Text style={[styles.textCenter, styles.m2]}>
 									Select a Site.
+								</Text>
+							)}
+
+							{infoMessage && (
+								<Text style={[styles.textCenter, styles.m2]}>
+									{infoMessage}
 								</Text>
 							)}
 
