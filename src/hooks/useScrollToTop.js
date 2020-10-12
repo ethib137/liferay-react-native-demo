@@ -4,7 +4,9 @@ function useScrollToTop(deps) {
 	const flatList = useRef();
 
 	useEffect(() => {
-		flatList.current.scrollToOffset({offset: 0});
+		if (flatList.current) {
+			flatList.current.scrollToOffset({offset: 0});
+		}
 	}, [deps]);
 
 	return flatList;
