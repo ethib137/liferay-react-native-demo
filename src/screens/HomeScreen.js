@@ -19,13 +19,16 @@ const Home = () => {
 			</Text>
 
 			<Text style={[homeStyles.version, styles.textCenter, styles.m2]}>
-				Version: 0.0.2
+				Version: 0.0.3
 			</Text>
 			<Text style={[homeStyles.version, styles.textCenter, styles.m2]}>
 				Developed Against:
 			</Text>
 			<Text style={[homeStyles.version, styles.textCenter]}>
 				7.2 FP7, 7.2 FP8, 7.3 GA1 (Unreleased)
+			</Text>
+			<Text style={[homeStyles.version, styles.textCenter]}>
+				Commerce 2.1.2
 			</Text>
 		</View>
 	);
