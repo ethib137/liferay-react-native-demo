@@ -72,18 +72,15 @@ function Comments(props) {
 			};
 
 			queryCache.setQueryData([COMMENTS_QUERY_KEY, parentId], (old) => {
-				let skippedComment = newComment;
+				const firstPage = old.shift();
 
-				return old.map((page) => {
-					const items = [skippedComment, ...page.items];
-
-					skippedComment = items.pop();
-
-					return {
-						...page,
-						items,
-					};
-				});
+				return [
+					{
+						...firstPage,
+						items: [newComment, ...firstPage.items],
+					},
+					...old,
+				];
 			});
 
 			return () =>
@@ -178,33 +175,36 @@ function Comments(props) {
 				</Text>
 			)}
 
-			{isFetching && <Loading loading={isFetching} />}
+			<Loading loading={isFetching}>
+				<CommentCreator
+					addComment={mutateAddComment}
+					parentId={parentId}
+				/>
 
-			<CommentCreator addComment={mutateAddComment} parentId={parentId} />
+				<CommentsList
+					comments={data}
+					onDelete={mutateDeleteComment}
+					parentId={parentId}
+				/>
 
-			<CommentsList
-				comments={data}
-				onDelete={mutateDeleteComment}
-				parentId={parentId}
-			/>
-
-			<Button
-				onPress={() => fetchMore()}
-				title={
-					isFetchingMore
-						? 'Loading more...'
-						: canFetchMore
-						? 'Load More Comments'
-						: 'Nothing more to load'
-				}
-			/>
+				<Button
+					onPress={() => fetchMore()}
+					title={
+						isFetchingMore
+							? 'Loading more...'
+							: canFetchMore
+							? 'Load More Comments'
+							: 'Nothing more to load'
+					}
+				/>
+			</Loading>
 		</View>
 	);
 }
 
 Comments.propTypes = {
 	addComment: PropTypes.func.isRequired,
-	containerStyle: PropTypes.object,
+	containerStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 	getComments: PropTypes.func.isRequired,
 	parentId: PropTypes.number.isRequired,
 };
