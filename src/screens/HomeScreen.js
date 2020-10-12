@@ -4,6 +4,7 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import styles from '../styles/main';
+import {greys} from '../styles/values';
 
 const Home = () => {
 	return (
@@ -16,6 +17,16 @@ const Home = () => {
 			<Text style={styles.textCenter}>
 				Welcome to the Liferay React Native Demo App.
 			</Text>
+
+			<Text style={[homeStyles.version, styles.textCenter, styles.m2]}>
+				Version: 0.0.1
+			</Text>
+			<Text style={[homeStyles.version, styles.textCenter, styles.m2]}>
+				Developed Against:
+			</Text>
+			<Text style={[homeStyles.version, styles.textCenter]}>
+				7.2 FP7, 7.2 FP8, 7.3 GA1 (Unreleased)
+			</Text>
 		</View>
 	);
 };
@@ -25,6 +36,11 @@ const homeStyles = StyleSheet.create({
 		alignSelf: 'center',
 		height: 100,
 		width: 100,
+	},
+	version: {
+		color: greys[2],
+		fontSize: 11,
+		textTransform: 'uppercase',
 	},
 });
 
