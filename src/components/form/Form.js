@@ -192,8 +192,10 @@ function prepareValuesForSubmit(values, formPages) {
 	return formFieldValues;
 }
 
-function Form({formId}) {
+function Form({route}) {
 	const [, , request] = useAppState();
+
+	const {formId} = route.params;
 
 	const {data, error, refetch, status} = useQuery(
 		formId && ['form', formId],

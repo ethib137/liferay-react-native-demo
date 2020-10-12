@@ -56,24 +56,24 @@ const FormField = ({field}) => {
 };
 
 const ContentSetEntry = (props) => {
-	const {item} = props;
+	const {params} = props.route;
+
+	const {content, title} = params;
 
 	return (
 		<ScrollView>
-			<Text style={[styles.m2, styles.h1]}>{item.title}</Text>
+			<Text style={[styles.m2, styles.h1]}>{title}</Text>
 
-			{item.content &&
-				!!item.content.description &&
-				item.content.description !== '' && (
-					<HTML
-						containerStyle={[styles.mx2, styles.h4]}
-						html={item.content.description}
-					/>
-				)}
+			{content && !!content.description && content.description !== '' && (
+				<HTML
+					containerStyle={[styles.mx2, styles.h4]}
+					html={content.description}
+				/>
+			)}
 
-			{item.content &&
-				item.content.contentFields &&
-				item.content.contentFields.map((field) => (
+			{content &&
+				content.contentFields &&
+				content.contentFields.map((field) => (
 					<FormField field={field} key={field.name} />
 				))}
 		</ScrollView>

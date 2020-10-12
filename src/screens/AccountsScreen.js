@@ -99,7 +99,7 @@ const Accounts = () => {
 									<Text
 										style={[styles.m2, styles.textCenter]}
 									>
-										There are no products to display.
+										There are no accounts to display.
 									</Text>
 								)}
 						</>

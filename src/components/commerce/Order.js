@@ -8,14 +8,16 @@ import styles from '../../styles/main';
 import ErrorDisplay from '../ErrorDisplay';
 import OrderItem from './OrderItem';
 
-const Order = (item) => {
+const Order = ({route}) => {
 	const [, , request] = useAppState();
 
+	const {id, totalFormatted} = route.params;
+
 	const {data, error, refetch, status} = useQuery(
-		['orderItems', item.id],
+		['orderItems', id],
 		() => {
 			return request(
-				`/o/headless-commerce-admin-order/v1.0/orders/${item.id}/orderItems`
+				`/o/headless-commerce-admin-order/v1.0/orders/${id}/orderItems`
 			);
 		}
 	);
@@ -34,7 +36,7 @@ const Order = (item) => {
 			>
 				<Text style={[styles.h4]}>Total Amount: </Text>
 				<Text style={[styles.h4, styles.textGrey7]}>
-					{item.totalFormatted}
+					{totalFormatted}
 				</Text>
 			</View>
 
@@ -51,7 +53,7 @@ const Order = (item) => {
 			)}
 
 			{items.map((item) => (
-				<OrderItem item={item} key={item.id} />
+				<OrderItem item={item} key={id} />
 			))}
 		</ScrollView>
 	);

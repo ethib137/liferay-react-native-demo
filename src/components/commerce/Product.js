@@ -10,15 +10,17 @@ import {colors} from '../../styles/values';
 import {getRelativeURL} from '../../util/url';
 import NoCartSelected from './NoCartSelected';
 
-const Product = (item) => {
+const Product = ({route}) => {
 	const [state, , request] = useAppState();
+
+	const {params} = route;
 
 	const {cartId} = state;
 
 	const [loading, setLoading] = useState(false);
 	const [skuId, setSkuId] = useState();
 
-	const {productId, skus, urlImage} = item;
+	const {id, productId, skus, shortDescription, urlImage} = params;
 
 	const items = useMemo(() => (skus ? skus : []), [skus]);
 
@@ -53,15 +55,15 @@ const Product = (item) => {
 					source={{
 						uri:
 							state.liferayURL +
-							getRelativeURL(item.urlImage, state.liferayURL),
+							getRelativeURL(urlImage, state.liferayURL),
 					}}
 					style={{height: 200, width: '100%'}}
 				/>
 			)}
 
-			{item.shortDescription.length > 0 && (
+			{shortDescription.length > 0 && (
 				<View style={styles.m2}>
-					<Text>{item.shortDescription}</Text>
+					<Text>{shortDescription}</Text>
 				</View>
 			)}
 

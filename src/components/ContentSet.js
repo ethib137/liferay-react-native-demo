@@ -11,8 +11,10 @@ import ErrorDisplay from './ErrorDisplay';
 import HTML from './HTML';
 import Pagination from './Pagination';
 
-const ContentSet = ({contentSetId, navigation}) => {
+const ContentSet = ({navigation, route}) => {
 	const [, , request] = useAppState();
+
+	const {contentSetId} = route.params;
 
 	const [page, setPage] = useState(1);
 
@@ -68,21 +70,23 @@ const ContentSet = ({contentSetId, navigation}) => {
 							style={styles.m2}
 							title={item.title}
 						>
-							{item.content &&
-								!!item.content.description &&
-								item.content.description !== '' && (
-									<HTML html={item.content.description} />
-								)}
+							<View>
+								{item.content &&
+									!!item.content.description &&
+									item.content.description !== '' && (
+										<HTML html={item.content.description} />
+									)}
 
-							<Button
-								onPress={() =>
-									navigation.navigate('ContentSetEntry', {
-										item,
-										title: item.title,
-									})
-								}
-								title="View Entry"
-							/>
+								<Button
+									onPress={() =>
+										navigation.navigate(
+											'ContentSetEntry',
+											item
+										)
+									}
+									title="View Entry"
+								/>
+							</View>
 						</Card>
 					)}
 				/>

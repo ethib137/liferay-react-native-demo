@@ -114,10 +114,6 @@ const FormsScreen = ({navigation}) => {
 	);
 };
 
-function ViewForm({route}) {
-	return <Form formId={route.params.formId} />;
-}
-
 const Stack = createStackNavigator();
 
 function FormsNavigator({navigation}) {
@@ -139,7 +135,7 @@ function FormsNavigator({navigation}) {
 			/>
 
 			<Stack.Screen
-				component={ViewForm}
+				component={Form}
 				name="FormEntry"
 				options={({route}) => {
 					return {title: route.params.name};

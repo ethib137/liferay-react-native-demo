@@ -94,14 +94,6 @@ const ContentSets = ({navigation}) => {
 	);
 };
 
-function ContentSetDisplay({navigation, route}) {
-	return <ContentSet navigation={navigation} {...route.params} />;
-}
-
-function ViewContentSetEntry({route}) {
-	return <ContentSetEntry {...route.params} />;
-}
-
 const Stack = createStackNavigator();
 
 function ContentSetsNavigation({navigation}) {
@@ -120,14 +112,14 @@ function ContentSetsNavigation({navigation}) {
 				options={{title: 'Content Sets'}}
 			/>
 			<Stack.Screen
-				component={ContentSetDisplay}
+				component={ContentSet}
 				name="ContentSet"
 				options={({route}) => {
 					return {title: route.params.title};
 				}}
 			/>
 			<Stack.Screen
-				component={ViewContentSetEntry}
+				component={ContentSetEntry}
 				name="ContentSetEntry"
 				options={({route}) => {
 					return {title: route.params.title};

@@ -47,9 +47,7 @@ const Catalog = ({navigation}) => {
 	const renderItem = ({index, item}) => (
 		<TouchableOpacity
 			onPress={() => {
-				navigation.navigate('Product', {
-					...item,
-				});
+				navigation.navigate('Product', item);
 			}}
 		>
 			<Card
@@ -134,10 +132,6 @@ const Catalog = ({navigation}) => {
 	);
 };
 
-function ViewProduct({route}) {
-	return <Product {...route.params} />;
-}
-
 const Stack = createStackNavigator();
 
 function CatalogNavigation({navigation}) {
@@ -156,7 +150,7 @@ function CatalogNavigation({navigation}) {
 				options={{title: 'Catalog'}}
 			/>
 			<Stack.Screen
-				component={ViewProduct}
+				component={Product}
 				name="Product"
 				options={({route}) => {
 					return {title: `${route.params.name}`};
