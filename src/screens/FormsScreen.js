@@ -24,9 +24,11 @@ const FormsScreen = ({navigation}) => {
 	const {error, refetch, resolvedData, status} = usePaginatedQuery(
 		siteId && ['forms', siteId, page],
 		() => {
-			return request(
-				`/o/headless-form/v1.0/sites/${siteId}/forms?page=${page}`
-			);
+			if (siteId) {
+				return request(
+					`/o/headless-form/v1.0/sites/${siteId}/forms?page=${page}`
+				);
+			}
 		}
 	);
 

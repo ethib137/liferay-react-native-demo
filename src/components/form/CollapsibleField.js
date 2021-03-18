@@ -4,7 +4,10 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import styles from '../../styles/main';
 import {greys, spacing} from '../../styles/values';
+import {isEmptyString} from '../../util/util';
 import Collapsible from '../Collapsible';
+import FieldContainer from './FieldContainer';
+import FieldError from './FieldError';
 import FieldLabel from './FieldLabel';
 
 function CollapsibleField(props) {
@@ -17,11 +20,8 @@ function CollapsibleField(props) {
 		value = '',
 	} = props;
 
-	const showError = !!error && error.length > 0;
-	const showValue = !!value && value.length > 0;
-
 	return (
-		<View style={[containerStyle, fieldStyles.container, styles.mb1]}>
+		<FieldContainer containerStyle={containerStyle}>
 			<Collapsible
 				header={
 					label && (
@@ -32,7 +32,7 @@ function CollapsibleField(props) {
 								style={fieldStyles.label}
 							/>
 
-							{showValue && (
+							{isEmptyString(value) && (
 								<Text style={styles.ml2}>{value}</Text>
 							)}
 						</View>
@@ -43,24 +43,14 @@ function CollapsibleField(props) {
 				<View style={fieldStyles.children}>{children}</View>
 			</Collapsible>
 
-			{showError && <Text style={fieldStyles.error}>{error}</Text>}
-		</View>
+			<FieldError error={error} />
+		</FieldContainer>
 	);
 }
 
 const fieldStyles = StyleSheet.create({
 	children: {
 		backgroundColor: 'rgba(0,0,0,0.1)',
-	},
-	container: {
-		backgroundColor: 'rgba(0,0,0,0.1)',
-		color: 'rgba(0,0,0,0.5)',
-	},
-	error: {
-		color: '#F00',
-		marginBottom: spacing[1],
-		marginLeft: spacing[2],
-		marginRight: spacing[2],
 	},
 	header: {
 		flex: 1,

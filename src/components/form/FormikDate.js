@@ -1,10 +1,14 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns';
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Platform, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import styles from '../../styles/main';
 import {greys, spacing} from '../../styles/values';
+import {isEmptyString} from '../../util/util';
+import CollapsibleField from './CollapsibleField';
+import FieldContainer from './FieldContainer';
+import FieldError from './FieldError';
 import FieldLabel from './FieldLabel';
 
 function FormikDate(props) {
@@ -21,66 +25,75 @@ function FormikDate(props) {
 
 	const [show, setShow] = useState(false);
 
-	return (
-		<View style={[containerStyle, fieldStyles.container, styles.mb1]}>
+	const formattedValue = format(values[name], 'LLL dd yyyy');
 
-			<TouchableOpacity
-				onPress={() => setShow(true)}
-				style={fieldStyles.header}
-			>
-				{label && (
-					<FieldLabel
-						label={`${label}:`}
-						required={required}
-						style={[fieldStyles.label, styles.mr2]}
-					/>
-				)}
+	const dateError = errors[name];
 
-				<Text>{values[name]?format(values[name], 'LLL dd yyyy'):''}</Text>
+	const DatePicker = (
+		<DateTimePicker
+			display="default"
+			is24Hour={true}
+			mode={'date'}
+			onChange={(event, date) => {
+				setShow(false);
 
-				{show && (
-					<DateTimePicker
-						display="default"
-						is24Hour={true}
-						mode={'date'}
-						onChange={(event, date) => {
-							setShow(false);
-
-							if (event.type != "dismissed") {
-								setFieldValue(name, date);
-							}
-						}}
-						timeZoneOffsetInMinutes={0}
-						value={values[name]}
-						{...otherProps}
-					/>
-				)}
-			</TouchableOpacity>
-
-			{errors[name] && (
-				<Text style={fieldStyles.error}>{errors[name]}</Text>
-			)}
-		</View>
+				if (event.type != 'dismissed') {
+					setFieldValue(name, date);
+				}
+			}}
+			timeZoneOffsetInMinutes={0}
+			value={values[name]}
+			{...otherProps}
+		/>
 	);
+
+	if (Platform.OS === 'ios') {
+		return (
+			<CollapsibleField
+				containerStyle={containerStyle}
+				error={dateError}
+				label={label}
+				required={required}
+				value={formattedValue}
+			>
+				{DatePicker}
+			</CollapsibleField>
+		);
+	} else {
+		return (
+			<FieldContainer containerStyle={containerStyle}>
+				<TouchableOpacity
+					onPress={() => setShow(true)}
+					style={fieldStyles.header}
+				>
+					{label && (
+						<FieldLabel
+							label={`${label}:`}
+							required={required}
+							style={[fieldStyles.label, styles.mr2]}
+						/>
+					)}
+
+					{isEmptyString(formattedValue) && (
+						<Text>{formattedValue}</Text>
+					)}
+
+					{show && DatePicker}
+				</TouchableOpacity>
+
+				<FieldError error={dateError} />
+			</FieldContainer>
+		);
+	}
 }
 
 const fieldStyles = StyleSheet.create({
-	container: {
-		backgroundColor: 'rgba(0,0,0,0.1)',
-		color: 'rgba(0,0,0,0.5)',
-	},
 	header: {
 		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		padding: spacing[2],
 		paddingBottom: spacing[1],
-	},
-	error: {
-		color: '#F00',
-		marginBottom: spacing[1],
-		marginLeft: spacing[2],
-		marginRight: spacing[2],
 	},
 	label: {
 		color: greys[0],

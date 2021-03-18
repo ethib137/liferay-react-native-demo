@@ -32,6 +32,10 @@ You will then need to enable scopes to give the OAuth application access to Life
 
 At this point it should be working.
 
+## Android Emulator
+
+In order to connect to you local Liferay instance from an Android emulator you will need to `Liferay Server URL` from the Configurations page to `http://10.0.2.2:8080`.
+
 ## Contributing Guidlines
 
 Before sending a pull request please make sure to run the following formatting commands. Fix any errors you see.

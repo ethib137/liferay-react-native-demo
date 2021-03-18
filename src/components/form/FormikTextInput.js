@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 
 import {greys, spacing} from '../../styles/values';
+import FieldError from './FieldError';
 import FieldLabel from './FieldLabel';
 
 function FormikTextInput(props) {
@@ -42,20 +43,12 @@ function FormikTextInput(props) {
 				value={values[name]}
 			/>
 
-			{errors[name] && (
-				<Text style={inputStyles.error}>{errors[name]}</Text>
-			)}
+			<FieldError error={errors[name]} />
 		</View>
 	);
 }
 
 const inputStyles = StyleSheet.create({
-	error: {
-		color: '#F00',
-		marginBottom: spacing[1],
-		marginLeft: spacing[2],
-		marginRight: spacing[2],
-	},
 	input: {
 		borderColor: '#999',
 		borderRadius: 4,
