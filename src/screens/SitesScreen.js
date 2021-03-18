@@ -63,7 +63,10 @@ const Sites = () => {
 		const selectedSite = siteId === item.id;
 
 		return (
-			<Card style={[styles.m1, {width: '100%'}]} title={item.name}>
+			<Card>
+				<Card.Title>{item.name}</Card.Title>
+				<Card.Divider />
+
 				<View>
 					{!!item.description && <Text>{item.description}</Text>}
 

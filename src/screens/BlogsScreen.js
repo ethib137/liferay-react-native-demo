@@ -35,18 +35,18 @@ function Blogs({navigation}) {
 	const items = resolvedData ? resolvedData.items : [];
 
 	const renderItem = ({index, item}) => (
-		<Card
-			containerStyle={[
-				index === items.length - 1 ? styles.mb2 : null,
-				styles.m2,
-			]}
-			image={
-				item.image
-					? {uri: state.liferayURL + item.image.contentUrl}
-					: null
-			}
-			title={item.headline}
-		>
+		<Card containerStyle={[index === items.length - 1 ? styles.mb2 : null]}>
+			<Card.Title>{item.headline}</Card.Title>
+
+			{item.image ? (
+				<Card.Image
+					containerStyle={styles.mb2}
+					source={{uri: state.liferayURL + item.image.contentUrl}}
+				/>
+			) : (
+				<Card.Divider />
+			)}
+
 			<View>
 				<Text style={styles.mb2}>{item.alternativeHeadline}</Text>
 

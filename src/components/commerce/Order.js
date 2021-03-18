@@ -50,7 +50,7 @@ const Order = ({route}) => {
 			)}
 
 			{items.map((item) => (
-				<OrderItem item={item} key={id} />
+				<OrderItem item={item} key={item.id} />
 			))}
 		</ScrollView>
 	);

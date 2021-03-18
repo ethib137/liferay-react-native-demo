@@ -13,6 +13,7 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
+import {getRelativeURL} from '../util/url';
 
 const Documents = ({navigation}) => {
 	const [state, , request] = useAppState();
@@ -35,18 +36,24 @@ const Documents = ({navigation}) => {
 	const items = resolvedData ? resolvedData.items : [];
 
 	const renderItem = ({index, item}) => (
-		<Card
-			containerStyle={[
-				styles.m2,
-				index === items.length - 1 ? styles.mb2 : null,
-			]}
-			image={
-				item.adaptedImages[0]
-					? {uri: state.liferayURL + item.adaptedImages[0].contentUrl}
-					: null
-			}
-			title={item.title}
-		>
+		<Card containerStyle={[index === items.length - 1 ? styles.mb2 : null]}>
+			<Card.Title>{item.title}</Card.Title>
+
+			{item.adaptedImages && item.adaptedImages[0] ? (
+				<Card.Image
+					source={{
+						uri:
+							state.liferayURL +
+							getRelativeURL(
+								item.adaptedImages[0].contentUrl,
+								state.liferayURL
+							),
+					}}
+				/>
+			) : (
+				<Card.Divider />
+			)}
+
 			<View>
 				<Text>{item.description}</Text>
 			</View>

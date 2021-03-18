@@ -53,26 +53,30 @@ const Catalog = ({navigation}) => {
 			<Card
 				containerStyle={[
 					index === items.length - 1 ? styles.mb2 : null,
-					styles.m2,
 				]}
-				image={
-					item.urlImage
-						? {
-								uri:
-									state.liferayURL +
-									getRelativeURL(
-										item.urlImage,
-										state.liferayURL
-									),
-						  }
-						: null
-				}
-				style={[styles.m1, {width: '100%'}]}
-				title={item.name}
 			>
+				<Card.Title>{item.name}</Card.Title>
+
+				{item.urlImage ? (
+					<Card.Image
+						source={{
+							uri:
+								state.liferayURL +
+								getRelativeURL(item.urlImage, state.liferayURL),
+						}}
+					/>
+				) : (
+					<Card.Divider />
+				)}
+
 				<View>
-					<Text>{item.shortDescription}</Text>
-					<Text>{item.commerceChannelId}</Text>
+					{!!item.shortDescription && (
+						<Text style={styles.mt2}>{item.shortDescription}</Text>
+					)}
+
+					{!!item.commerceChannelId && (
+						<Text style={styles.mt2}>{item.commerceChannelId}</Text>
+					)}
 				</View>
 			</Card>
 		</TouchableOpacity>

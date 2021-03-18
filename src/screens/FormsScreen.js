@@ -34,16 +34,13 @@ const FormsScreen = ({navigation}) => {
 
 	const items = resolvedData ? resolvedData.items : [];
 
-	const renderItem = ({index, item}) => (
-		<Card
-			containerStyle={[
-				index === items.length - 1 ? styles.mb2 : null,
-				styles.m2,
-			]}
-			title={item.name}
-		>
+	const renderItem = ({item}) => (
+		<Card>
+			<Card.Title>{item.name}</Card.Title>
+			<Card.Divider />
+
 			<View>
-				{item.description.length > 0 && (
+				{item.description.trim().length > 0 && (
 					<Text style={styles.mb2}>{item.description}</Text>
 				)}
 

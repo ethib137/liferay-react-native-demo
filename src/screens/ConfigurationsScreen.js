@@ -129,12 +129,12 @@ const Configurations = () => {
 						/>
 
 						<Button
+							containerStyle={styles.m2}
 							disabled={
 								Object.keys(formikObj.errors).length > 0 ||
 								!hasUnsavedChanges(formikObj.values)
 							}
 							onPress={formikObj.handleSubmit}
-							containerStyle={styles.m2}
 							title="Save Configurations"
 						/>
 					</View>

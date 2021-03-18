@@ -105,8 +105,10 @@ const Cart = ({navigation}) => {
 						styles.m2,
 						styles.pRelative,
 					]}
-					title={`Cart ${item.id}`}
 				>
+					<Card.Title>{`Cart ${item.id}`}</Card.Title>
+					<Card.Divider />
+
 					<Button
 						containerStyle={[
 							styles.pAbsolute,

@@ -35,7 +35,10 @@ const ContentSets = ({navigation}) => {
 	const items = data ? data : [];
 
 	const renderItem = ({item}) => (
-		<Card style={[styles.m1, styles.w100]} title={item.title}>
+		<Card>
+			<Card.Title>{item.title}</Card.Title>
+			<Card.Divider />
+
 			<CardItemRow label="Id" value={item.assetListEntryId} />
 			<CardItemRow label="Type" value={TYPE_MAP[item.type]} />
 

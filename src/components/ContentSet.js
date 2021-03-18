@@ -65,11 +65,9 @@ const ContentSet = ({navigation, route}) => {
 						/>
 					}
 					renderItem={({item}) => (
-						<Card
-							key={item.id}
-							style={styles.m2}
-							title={item.title}
-						>
+						<Card>
+							<Card.Title>{item.title}</Card.Title>
+							<Card.Divider />
 							<View>
 								{item.content &&
 									!!item.content.description &&

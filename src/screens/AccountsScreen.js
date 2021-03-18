@@ -48,7 +48,6 @@ const Accounts = () => {
 				containerStyle={[
 					accountId === item.id ? accountStyles.selected : null,
 					index === items.length - 1 ? styles.mb2 : null,
-					styles.m2,
 				]}
 				image={
 					item.urlImage
@@ -62,9 +61,22 @@ const Accounts = () => {
 						  }
 						: null
 				}
-				style={[styles.m1, {width: '100%'}]}
-				title={item.name}
 			>
+				<Card.Title>{item.name}</Card.Title>
+
+				{item.urlImage ? (
+					<Card.Image
+						containerStyle={styles.mb2}
+						source={{
+							uri:
+								state.liferayURL +
+								getRelativeURL(item.urlImage, state.liferayURL),
+						}}
+					/>
+				) : (
+					<Card.Divider />
+				)}
+
 				<View>
 					<CardItemRow
 						label="Account Type"

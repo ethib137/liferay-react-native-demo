@@ -3,7 +3,6 @@ import {View} from 'react-native';
 import {Card} from 'react-native-elements';
 
 import {useAppState} from '../../hooks/appState';
-import styles from '../../styles/main';
 import CardItemRow from '../CardItemRow';
 
 function OrderItem({item}) {
@@ -14,7 +13,10 @@ function OrderItem({item}) {
 	const {customFields} = item;
 
 	return (
-		<Card style={[styles.m1, {width: '100%'}]} title={item.name[lang]}>
+		<Card>
+			<Card.Title>{item.name[lang]}</Card.Title>
+			<Card.Divider />
+
 			<View>
 				<CardItemRow label="Item Id" value={item.id} />
 				<CardItemRow label="Quantity" value={item.quantity} />

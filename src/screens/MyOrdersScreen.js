@@ -37,20 +37,16 @@ const MyOrders = ({navigation}) => {
 
 	const items = resolvedData ? resolvedData.items : [];
 
-	const renderItem = ({index, item}) => (
+	const renderItem = ({item}) => (
 		<TouchableOpacity
 			onPress={() => {
 				navigation.navigate('Order', item);
 			}}
 		>
-			<Card
-				containerStyle={[
-					index === items.length - 1 ? styles.mb2 : null,
-					styles.m2,
-				]}
-				style={[styles.m1, {width: '100%'}]}
-				title={`Order ${item.id}`}
-			>
+			<Card>
+				<Card.Title>{`Order ${item.id}`}</Card.Title>
+				<Card.Divider />
+
 				<View>
 					<CardItemRow
 						label="Created"
