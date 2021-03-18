@@ -1,5 +1,6 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import React, {useEffect} from 'react';
+import {LogBox} from 'react-native';
 
 import hydrate from './actions/hydrate';
 import CustomDrawerContent from './components/CustomDrawerContent';
@@ -24,6 +25,10 @@ const App = () => {
 	const [state, dispatch] = useAppState();
 
 	const {channelId, isLoading, loggedIn} = state;
+
+	useEffect(() => {
+		LogBox.ignoreLogs(['Setting a timer']);
+	});
 
 	useEffect(() => {
 		dispatch(hydrate());
