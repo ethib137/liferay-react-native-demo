@@ -12,9 +12,9 @@ This Liferay React Native App is built using [Expo](https://expo.io/) which simp
 
 ` $ npm install expo-cli --global`
 
-` $ npm install`
+` $ expo install`
 
-` $ npm start`
+` $ expo start`
 
 ## Authentication
 
