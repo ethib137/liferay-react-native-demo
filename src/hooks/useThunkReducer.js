@@ -17,7 +17,7 @@ function useThunkReducer(reducer, initialState) {
 	const dispatchWithThunk = useCallback(
 		(action) => {
 			if (typeof action === 'function') {
-				action(dispatchWithThunk, () => preState.current, request);
+				return action(dispatchWithThunk, () => preState.current, request);
 			}
 
 			dispatch(action);
