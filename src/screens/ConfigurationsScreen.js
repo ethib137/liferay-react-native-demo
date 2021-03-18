@@ -134,7 +134,7 @@ const Configurations = () => {
 								!hasUnsavedChanges(formikObj.values)
 							}
 							onPress={formikObj.handleSubmit}
-							style={styles.m2}
+							containerStyle={styles.m2}
 							title="Save Configurations"
 						/>
 					</View>

@@ -31,10 +31,11 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
     "react-native-collapsible": "^1.5.2",
-    "react-native-elements": "^1.2.7",
+    "react-native-elements": "^3.3.2",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-keyboard-spacer": "^0.4.1",
+    "react-native-maps": "0.27.1",
     "react-native-reanimated": "~1.13.0",
     "react-native-render-html": "^4.2.0",
     "react-native-safe-area-context": "3.1.4",
@@ -43,8 +44,7 @@
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "~0.13.7",
     "react-native-webview": "10.7.0",
-    "react-query": "^2.23.1",
-    "react-native-maps": "0.27.1"
+    "react-query": "^2.23.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
