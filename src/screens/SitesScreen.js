@@ -6,6 +6,7 @@ import {usePaginatedQuery, useQuery} from 'react-query';
 
 import {setChannelAction} from '../actions/channel';
 import {setSiteAction} from '../actions/site';
+import Alert, {DISPLAY_TYPES} from '../components/Alert';
 import ErrorDisplay from '../components/ErrorDisplay';
 import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
@@ -99,9 +100,11 @@ const Sites = () => {
 							)}
 
 							{infoMessage && (
-								<Text style={[styles.textCenter, styles.m2]}>
-									{infoMessage}
-								</Text>
+								<Alert
+									containerStyle={styles.mx2}
+									displayType={DISPLAY_TYPES.info}
+									text={infoMessage}
+								/>
 							)}
 
 							{status === 'error' && (

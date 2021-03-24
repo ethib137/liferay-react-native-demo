@@ -6,7 +6,12 @@ import {StyleSheet, Text, View} from 'react-native';
 import styles from '../styles/main';
 import {colors} from '../styles/values';
 
-const DISPLAY_TYPES = ['danger', 'info', 'success', 'warning'];
+export const DISPLAY_TYPES = {
+	danger: 'danger',
+	info: 'info',
+	success: 'success',
+	warning: 'warning',
+};
 
 const ICON_DISPLAY_MAP = {
 	danger: 'error',
@@ -16,7 +21,7 @@ const ICON_DISPLAY_MAP = {
 };
 
 function Alert(props) {
-	const {containerStyle, displayType = DISPLAY_TYPES[1], text} = props;
+	const {containerStyle, displayType = DISPLAY_TYPES.info, text} = props;
 
 	return (
 		<View
@@ -55,22 +60,22 @@ const alertStyles = StyleSheet.create({
 		paddingBottom: 12,
 		paddingTop: 12,
 	},
-	[DISPLAY_TYPES[0]]: {
+	[DISPLAY_TYPES.danger]: {
 		backgroundColor: colors.danger.background,
 		borderColor: colors.danger.border,
 		color: colors.danger.text,
 	},
-	[DISPLAY_TYPES[1]]: {
+	[DISPLAY_TYPES.info]: {
 		backgroundColor: colors.info.background,
 		borderColor: colors.info.border,
 		color: colors.info.text,
 	},
-	[DISPLAY_TYPES[2]]: {
+	[DISPLAY_TYPES.success]: {
 		backgroundColor: colors.success.background,
 		borderColor: colors.success.border,
 		color: colors.success.text,
 	},
-	[DISPLAY_TYPES[3]]: {
+	[DISPLAY_TYPES.warning]: {
 		backgroundColor: colors.warning.background,
 		borderColor: colors.warning.border,
 		color: colors.warning.text,
@@ -79,7 +84,7 @@ const alertStyles = StyleSheet.create({
 
 Alert.propTypes = {
 	containerStyle: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-	displayType: PropTypes.oneOf(DISPLAY_TYPES),
+	displayType: PropTypes.oneOf(Object.values(DISPLAY_TYPES)),
 	text: PropTypes.string.isRequired,
 };
 

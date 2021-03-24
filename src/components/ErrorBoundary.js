@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-import Alert from './Alert';
+import Alert, {DISPLAY_TYPES} from './Alert';
 
 class ErrorBoundary extends React.Component {
 	constructor(props) {
@@ -31,7 +31,10 @@ class ErrorBoundary extends React.Component {
 		if (this.state.hasError) {
 			return (
 				<View>
-					<Alert displayType="warning" text="Something went wrong." />
+					<Alert
+						displayType={DISPLAY_TYPES.warning}
+						text="Something went wrong."
+					/>
 
 					{this.state.error && (
 						<Text>{this.state.error.toString()}</Text>
