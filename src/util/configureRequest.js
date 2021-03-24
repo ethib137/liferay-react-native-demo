@@ -4,6 +4,12 @@ import qs from 'qs';
 const AUTH_URL = '/o/oauth2/token';
 const BASE_URL = 'http://localhost:8080';
 
+export const RETURN_TYPES = {
+	blob: 'blob',
+	json: 'json',
+	text: 'text',
+};
+
 export default function (options = {}) {
 	const {
 		authURL = AUTH_URL,
@@ -84,6 +90,7 @@ export default function (options = {}) {
 			data = {},
 			headers,
 			method = 'GET',
+			returnType = RETURN_TYPES.json,
 			...otherOptions
 		} = options;
 
@@ -119,7 +126,13 @@ export default function (options = {}) {
 			if (method === 'DELETE') {
 				return Promise.resolve('deleted-successfully');
 			} else {
-				return response.json();
+				if (returnType == RETURN_TYPES.blob) {
+					const text = await response.blob();
+
+					return text;
+				} else {
+					return response.json();
+				}
 			}
 		} else {
 			const text = await response.text();

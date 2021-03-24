@@ -6,8 +6,8 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Comments from '../comments';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
+import AuthImage from './AuthImage';
 import HTML from './HTML';
-import Image from './Image';
 
 const Blog = ({navigation, route}) => {
 	const [, , request] = useAppState();
@@ -42,7 +42,9 @@ const Blog = ({navigation, route}) => {
 
 	return (
 		<KeyboardAwareScrollView extraScrollHeight={20}>
-			{params.image && <Image relativeURL={params.image.contentUrl} />}
+			{params.image && (
+				<AuthImage contentValue={params.image.contentValue} />
+			)}
 
 			<Text style={[styles.m2, styles.h1]}>{params.headline}</Text>
 

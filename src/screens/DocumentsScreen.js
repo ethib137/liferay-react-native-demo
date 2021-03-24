@@ -5,6 +5,7 @@ import {Button, Card} from 'react-native-elements';
 import {usePaginatedQuery} from 'react-query';
 
 import CommentThread from '../comments/CommentThread';
+import CardImage from '../components/CardImage';
 import Document from '../components/Document';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
@@ -13,7 +14,6 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
-import {getRelativeURL} from '../util/url';
 
 const Documents = ({navigation}) => {
 	const [state, , request] = useAppState();
@@ -40,16 +40,7 @@ const Documents = ({navigation}) => {
 			<Card.Title>{item.title}</Card.Title>
 
 			{item.adaptedImages && item.adaptedImages[0] ? (
-				<Card.Image
-					source={{
-						uri:
-							state.liferayURL +
-							getRelativeURL(
-								item.adaptedImages[0].contentUrl,
-								state.liferayURL
-							),
-					}}
-				/>
+				<CardImage contentUrl={item.adaptedImages[0].contentUrl} />
 			) : (
 				<Card.Divider />
 			)}

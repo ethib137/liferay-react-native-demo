@@ -6,6 +6,7 @@ import {usePaginatedQuery} from 'react-query';
 
 import CommentThread from '../comments/CommentThread';
 import Blog from '../components/Blog';
+import CardImage from '../components/CardImage';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import Pagination from '../components/Pagination';
@@ -25,7 +26,7 @@ function Blogs({navigation}) {
 		siteId && ['blogs', siteId, page],
 		() => {
 			return request(
-				`/o/headless-delivery/v1.0/sites/${siteId}/blog-postings?page=${page}`
+				`/o/headless-delivery/v1.0/sites/${siteId}/blog-postings?page=${page}&nestedFields=image.contentValue`
 			);
 		}
 	);
@@ -39,9 +40,9 @@ function Blogs({navigation}) {
 			<Card.Title>{item.headline}</Card.Title>
 
 			{item.image ? (
-				<Card.Image
+				<CardImage
 					containerStyle={styles.mb2}
-					source={{uri: state.liferayURL + item.image.contentUrl}}
+					contentValue={item.image.contentValue}
 				/>
 			) : (
 				<Card.Divider />

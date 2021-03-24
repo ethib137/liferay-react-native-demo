@@ -2,12 +2,12 @@ import {DateTime} from 'luxon';
 import PropTypes from 'prop-types';
 import React, {useCallback} from 'react';
 import {Text, View} from 'react-native';
-import {Image} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import Comments from '../comments';
 import {useAppState} from '../hooks/appState';
 import styles from '../styles/main';
+import AuthImage from './AuthImage';
 import CardItemRow from './CardItemRow';
 
 const Document = ({navigation, route}) => {
@@ -44,18 +44,7 @@ const Document = ({navigation, route}) => {
 	return (
 		<KeyboardAwareScrollView extraScrollHeight={20}>
 			{params.adaptedImages[0] && (
-				<Image
-					source={
-						params.adaptedImages[0]
-							? {
-									uri:
-										state.liferayURL +
-										params.adaptedImages[0].contentUrl,
-							  }
-							: null
-					}
-					style={{height: 200, width: '100%'}}
-				/>
+				<AuthImage contentUrl={params.adaptedImages[0].contentUrl} />
 			)}
 
 			<Text style={[styles.mx2, styles.h4]}>{params.description}</Text>

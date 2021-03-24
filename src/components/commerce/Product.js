@@ -2,12 +2,11 @@ import {Ionicons} from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import React, {useEffect, useMemo, useState} from 'react';
 import {ScrollView, Text, View} from 'react-native';
-import {Button, CheckBox, Image} from 'react-native-elements';
 
 import {useAppState} from '../../hooks/appState';
 import styles from '../../styles/main';
 import {colors} from '../../styles/values';
-import {getRelativeURL} from '../../util/url';
+import AuthImage from '../AuthImage';
 import NoCartSelected from './NoCartSelected';
 
 const Product = ({route}) => {
@@ -50,16 +49,7 @@ const Product = ({route}) => {
 
 	return (
 		<ScrollView>
-			{urlImage && (
-				<Image
-					source={{
-						uri:
-							state.liferayURL +
-							getRelativeURL(urlImage, state.liferayURL),
-					}}
-					style={{height: 200, width: '100%'}}
-				/>
-			)}
+			{urlImage && <AuthImage contentUrl={urlImage} />}
 
 			{shortDescription.length > 0 && (
 				<View style={styles.m2}>

@@ -6,6 +6,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {usePaginatedQuery} from 'react-query';
 
 import {setAccountAction} from '../actions/account';
+import CardImage from '../components/CardImage';
 import CardItemRow from '../components/CardItemRow';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
@@ -15,7 +16,6 @@ import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 import {colors} from '../styles/values';
-import {getRelativeURL} from '../util/url';
 
 const ACCOUNT_TYPE_MAP = {
 	1: 'Personal',
@@ -49,30 +49,11 @@ const Accounts = () => {
 					accountId === item.id ? accountStyles.selected : null,
 					index === items.length - 1 ? styles.mb2 : null,
 				]}
-				image={
-					item.urlImage
-						? {
-								uri:
-									state.liferayURL +
-									getRelativeURL(
-										item.urlImage,
-										state.liferayURL
-									),
-						  }
-						: null
-				}
 			>
 				<Card.Title>{item.name}</Card.Title>
 
-				{item.urlImage ? (
-					<Card.Image
-						containerStyle={styles.mb2}
-						source={{
-							uri:
-								state.liferayURL +
-								getRelativeURL(item.urlImage, state.liferayURL),
-						}}
-					/>
+				{item.thumbnail ? (
+					<CardImage contentUrl={item.thumbnail} />
 				) : (
 					<Card.Divider />
 				)}

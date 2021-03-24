@@ -3,8 +3,8 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import styles from '../styles/main';
 import {greys} from '../styles/values';
+import AuthImage from './AuthImage';
 import HTML from './HTML';
-import Image from './Image';
 import Map from './Map';
 
 const geolocationField = {
@@ -31,7 +31,7 @@ const imageField = {
 	dataType: 'image',
 	render: (field) =>
 		field.contentFieldValue.image && (
-			<Image relativeURL={field.contentFieldValue.image.contentUrl} />
+			<AuthImage contentUrl={field.contentFieldValue.image.contentUrl} />
 		),
 };
 

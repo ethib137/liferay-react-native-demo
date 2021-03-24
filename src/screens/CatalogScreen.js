@@ -10,6 +10,7 @@ import {
 import {Card} from 'react-native-elements';
 import {usePaginatedQuery} from 'react-query';
 
+import CardImage from '../components/CardImage';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import Pagination from '../components/Pagination';
@@ -18,7 +19,6 @@ import Product from '../components/commerce/Product';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
-import {getRelativeURL} from '../util/url';
 
 const Catalog = ({navigation}) => {
 	const [state, , request] = useAppState();
@@ -58,13 +58,7 @@ const Catalog = ({navigation}) => {
 				<Card.Title>{item.name}</Card.Title>
 
 				{item.urlImage ? (
-					<Card.Image
-						source={{
-							uri:
-								state.liferayURL +
-								getRelativeURL(item.urlImage, state.liferayURL),
-						}}
-					/>
+					<CardImage contentUrl={item.urlImage} />
 				) : (
 					<Card.Divider />
 				)}
