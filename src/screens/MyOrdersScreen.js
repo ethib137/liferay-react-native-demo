@@ -17,6 +17,8 @@ import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 
+const COMMERCE_ORDER_STATUS_PENDING = 1;
+
 const MyOrders = ({navigation}) => {
 	const [state, , request] = useAppState();
 
@@ -28,7 +30,7 @@ const MyOrders = ({navigation}) => {
 		['orders', accountId, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=(accountId/any(x:(x eq ${accountId}))) and (channelId eq ${channelId}) and (orderStatus/any(x:(x eq 1)))`
+				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=(accountId/any(x:(x eq ${accountId}))) and (channelId eq ${channelId}) and (orderStatus/any(x:(x eq ${COMMERCE_ORDER_STATUS_PENDING})))`
 			);
 		}
 	);

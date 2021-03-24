@@ -27,6 +27,8 @@ import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 import {colors} from '../styles/values';
 
+const COMMERCE_ORDER_STATUS_OPEN = 2;
+
 const Cart = ({navigation}) => {
 	const [state, dispatch, request] = useAppState();
 
@@ -80,7 +82,7 @@ const Cart = ({navigation}) => {
 		['carts', accountId, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=(accountId/any(x:(x eq ${accountId}))) and (channelId eq ${channelId}) and (orderStatus/any(x:(x eq 2)))`
+				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=(accountId/any(x:(x eq ${accountId}))) and (channelId eq ${channelId}) and (orderStatus/any(x:(x eq ${COMMERCE_ORDER_STATUS_OPEN})))`
 			);
 		}
 	);
