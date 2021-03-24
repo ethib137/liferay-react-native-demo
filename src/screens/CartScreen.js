@@ -26,8 +26,7 @@ import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 import {colors} from '../styles/values';
-
-const COMMERCE_ORDER_STATUS_OPEN = 2;
+import { COMMERCE_ORDER_STATUS_OPEN } from '../util/orderConstants';
 
 const Cart = ({navigation}) => {
 	const [state, dispatch, request] = useAppState();

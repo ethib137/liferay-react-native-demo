@@ -16,8 +16,7 @@ import Order from '../components/commerce/Order';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
-
-const COMMERCE_ORDER_STATUS_PENDING = 1;
+import { COMMERCE_ORDER_STATUS_OPEN } from '../util/orderConstants';
 
 const MyOrders = ({navigation}) => {
 	const [state, , request] = useAppState();
@@ -30,7 +29,7 @@ const MyOrders = ({navigation}) => {
 		['orders', accountId, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&sort=modifiedDate:desc&filter=(accountId/any(x:(x eq ${accountId}))) and (channelId eq ${channelId}) and (orderStatus/any(x:(x ne ${COMMERCE_ORDER_STATUS_PENDING})))`
+				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&sort=modifiedDate:desc&filter=(accountId/any(x:(x eq ${accountId}))) and (channelId eq ${channelId}) and (orderStatus/any(x:(x ne ${COMMERCE_ORDER_STATUS_OPEN})))`
 			);
 		}
 	);
@@ -57,6 +56,10 @@ const MyOrders = ({navigation}) => {
 					<CardItemRow
 						label="Modified"
 						value={moment(item.modifiedDate).fromNow()}
+					/>
+					<CardItemRow
+						label="Status"
+						value={item.orderStatusInfo.label_i18n}
 					/>
 					<CardItemRow label="Total" value={item.totalFormatted} />
 				</View>

@@ -1,0 +1,1 @@
+export const COMMERCE_ORDER_STATUS_OPEN = 2;
