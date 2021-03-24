@@ -26,7 +26,7 @@ const Documents = ({navigation}) => {
 		siteId && ['documents', siteId, page],
 		() => {
 			return request(
-				`/o/headless-delivery/v1.0/sites/${siteId}/documents?flatten=true&page=${page}&pageSize=20`
+				`/o/headless-delivery/v1.0/sites/${siteId}/documents?flatten=true&sort=dateModified:desc&page=${page}&pageSize=20`
 			);
 		}
 	);

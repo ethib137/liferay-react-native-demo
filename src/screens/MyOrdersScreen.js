@@ -30,7 +30,7 @@ const MyOrders = ({navigation}) => {
 		['orders', accountId, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&filter=(accountId/any(x:(x eq ${accountId}))) and (channelId eq ${channelId}) and (orderStatus/any(x:(x eq ${COMMERCE_ORDER_STATUS_PENDING})))`
+				`/o/headless-commerce-admin-order/v1.0/orders?page=${page}&sort=modifiedDate:desc&filter=(accountId/any(x:(x eq ${accountId}))) and (channelId eq ${channelId}) and (orderStatus/any(x:(x ne ${COMMERCE_ORDER_STATUS_PENDING})))`
 			);
 		}
 	);
