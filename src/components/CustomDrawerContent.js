@@ -1,3 +1,4 @@
+import {Ionicons} from '@expo/vector-icons';
 import {
 	DrawerContentScrollView,
 	DrawerItem,
@@ -5,6 +6,7 @@ import {
 } from '@react-navigation/drawer';
 import React from 'react';
 import {Alert, View} from 'react-native';
+import {colors} from 'react-native-elements';
 
 import {logoutAction} from '../actions/auth';
 import {asyncKeys} from '../actions/hydrate';
@@ -15,7 +17,7 @@ import {asyncMultiRemove} from '../util/async';
 function CustomDrawerContent(props) {
 	const [state, dispatch] = useAppState();
 
-	const {loggedIn} = state;
+	const {loggedIn, username} = state;
 
 	function handleClearData() {
 		Alert.alert(
@@ -45,6 +47,21 @@ function CustomDrawerContent(props) {
 			contentContainerStyle={[styles.spaceBetween, styles.mb4]}
 		>
 			<View>
+				<DrawerItem
+					icon={() => (
+						<Ionicons
+							color={colors.white}
+							name="ios-person"
+							size={24}
+						/>
+					)}
+					label={username}
+					labelStyle={{color: colors.white}}
+					pressColor="1"
+					pressOpacity="1"
+					style={{backgroundColor: colors.primary}}
+				/>
+
 				<DrawerItemList {...props} />
 			</View>
 
