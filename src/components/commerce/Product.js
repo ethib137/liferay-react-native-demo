@@ -2,6 +2,7 @@ import {Ionicons} from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import React, {useEffect, useMemo, useState} from 'react';
 import {ScrollView, Text, View} from 'react-native';
+import {Button, CheckBox} from 'react-native-elements';
 
 import {useAppState} from '../../hooks/appState';
 import styles from '../../styles/main';
@@ -14,12 +15,25 @@ const Product = ({route}) => {
 
 	const {params} = route;
 
-	const {cartId} = state;
+	const {accountId, cartId, channelId} = state;
 
 	const [loading, setLoading] = useState(false);
+	const [skus, setSkus] = useState([]);
 	const [skuId, setSkuId] = useState();
 
-	const {productId, shortDescription, skus, urlImage} = params;
+	const {productId, shortDescription, urlImage} = params;
+
+	useEffect(() => {
+		setLoading(true);
+
+		request(
+			`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products/${productId}/skus?accountId=${accountId}`
+		).then((res) => {
+			setSkus(res.items);
+
+			setLoading(false);
+		});
+	}, [accountId, channelId, productId, request]);
 
 	const items = useMemo(() => (skus ? skus : []), [skus]);
 

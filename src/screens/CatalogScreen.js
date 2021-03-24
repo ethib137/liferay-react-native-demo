@@ -1,5 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
 	FlatList,
 	RefreshControl,
@@ -26,23 +26,32 @@ const Catalog = ({navigation}) => {
 	const {accountId, channelId, siteId, userId} = state;
 
 	const [page, setPage] = useState(1);
+	const [error, setError] = useState();
 
 	const identifier = accountId || userId;
 
-	const {error, refetch, resolvedData, status} = usePaginatedQuery(
+	const {refetch, resolvedData, status} = usePaginatedQuery(
 		identifier && channelId && ['products', identifier, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?page=${page}&nestedFields=skus${
+				`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?page=${page}${
 					accountId ? '&accountId=' + accountId : ''
 				}`
-			);
+			).catch((error) => {
+				setError(error);
+			});
 		}
 	);
 
 	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
 
 	const items = resolvedData ? resolvedData.items : [];
+
+	useEffect(() => {
+		if (items.length > 0) {
+			setError();
+		}
+	}, [items.length]);
 
 	const renderItem = ({index, item}) => (
 		<TouchableOpacity
@@ -86,9 +95,9 @@ const Catalog = ({navigation}) => {
 				<FlatList
 					ListHeaderComponent={
 						<>
-							{status === 'error' && (
+							{error && (
 								<ErrorDisplay
-									error={error.title}
+									error={error.status}
 									onRetry={() => refetch()}
 								/>
 							)}

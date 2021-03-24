@@ -17,10 +17,7 @@ import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
 import {colors} from '../styles/values';
 
-const ACCOUNT_TYPE_MAP = {
-	1: 'Personal',
-	2: 'Business',
-};
+const PAGE_SIZE = 10;
 
 const Accounts = () => {
 	const [state, dispatch, request] = useAppState();
@@ -30,23 +27,29 @@ const Accounts = () => {
 	const [page, setPage] = useState(1);
 
 	const {error, refetch, resolvedData, status} = usePaginatedQuery(
-		['accounts', userId, page],
+		['accounts', siteId, userId, page],
 		() => {
-			return request(
-				`/o/headless-commerce-admin-account/v1.0/accounts?page=${page}&pageSize=10`
-			);
+			if (siteId) {
+				return request(
+					`/o/commerce-ui/search-accounts?groupId=${siteId}&page=${page}&pageSize=${PAGE_SIZE}`
+				);
+			}
 		}
 	);
 
-	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
+	const flatList = useScrollToTop(page);
 
-	const items = resolvedData ? resolvedData.items : [];
+	const items = resolvedData ? resolvedData.accounts : [];
 
 	const renderItem = ({index, item}) => (
-		<TouchableOpacity onPress={() => dispatch(setAccountAction(item.id))}>
+		<TouchableOpacity
+			onPress={() => dispatch(setAccountAction(item.accountId))}
+		>
 			<Card
 				containerStyle={[
-					accountId === item.id ? accountStyles.selected : null,
+					accountId === item.accountId
+						? accountStyles.selected
+						: null,
 					index === items.length - 1 ? styles.mb2 : null,
 				]}
 			>
@@ -58,13 +61,7 @@ const Accounts = () => {
 					<Card.Divider />
 				)}
 
-				<View>
-					<CardItemRow
-						label="Account Type"
-						value={ACCOUNT_TYPE_MAP[item.type]}
-					/>
-					<CardItemRow label="Account ID" value={item.id} />
-				</View>
+				<CardItemRow label="Account ID" value={item.accountId} />
 			</Card>
 		</TouchableOpacity>
 	);
@@ -92,13 +89,19 @@ const Accounts = () => {
 									<Text
 										style={[styles.m2, styles.textCenter]}
 									>
-										There are no accounts to display.
+										There are no accounts to display. Make
+										sure your user has an account. If this
+										is a B2C site, visit the site in Liferay
+										to create an account. If this is a B2B
+										site, you will need to create a Business
+										Account through the control panel and
+										add your user to the account.
 									</Text>
 								)}
 						</>
 					}
 					data={items}
-					keyExtractor={({id}) => id.toString()}
+					keyExtractor={({accountId}) => accountId.toString()}
 					ref={flatList}
 					refreshControl={
 						<RefreshControl
@@ -112,11 +115,11 @@ const Accounts = () => {
 
 			{resolvedData && (
 				<Pagination
-					lastPage={resolvedData.lastPage}
-					page={resolvedData.page}
-					pageSize={resolvedData.pageSize}
+					lastPage={Math.ceil(resolvedData.count / PAGE_SIZE)}
+					page={page}
+					pageSize={PAGE_SIZE}
 					setPage={setPage}
-					totalCount={resolvedData.totalCount}
+					totalCount={resolvedData.count}
 				/>
 			)}
 		</View>

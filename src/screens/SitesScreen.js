@@ -1,5 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Button, Card} from 'react-native-elements';
 import {usePaginatedQuery, useQuery} from 'react-query';
@@ -17,7 +17,7 @@ import styles from '../styles/main';
 const Sites = () => {
 	const [state, dispatch, request] = useAppState();
 
-	const {siteId} = state;
+	const {siteId, userId} = state;
 
 	const [page, setPage] = useState(1);
 
@@ -32,13 +32,15 @@ const Sites = () => {
 		}
 	);
 
-	const {data: channels} = useQuery(['channels'], () => {
+	const {data} = useQuery(['channels', userId], () => {
 		return request(
-			`/api/jsonws/commerce.commercechannel/get-commerce-channels/start/-1/end/-1`
+			`/o/headless-commerce-admin-channel/v1.0/channels?pageSize=-1`
 		).catch(() => {
 			setInfoMessage('Commerce APIs do not exist on this instance.');
 		});
 	});
+
+	const channels = data ? data.items : null;
 
 	function selectSite(id) {
 		dispatch(setSiteAction(id));
@@ -48,17 +50,21 @@ const Sites = () => {
 				({siteGroupId}) => parseInt(siteGroupId, 10) === id
 			);
 
-			dispatch(
-				setChannelAction(
-					curChannel ? curChannel.commerceChannelId : null
-				)
-			);
+			dispatch(setChannelAction(curChannel ? curChannel.id : null));
 		}
 	}
 
 	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
 
 	const items = resolvedData ? resolvedData.items : [];
+
+	useEffect(() => {
+		if (channels && channels.length == 0) {
+			setInfoMessage(
+				'If the site you have selected includes Commerce, but the Commerce applications are not showing up in the side menu, please make sure your user has the "Channels > Commerce Channel: View" permission.'
+			);
+		}
+	}, [channels]);
 
 	const renderItem = ({item}) => {
 		const selectedSite = siteId === item.id;
