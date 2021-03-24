@@ -16,7 +16,7 @@ import Order from '../components/commerce/Order';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
-import { COMMERCE_ORDER_STATUS_OPEN } from '../util/orderConstants';
+import {COMMERCE_ORDER_STATUS_OPEN} from '../util/orderConstants';
 
 const MyOrders = ({navigation}) => {
 	const [state, , request] = useAppState();

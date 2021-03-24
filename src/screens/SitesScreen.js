@@ -1,5 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {Button, Card} from 'react-native-elements';
 import {usePaginatedQuery, useQuery} from 'react-query';
@@ -42,16 +42,27 @@ const Sites = () => {
 
 	const channels = data ? data.items : null;
 
+	const selectChannel = useCallback(
+		(id) => {
+			if (channels && channels.length > 0) {
+				const curChannel = channels.find(
+					({siteGroupId}) => parseInt(siteGroupId, 10) === id
+				);
+
+				dispatch(setChannelAction(curChannel ? curChannel.id : null));
+
+				if (curChannel) {
+					setInfoMessage();
+				}
+			}
+		},
+		[channels, dispatch]
+	);
+
 	function selectSite(id) {
 		dispatch(setSiteAction(id));
 
-		if (channels) {
-			const curChannel = channels.find(
-				({siteGroupId}) => parseInt(siteGroupId, 10) === id
-			);
-
-			dispatch(setChannelAction(curChannel ? curChannel.id : null));
-		}
+		selectChannel(id);
 	}
 
 	const flatList = useScrollToTop(resolvedData ? resolvedData.page : null);
@@ -63,8 +74,10 @@ const Sites = () => {
 			setInfoMessage(
 				'If the site you have selected includes Commerce, but the Commerce applications are not showing up in the side menu, please make sure your user has the "Channels > Commerce Channel: View" permission.'
 			);
+		} else {
+			selectChannel(siteId);
 		}
-	}, [channels]);
+	}, [channels, selectChannel, siteId]);
 
 	const renderItem = ({item}) => {
 		const selectedSite = siteId === item.id;

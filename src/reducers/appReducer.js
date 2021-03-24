@@ -16,7 +16,7 @@ const initialState = {
 	},
 	siteId: null,
 	userId: null,
-	username: 'ali@liferay.com',
+	username: 'test@liferay.com',
 };
 
 const appStateReducer = (state, action) => {

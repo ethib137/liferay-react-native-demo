@@ -11,7 +11,7 @@ import AuthImage from './AuthImage';
 import CardItemRow from './CardItemRow';
 
 const Document = ({navigation, route}) => {
-	const [state, , request] = useAppState();
+	const [, , request] = useAppState();
 
 	const {params} = route;
 
