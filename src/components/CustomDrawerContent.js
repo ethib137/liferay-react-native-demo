@@ -5,7 +5,7 @@ import {
 	DrawerItemList,
 } from '@react-navigation/drawer';
 import React from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, ScrollView, View} from 'react-native';
 import {colors} from 'react-native-elements';
 
 import {logoutAction} from '../actions/auth';
@@ -44,40 +44,44 @@ function CustomDrawerContent(props) {
 	return (
 		<DrawerContentScrollView
 			{...props}
-			contentContainerStyle={[styles.spaceBetween, styles.mb4]}
+			contentContainerStyle={{minHeight: '100%'}}
 		>
-			<View>
-				<DrawerItem
-					icon={() => (
-						<Ionicons
-							color={colors.white}
-							name="ios-person"
-							size={24}
+			<ScrollView
+				contentContainerStyle={[styles.spaceBetween, styles.mb4]}
+			>
+				<View>
+					<DrawerItem
+						icon={() => (
+							<Ionicons
+								color={colors.white}
+								name="ios-person"
+								size={24}
+							/>
+						)}
+						label={username}
+						labelStyle={{color: colors.white}}
+						pressColor="1"
+						pressOpacity="1"
+						style={{backgroundColor: colors.primary}}
+					/>
+
+					<DrawerItemList {...props} />
+				</View>
+
+				<View>
+					{loggedIn.value && (
+						<DrawerItem
+							label="Log Out"
+							onPress={() => dispatch(logoutAction())}
 						/>
 					)}
-					label={username}
-					labelStyle={{color: colors.white}}
-					pressColor="1"
-					pressOpacity="1"
-					style={{backgroundColor: colors.primary}}
-				/>
 
-				<DrawerItemList {...props} />
-			</View>
-
-			<View>
-				{loggedIn.value && (
 					<DrawerItem
-						label="Log Out"
-						onPress={() => dispatch(logoutAction())}
+						label="Remove All Local Data"
+						onPress={() => handleClearData()}
 					/>
-				)}
-
-				<DrawerItem
-					label="Remove All Local Data"
-					onPress={() => handleClearData()}
-				/>
-			</View>
+				</View>
+			</ScrollView>
 		</DrawerContentScrollView>
 	);
 }
