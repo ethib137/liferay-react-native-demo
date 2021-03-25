@@ -32,6 +32,10 @@ You will then need to enable scopes to give the OAuth application access to Life
 
 At this point it should be working.
 
+## Permissioned Images
+
+Viewing images that do not include guest permissions may require additional configuration in your Liferay instance. If you are using basic Auth make sure "System Settings > API Authentication > Basic Auth Header" includes your image's base url. For example: `/o/adaptive-media/*`.
+
 ## Android Emulator
 
 In order to connect to you local Liferay instance from an Android emulator you will need to `Liferay Server URL` from the Configurations page to `http://10.0.2.2:8080`.
