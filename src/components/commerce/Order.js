@@ -1,17 +1,18 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, Text} from 'react-native';
 import {useQuery} from 'react-query';
 
 import {useAppState} from '../../hooks/appState';
 import gStyles from '../../styles/main';
 import ErrorDisplay from '../ErrorDisplay';
+import Row from '../Row';
 import OrderItem from './OrderItem';
 
 const Order = ({route}) => {
 	const [, , request] = useAppState();
 
-	const {id, totalFormatted} = route.params;
+	const {id, orderStatusInfo, totalFormatted} = route.params;
 
 	const {data, error, refetch, status} = useQuery(['orderItems', id], () => {
 		return request(
@@ -23,19 +24,8 @@ const Order = ({route}) => {
 
 	return (
 		<ScrollView>
-			<View
-				style={[
-					gStyles.spaceBetweenH,
-					gStyles.mx2,
-					gStyles.mt3,
-					gStyles.mb1,
-				]}
-			>
-				<Text style={[gStyles.h4]}>Total Amount: </Text>
-				<Text style={[gStyles.h4, gStyles.textGrey7]}>
-					{totalFormatted}
-				</Text>
-			</View>
+			<Row label="Total Amount" value={totalFormatted} />
+			<Row label="Status" value={orderStatusInfo.label_i18n} />
 
 			<Text style={[gStyles.mx2, gStyles.mt2, gStyles.h4]}>Items:</Text>
 
