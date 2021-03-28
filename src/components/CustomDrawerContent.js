@@ -72,7 +72,11 @@ function CustomDrawerContent(props) {
 					{loggedIn.value && (
 						<DrawerItem
 							label="Log Out"
-							onPress={() => dispatch(logoutAction())}
+							onPress={() => {
+								props.navigation.closeDrawer();
+
+								dispatch(logoutAction());
+							}}
 						/>
 					)}
 
