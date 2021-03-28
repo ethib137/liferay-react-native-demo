@@ -53,7 +53,7 @@ const Document = ({navigation, route}) => {
 			<Text style={[styles.mx2, styles.h4]}>{params.description}</Text>
 
 			<View style={styles.m2}>
-				<CardItemRow label="ID" value={params.id} />
+				<CardItemRow label="Id" value={params.id} />
 				<CardItemRow
 					label="Date Created"
 					value={DateTime.fromISO(params.dateCreated).toRelative()}
