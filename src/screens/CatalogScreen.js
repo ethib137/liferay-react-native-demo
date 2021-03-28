@@ -1,16 +1,9 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect, useState} from 'react';
-import {
-	FlatList,
-	RefreshControl,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native';
-import {Card} from 'react-native-elements';
+import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {usePaginatedQuery} from 'react-query';
 
-import CardImage from '../components/CardImage';
+import Card from '../components/Card';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import Pagination from '../components/Pagination';
@@ -32,11 +25,13 @@ const Catalog = ({navigation}) => {
 	const {refetch, resolvedData, status} = usePaginatedQuery(
 		accountId && channelId && ['products', accountId, channelId, page],
 		() => {
-			return request(
-				`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?page=${page}&accountId=${accountId}`
-			).catch((error) => {
-				setError(error);
-			});
+			if (accountId && channelId) {
+				return request(
+					`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?page=${page}&accountId=${accountId}`
+				).catch((error) => {
+					setError(error);
+				});
+			}
 		}
 	);
 
@@ -51,35 +46,20 @@ const Catalog = ({navigation}) => {
 	}, [items.length]);
 
 	const renderItem = ({index, item}) => (
-		<TouchableOpacity
-			onPress={() => {
-				navigation.navigate('Product', item);
-			}}
+		<Card
+			containerStyle={index === items.length - 1 ? styles.mb2 : null}
+			imageUrl={item.urlImage}
+			onPress={() => navigation.navigate('Product', item)}
+			title={item.name}
 		>
-			<Card
-				containerStyle={[
-					index === items.length - 1 ? styles.mb2 : null,
-				]}
-			>
-				<Card.Title>{item.name}</Card.Title>
+			{!!item.shortDescription && (
+				<Text style={styles.mt2}>{item.shortDescription}</Text>
+			)}
 
-				{item.urlImage ? (
-					<CardImage contentUrl={item.urlImage} />
-				) : (
-					<Card.Divider />
-				)}
-
-				<View>
-					{!!item.shortDescription && (
-						<Text style={styles.mt2}>{item.shortDescription}</Text>
-					)}
-
-					{!!item.commerceChannelId && (
-						<Text style={styles.mt2}>{item.commerceChannelId}</Text>
-					)}
-				</View>
-			</Card>
-		</TouchableOpacity>
+			{!!item.commerceChannelId && (
+				<Text style={styles.mt2}>{item.commerceChannelId}</Text>
+			)}
+		</Card>
 	);
 
 	if (!channelId || !siteId) {

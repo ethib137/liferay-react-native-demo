@@ -1,20 +1,12 @@
-import {Ionicons} from '@expo/vector-icons';
 import {createStackNavigator} from '@react-navigation/stack';
 import moment from 'moment-timezone';
 import React, {useState} from 'react';
-import {
-	Alert,
-	FlatList,
-	RefreshControl,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native';
-import {Button, Card} from 'react-native-elements';
+import {Alert, FlatList, RefreshControl, Text, View} from 'react-native';
+import {Button} from 'react-native-elements';
 import {usePaginatedQuery} from 'react-query';
 
 import {setCartAction} from '../actions/cart';
+import Card from '../components/Card';
 import CardItemRow from '../components/CardItemRow';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
@@ -25,7 +17,6 @@ import Order from '../components/commerce/Order';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
-import {colors} from '../styles/values';
 import {COMMERCE_ORDER_STATUS_OPEN} from '../util/orderConstants';
 
 const Cart = ({navigation}) => {
@@ -94,53 +85,32 @@ const Cart = ({navigation}) => {
 		const selectedCart = cartId === item.id;
 
 		return (
-			<TouchableOpacity
-				onPress={() => {
-					navigation.navigate('Cart', item);
-				}}
+			<Card
+				containerStyle={[
+					index === items.length - 1 ? styles.mb2 : null,
+				]}
+				onDelete={() => deleteCart(item.id)}
+				onPress={() => navigation.navigate('Cart', item)}
+				onToggleSelect={() =>
+					dispatch(setCartAction(selectedCart ? null : item.id))
+				}
+				selected={selectedCart}
+				title={`Cart ${item.id}`}
 			>
-				<Card
-					containerStyle={[
-						index === items.length - 1 ? styles.mb2 : null,
-						selectedCart ? cartStyles.selected : {},
-						styles.m2,
-						styles.pRelative,
-					]}
-				>
-					<Card.Title>{`Cart ${item.id}`}</Card.Title>
-					<Card.Divider />
-
-					<Button
-						containerStyle={[
-							styles.pAbsolute,
-							{right: 0, top: -12},
-						]}
-						icon={
-							<Ionicons color="#000" name="ios-close" size={32} />
-						}
-						onPress={() => deleteCart(item.id)}
-						type="clear"
-					/>
-
-					<View>
-						<CardItemRow
-							label="Modified"
-							value={moment(item.modifiedDate).fromNow()}
-						/>
-						<CardItemRow
-							label="Total"
-							value={item.totalFormatted}
-						/>
-					</View>
-
-					<Button
-						disabled={selectedCart}
-						onPress={() => dispatch(setCartAction(item.id))}
-						style={styles.mt2}
-						title={selectedCart ? 'Selected Cart' : 'Select Cart'}
-					/>
-				</Card>
-			</TouchableOpacity>
+				<CardItemRow
+					label="Created"
+					value={moment(item.createDate).fromNow()}
+				/>
+				<CardItemRow
+					label="Modified"
+					value={moment(item.modifiedDate).fromNow()}
+				/>
+				<CardItemRow
+					label="Status"
+					value={item.orderStatusInfo.label_i18n}
+				/>
+				<CardItemRow label="Total" value={item.totalFormatted} />
+			</Card>
 		);
 	};
 
@@ -207,12 +177,6 @@ const Cart = ({navigation}) => {
 		</View>
 	);
 };
-
-const cartStyles = StyleSheet.create({
-	selected: {
-		borderColor: colors.primary,
-	},
-});
 
 const Stack = createStackNavigator();
 

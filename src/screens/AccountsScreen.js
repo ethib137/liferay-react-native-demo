@@ -1,12 +1,10 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useState} from 'react';
-import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
-import {Card} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {usePaginatedQuery} from 'react-query';
 
 import {setAccountAction} from '../actions/account';
-import CardImage from '../components/CardImage';
+import Card from '../components/Card';
 import CardItemRow from '../components/CardItemRow';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
@@ -15,7 +13,6 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
-import {colors} from '../styles/values';
 
 const PAGE_SIZE = 10;
 
@@ -27,7 +24,7 @@ const Accounts = () => {
 	const [page, setPage] = useState(1);
 
 	const {error, refetch, resolvedData, status} = usePaginatedQuery(
-		['accounts', siteId, userId, page],
+		siteId && ['accounts', siteId, userId, page],
 		() => {
 			if (siteId) {
 				return request(
@@ -41,30 +38,23 @@ const Accounts = () => {
 
 	const items = resolvedData ? resolvedData.accounts : [];
 
-	const renderItem = ({index, item}) => (
-		<TouchableOpacity
-			onPress={() => dispatch(setAccountAction(item.accountId))}
-		>
+	const renderItem = ({index, item}) => {
+		const selected = accountId === item.accountId;
+
+		return (
 			<Card
-				containerStyle={[
-					accountId === item.accountId
-						? accountStyles.selected
-						: null,
-					index === items.length - 1 ? styles.mb2 : null,
-				]}
+				containerStyle={index === items.length - 1 ? styles.mb2 : null}
+				imageUrl={item.thumbnail}
+				onToggleSelect={() =>
+					dispatch(setAccountAction(selected ? null : item.accountId))
+				}
+				selected={selected}
+				title={item.name}
 			>
-				<Card.Title>{item.name}</Card.Title>
-
-				{item.thumbnail ? (
-					<CardImage contentUrl={item.thumbnail} />
-				) : (
-					<Card.Divider />
-				)}
-
 				<CardItemRow label="Account ID" value={item.accountId} />
 			</Card>
-		</TouchableOpacity>
-	);
+		);
+	};
 
 	if (!siteId) {
 		return <NoSiteSelected />;
@@ -125,12 +115,6 @@ const Accounts = () => {
 		</View>
 	);
 };
-
-const accountStyles = StyleSheet.create({
-	selected: {
-		borderColor: colors.primary,
-	},
-});
 
 const Stack = createStackNavigator();
 

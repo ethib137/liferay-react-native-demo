@@ -1,9 +1,9 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {FlatList, RefreshControl, Text} from 'react-native';
-import {Button, Card} from 'react-native-elements';
 import {useQuery} from 'react-query';
 
+import Card from '../components/Card';
 import CardItemRow from '../components/CardItemRow';
 import ContentSet from '../components/ContentSet';
 import ContentSetEntry from '../components/ContentSetEntry';
@@ -35,22 +35,17 @@ const ContentSets = ({navigation}) => {
 	const items = data ? data : [];
 
 	const renderItem = ({item}) => (
-		<Card>
-			<Card.Title>{item.title}</Card.Title>
-			<Card.Divider />
-
+		<Card
+			onPress={() =>
+				navigation.navigate('ContentSet', {
+					contentSetId: item.assetListEntryId,
+					title: item.title,
+				})
+			}
+			title={item.title}
+		>
 			<CardItemRow label="Id" value={item.assetListEntryId} />
 			<CardItemRow label="Type" value={TYPE_MAP[item.type]} />
-
-			<Button
-				onPress={() =>
-					navigation.navigate('ContentSet', {
-						contentSetId: item.assetListEntryId,
-						title: item.title,
-					})
-				}
-				title="View Content Set"
-			/>
 		</Card>
 	);
 

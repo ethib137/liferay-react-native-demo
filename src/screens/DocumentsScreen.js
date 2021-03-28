@@ -1,11 +1,10 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
-import {Button, Card} from 'react-native-elements';
 import {usePaginatedQuery} from 'react-query';
 
 import CommentThread from '../comments/CommentThread';
-import CardImage from '../components/CardImage';
+import Card from '../components/Card';
 import Document from '../components/Document';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
@@ -14,6 +13,7 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
+import {isNotEmptyString} from '../util/util';
 
 const Documents = ({navigation}) => {
 	const [state, , request] = useAppState();
@@ -36,23 +36,15 @@ const Documents = ({navigation}) => {
 	const items = resolvedData ? resolvedData.items : [];
 
 	const renderItem = ({index, item}) => (
-		<Card containerStyle={[index === items.length - 1 ? styles.mb2 : null]}>
-			<Card.Title>{item.title}</Card.Title>
-
-			{item.adaptedImages && item.adaptedImages[0] ? (
-				<CardImage contentUrl={item.adaptedImages[0].contentUrl} />
-			) : (
-				<Card.Divider />
-			)}
-
-			<View>
+		<Card
+			containerStyle={index === items.length - 1 ? styles.mb2 : null}
+			imageUrl={item.adaptedImages[0]?.contentUrl}
+			onPress={() => navigation.navigate('DocumentEntry', item)}
+			title={item.title}
+		>
+			{isNotEmptyString(item.description) && (
 				<Text>{item.description}</Text>
-			</View>
-
-			<Button
-				onPress={() => navigation.navigate('DocumentEntry', item)}
-				title="View Document"
-			/>
+			)}
 		</Card>
 	);
 

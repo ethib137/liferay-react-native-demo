@@ -1,7 +1,17 @@
 import {Alert} from 'react-native';
 
 export function isEmptyString(string) {
-	return !!string && string.length > 0;
+	if (typeof string != 'string') {
+		return true;
+	}
+
+	string = string.trim();
+
+	return !string || string.length == 0;
+}
+
+export function isNotEmptyString(string) {
+	return !isEmptyString(string);
 }
 
 export function debugAlert(error) {

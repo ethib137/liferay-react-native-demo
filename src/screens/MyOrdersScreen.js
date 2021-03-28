@@ -2,10 +2,9 @@ import {createStackNavigator} from '@react-navigation/stack';
 import moment from 'moment-timezone';
 import React, {useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
-import {Card} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {usePaginatedQuery} from 'react-query';
 
+import Card from '../components/Card';
 import CardItemRow from '../components/CardItemRow';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
@@ -39,32 +38,26 @@ const MyOrders = ({navigation}) => {
 	const items = resolvedData ? resolvedData.items : [];
 
 	const renderItem = ({item}) => (
-		<TouchableOpacity
+		<Card
 			onPress={() => {
 				navigation.navigate('Order', item);
 			}}
+			title={`Order ${item.id}`}
 		>
-			<Card>
-				<Card.Title>{`Order ${item.id}`}</Card.Title>
-				<Card.Divider />
-
-				<View>
-					<CardItemRow
-						label="Created"
-						value={moment(item.createDate).fromNow()}
-					/>
-					<CardItemRow
-						label="Modified"
-						value={moment(item.modifiedDate).fromNow()}
-					/>
-					<CardItemRow
-						label="Status"
-						value={item.orderStatusInfo.label_i18n}
-					/>
-					<CardItemRow label="Total" value={item.totalFormatted} />
-				</View>
-			</Card>
-		</TouchableOpacity>
+			<CardItemRow
+				label="Created"
+				value={moment(item.createDate).fromNow()}
+			/>
+			<CardItemRow
+				label="Modified"
+				value={moment(item.modifiedDate).fromNow()}
+			/>
+			<CardItemRow
+				label="Status"
+				value={item.orderStatusInfo.label_i18n}
+			/>
+			<CardItemRow label="Total" value={item.totalFormatted} />
+		</Card>
 	);
 
 	if (!channelId || !siteId) {

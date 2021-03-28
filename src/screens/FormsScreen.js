@@ -1,10 +1,10 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useState} from 'react';
-import {RefreshControl, Text, View} from 'react-native';
-import {Button, Card} from 'react-native-elements';
+import {RefreshControl, Text} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {usePaginatedQuery} from 'react-query';
 
+import Card from '../components/Card';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import Pagination from '../components/Pagination';
@@ -13,6 +13,7 @@ import Form from '../components/form/Form';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
+import {isNotEmptyString} from '../util/util';
 
 const FormsScreen = ({navigation}) => {
 	const [state, , request] = useAppState();
@@ -37,25 +38,18 @@ const FormsScreen = ({navigation}) => {
 	const items = resolvedData ? resolvedData.items : [];
 
 	const renderItem = ({item}) => (
-		<Card>
-			<Card.Title>{item.name}</Card.Title>
-			<Card.Divider />
-
-			<View>
-				{item.description.trim().length > 0 && (
-					<Text style={styles.mb2}>{item.description}</Text>
-				)}
-
-				<Button
-					onPress={() =>
-						navigation.navigate('FormEntry', {
-							formId: item.id,
-							name: item.name,
-						})
-					}
-					title="View Form"
-				/>
-			</View>
+		<Card
+			onPress={() =>
+				navigation.navigate('FormEntry', {
+					formId: item.id,
+					name: item.name,
+				})
+			}
+			title={item.name}
+		>
+			{isNotEmptyString(item.description) && (
+				<Text style={styles.mb2}>{item.description}</Text>
+			)}
 		</Card>
 	);
 

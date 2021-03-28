@@ -1,18 +1,20 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
-import {Button, Card} from 'react-native-elements';
 import {usePaginatedQuery, useQuery} from 'react-query';
 
 import {setChannelAction} from '../actions/channel';
 import {setSiteAction} from '../actions/site';
 import Alert, {DISPLAY_TYPES} from '../components/Alert';
+import Card from '../components/Card';
+import CardItemRow from '../components/CardItemRow';
 import ErrorDisplay from '../components/ErrorDisplay';
 import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
+import {isNotEmptyString} from '../util/util';
 
 const Sites = () => {
 	const [state, dispatch, request] = useAppState();
@@ -74,7 +76,7 @@ const Sites = () => {
 			setInfoMessage(
 				'If the site you have selected includes Commerce, but the Commerce applications are not showing up in the side menu, please make sure your user has the "Channels > Commerce Channel: View" permission.'
 			);
-		} else {
+		} else if (siteId) {
 			selectChannel(siteId);
 		}
 	}, [channels, selectChannel, siteId]);
@@ -83,19 +85,16 @@ const Sites = () => {
 		const selectedSite = siteId === item.id;
 
 		return (
-			<Card>
-				<Card.Title>{item.name}</Card.Title>
-				<Card.Divider />
+			<Card
+				onToggleSelect={() => selectSite(selectedSite ? null : item.id)}
+				selected={selectedSite}
+				title={item.name}
+			>
+				<CardItemRow label="Site Id" value={item.id} />
 
-				<View>
-					{!!item.description && <Text>{item.description}</Text>}
-
-					<Button
-						disabled={selectedSite}
-						onPress={() => selectSite(item.id)}
-						title={selectedSite ? 'Selected Site' : 'Select Site'}
-					/>
-				</View>
+				{isNotEmptyString(item.description) && (
+					<Text>{item.description}</Text>
+				)}
 			</Card>
 		);
 	};

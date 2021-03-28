@@ -1,12 +1,11 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
-import {Button, Card} from 'react-native-elements';
 import {usePaginatedQuery} from 'react-query';
 
 import CommentThread from '../comments/CommentThread';
 import Blog from '../components/Blog';
-import CardImage from '../components/CardImage';
+import Card from '../components/Card';
 import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import Pagination from '../components/Pagination';
@@ -36,26 +35,13 @@ function Blogs({navigation}) {
 	const items = resolvedData ? resolvedData.items : [];
 
 	const renderItem = ({index, item}) => (
-		<Card containerStyle={[index === items.length - 1 ? styles.mb2 : null]}>
-			<Card.Title>{item.headline}</Card.Title>
-
-			{item.image ? (
-				<CardImage
-					containerStyle={styles.mb2}
-					contentValue={item.image.contentValue}
-				/>
-			) : (
-				<Card.Divider />
-			)}
-
-			<View>
-				<Text style={styles.mb2}>{item.alternativeHeadline}</Text>
-
-				<Button
-					onPress={() => navigation.navigate('BlogEntry', item)}
-					title="Keep Reading"
-				/>
-			</View>
+		<Card
+			containerStyle={index === items.length - 1 ? styles.mb2 : null}
+			imageValue={item.image?.contentValue}
+			onPress={() => navigation.navigate('BlogEntry', item)}
+			title={item.headline}
+		>
+			<Text style={styles.mb2}>{item.alternativeHeadline}</Text>
 		</Card>
 	);
 

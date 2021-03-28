@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
-import {Button, Card} from 'react-native-elements';
 import {usePaginatedQuery} from 'react-query';
 
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
 import styles from '../styles/main';
+import {isNotEmptyString} from '../util/util';
+import Card from './Card';
 import ErrorDisplay from './ErrorDisplay';
 import HTML from './HTML';
 import Pagination from './Pagination';
@@ -65,26 +66,15 @@ const ContentSet = ({navigation, route}) => {
 						/>
 					}
 					renderItem={({item}) => (
-						<Card>
-							<Card.Title>{item.title}</Card.Title>
-							<Card.Divider />
-							<View>
-								{item.content &&
-									!!item.content.description &&
-									item.content.description !== '' && (
-										<HTML html={item.content.description} />
-									)}
-
-								<Button
-									onPress={() =>
-										navigation.navigate(
-											'ContentSetEntry',
-											item
-										)
-									}
-									title="View Entry"
-								/>
-							</View>
+						<Card
+							onPress={() =>
+								navigation.navigate('ContentSetEntry', item)
+							}
+							title={item.title}
+						>
+							{isNotEmptyString(item.content?.description) && (
+								<HTML html={item.content.description} />
+							)}
 						</Card>
 					)}
 				/>

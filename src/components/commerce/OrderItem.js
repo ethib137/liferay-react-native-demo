@@ -1,8 +1,7 @@
 import React from 'react';
-import {View} from 'react-native';
-import {Card} from 'react-native-elements';
 
 import {useAppState} from '../../hooks/appState';
+import Card from '../Card';
 import CardItemRow from '../CardItemRow';
 
 function OrderItem({item}) {
@@ -13,27 +12,22 @@ function OrderItem({item}) {
 	const {customFields} = item;
 
 	return (
-		<Card>
-			<Card.Title>{item.name[lang]}</Card.Title>
-			<Card.Divider />
+		<Card title={item.name[lang]}>
+			<CardItemRow label="Item Id" value={item.id} />
+			<CardItemRow label="Quantity" value={item.quantity} />
+			<CardItemRow label="SKU" value={item.sku} />
 
-			<View>
-				<CardItemRow label="Item Id" value={item.id} />
-				<CardItemRow label="Quantity" value={item.quantity} />
-				<CardItemRow label="SKU" value={item.sku} />
+			{customFields &&
+				Object.keys(customFields).map((key) => (
+					<CardItemRow
+						key={key}
+						label={key}
+						value={customFields[key]}
+					/>
+				))}
 
-				{customFields &&
-					Object.keys(customFields).map((key) => (
-						<CardItemRow
-							key={key}
-							label={key}
-							value={customFields[key]}
-						/>
-					))}
-
-				<CardItemRow label="Unit Price" value={item.unitPrice} />
-				<CardItemRow label="Final Price" value={item.finalPrice} />
-			</View>
+			<CardItemRow label="Unit Price" value={item.unitPrice} />
+			<CardItemRow label="Final Price" value={item.finalPrice} />
 		</Card>
 	);
 }
