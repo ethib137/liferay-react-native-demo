@@ -15,6 +15,7 @@ import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
+import NoAccountSelected from '../components/commerce/NoAccountSelected';
 import Product from '../components/commerce/Product';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
@@ -23,20 +24,16 @@ import styles from '../styles/main';
 const Catalog = ({navigation}) => {
 	const [state, , request] = useAppState();
 
-	const {accountId, channelId, siteId, userId} = state;
+	const {accountId, channelId, siteId} = state;
 
 	const [page, setPage] = useState(1);
 	const [error, setError] = useState();
 
-	const identifier = accountId || userId;
-
 	const {refetch, resolvedData, status} = usePaginatedQuery(
-		identifier && channelId && ['products', identifier, channelId, page],
+		accountId && channelId && ['products', accountId, channelId, page],
 		() => {
 			return request(
-				`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?page=${page}${
-					accountId ? '&accountId=' + accountId : ''
-				}`
+				`/o/headless-commerce-delivery-catalog/v1.0/channels/${channelId}/products?page=${page}&accountId=${accountId}`
 			).catch((error) => {
 				setError(error);
 			});
@@ -87,6 +84,10 @@ const Catalog = ({navigation}) => {
 
 	if (!channelId || !siteId) {
 		return <NoSiteSelected />;
+	}
+
+	if (!accountId) {
+		return <NoAccountSelected />;
 	}
 
 	return (
