@@ -260,10 +260,14 @@ function Form({route}) {
 						>
 							{(formikObj) => (
 								<>
-									<Text style={[gStyles.m2]}>{form.name}</Text>
+									<Text style={[gStyles.m2]}>
+										{form.name}
+									</Text>
 
 									{form.description.length > 0 && (
-										<Text style={[gStyles.mb2, gStyles.mx2]}>
+										<Text
+											style={[gStyles.mb2, gStyles.mx2]}
+										>
 											{form.description}
 										</Text>
 									)}
