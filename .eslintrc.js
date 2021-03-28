@@ -10,5 +10,6 @@ module.exports = {
   "globals": {
     "require": "readonly"
   },
+  "parser": "babel-eslint",
   "plugins": ["jest"]
 };
