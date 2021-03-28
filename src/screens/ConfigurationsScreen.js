@@ -34,7 +34,10 @@ const Configurations = () => {
 	}
 
 	return (
-		<KeyboardAwareScrollView extraScrollHeight={20}>
+		<KeyboardAwareScrollView
+			extraScrollHeight={20}
+			keyboardShouldPersistTaps="handled"
+		>
 			<Formik
 				initialValues={{
 					authenticationType,

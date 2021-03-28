@@ -42,7 +42,10 @@ const Document = ({navigation, route}) => {
 	);
 
 	return (
-		<KeyboardAwareScrollView extraScrollHeight={20}>
+		<KeyboardAwareScrollView
+			extraScrollHeight={20}
+			keyboardShouldPersistTaps="handled"
+		>
 			{params.adaptedImages[0] && (
 				<AuthImage contentUrl={params.adaptedImages[0].contentUrl} />
 			)}

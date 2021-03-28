@@ -41,7 +41,10 @@ const Blog = ({navigation, route}) => {
 	);
 
 	return (
-		<KeyboardAwareScrollView extraScrollHeight={20}>
+		<KeyboardAwareScrollView
+			extraScrollHeight={20}
+			keyboardShouldPersistTaps="handled"
+		>
 			{params.image && (
 				<AuthImage contentValue={params.image.contentValue} />
 			)}
