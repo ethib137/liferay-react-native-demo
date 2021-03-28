@@ -3,14 +3,14 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
 
-import styles from '../../styles/main';
+import gStyles from '../../styles/main';
 
 function NoAccountSelected() {
 	const navigation = useNavigation();
 
 	return (
-		<View style={styles.m2}>
-			<Text style={[styles.textCenter, styles.mb2]}>
+		<View style={gStyles.m2}>
+			<Text style={[gStyles.textCenter, gStyles.mb2]}>
 				Please select an account in order to view.
 			</Text>
 

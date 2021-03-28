@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import styles from '../../styles/main';
+import gStyles from '../../styles/main';
 
 function FieldContainer(props) {
 	const {children, containerStyle} = props;
 
 	return (
-		<View style={[containerStyle, fieldStyles.container, styles.mb1]}>
+		<View style={[containerStyle, fieldStyles.container, gStyles.mb1]}>
 			{children}
 		</View>
 	);

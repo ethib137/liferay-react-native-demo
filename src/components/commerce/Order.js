@@ -4,7 +4,7 @@ import {ScrollView, Text, View} from 'react-native';
 import {useQuery} from 'react-query';
 
 import {useAppState} from '../../hooks/appState';
-import styles from '../../styles/main';
+import gStyles from '../../styles/main';
 import ErrorDisplay from '../ErrorDisplay';
 import OrderItem from './OrderItem';
 
@@ -25,26 +25,26 @@ const Order = ({route}) => {
 		<ScrollView>
 			<View
 				style={[
-					styles.spaceBetweenH,
-					styles.mx2,
-					styles.mt3,
-					styles.mb1,
+					gStyles.spaceBetweenH,
+					gStyles.mx2,
+					gStyles.mt3,
+					gStyles.mb1,
 				]}
 			>
-				<Text style={[styles.h4]}>Total Amount: </Text>
-				<Text style={[styles.h4, styles.textGrey7]}>
+				<Text style={[gStyles.h4]}>Total Amount: </Text>
+				<Text style={[gStyles.h4, gStyles.textGrey7]}>
 					{totalFormatted}
 				</Text>
 			</View>
 
-			<Text style={[styles.mx2, styles.mt2, styles.h4]}>Items:</Text>
+			<Text style={[gStyles.mx2, gStyles.mt2, gStyles.h4]}>Items:</Text>
 
 			{status === 'error' && (
 				<ErrorDisplay error={error.message} onRetry={() => refetch()} />
 			)}
 
 			{items && items.length === 0 && status === 'success' && (
-				<Text style={[styles.m2, styles.textCenter]}>
+				<Text style={[gStyles.m2, gStyles.textCenter]}>
 					There are no items to display.
 				</Text>
 			)}

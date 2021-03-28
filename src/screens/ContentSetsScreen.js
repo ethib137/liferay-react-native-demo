@@ -11,7 +11,7 @@ import ErrorDisplay from '../components/ErrorDisplay';
 import NoSiteSelected from '../components/NoSiteSelected';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 
 const TYPE_MAP = {
 	0: 'Dynamic Selction',
@@ -70,7 +70,7 @@ const ContentSets = ({navigation}) => {
 								items.length === 0 &&
 								status === 'success' && (
 									<Text
-										style={[styles.m2, styles.textCenter]}
+										style={[gStyles.m2, gStyles.textCenter]}
 									>
 										There are no content sets to display.
 									</Text>

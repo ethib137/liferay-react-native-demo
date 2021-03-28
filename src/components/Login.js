@@ -5,7 +5,7 @@ import {Button} from 'react-native-elements';
 
 import {loginAction} from '../actions/auth';
 import {useAppState} from '../hooks/appState';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import Alert from './Alert';
 import Loading from './Loading';
 import FormContainer from './form/FormContainer';
@@ -47,12 +47,12 @@ function Login() {
 						<Loading loading={loading}>
 							<Image
 								source={require('../../assets/icon.png')}
-								style={[loginStyles.image, styles.m4]}
+								style={[loginStyles.image, gStyles.m4]}
 							/>
 
 							{error && (
 								<Alert
-									containerStyle={styles.m2}
+									containerStyle={gStyles.m2}
 									text={error}
 								/>
 							)}
@@ -61,7 +61,7 @@ function Login() {
 								autoCapitalize="none"
 								autoComplete="off"
 								autoCorrect={false}
-								containerStyle={styles.m2}
+								containerStyle={gStyles.m2}
 								label="Email Address or User Name"
 								name={'email'}
 								required={true}
@@ -73,7 +73,7 @@ function Login() {
 								autoCapitalize="none"
 								autoComplete="off"
 								autoCorrect={false}
-								containerStyle={styles.m2}
+								containerStyle={gStyles.m2}
 								label="Password"
 								name={'password'}
 								required={true}
@@ -89,7 +89,7 @@ function Login() {
 									!formikObj.isSubmitting
 								}
 								onPress={formikObj.handleSubmit}
-								style={styles.m2}
+								style={gStyles.m2}
 								title="Login"
 							/>
 						</Loading>

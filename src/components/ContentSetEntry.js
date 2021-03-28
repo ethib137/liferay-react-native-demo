@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {greys} from '../styles/values';
 import AuthImage from './AuthImage';
 import HTML from './HTML';
@@ -44,7 +44,7 @@ const fields = {};
 const FormField = ({field}) => {
 	if (fields[field.dataType]) {
 		return (
-			<View style={[styles.mx2, styles.my1]}>
+			<View style={[gStyles.mx2, gStyles.my1]}>
 				<Text style={componentStyles.label}>{field.label}</Text>
 
 				{fields[field.dataType].render(field)}
@@ -62,11 +62,11 @@ const ContentSetEntry = (props) => {
 
 	return (
 		<ScrollView>
-			<Text style={[styles.m2, styles.h1]}>{title}</Text>
+			<Text style={[gStyles.m2, gStyles.h1]}>{title}</Text>
 
 			{content && !!content.description && content.description !== '' && (
 				<HTML
-					containerStyle={[styles.mx2, styles.h4]}
+					containerStyle={[gStyles.mx2, gStyles.h4]}
 					html={content.description}
 				/>
 			)}

@@ -5,7 +5,7 @@ import {usePaginatedQuery} from 'react-query';
 
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {isNotEmptyString} from '../util/util';
 import Card from './Card';
 import ErrorDisplay from './ErrorDisplay';
@@ -49,7 +49,7 @@ const ContentSet = ({navigation, route}) => {
 								items.length === 0 &&
 								status === 'success' && (
 									<Text
-										style={[styles.m2, styles.textCenter]}
+										style={[gStyles.m2, gStyles.textCenter]}
 									>
 										There are no items to display.
 									</Text>

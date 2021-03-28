@@ -3,7 +3,7 @@ import {format} from 'date-fns';
 import React, {useState} from 'react';
 import {Platform, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-import styles from '../../styles/main';
+import gStyles from '../../styles/main';
 import {greys, spacing} from '../../styles/values';
 import {isEmptyString} from '../../util/util';
 import CollapsibleField from './CollapsibleField';
@@ -70,7 +70,7 @@ function FormikDate(props) {
 						<FieldLabel
 							label={`${label}:`}
 							required={required}
-							style={[fieldStyles.label, styles.mr2]}
+							style={[fieldStyles.label, gStyles.mr2]}
 						/>
 					)}
 

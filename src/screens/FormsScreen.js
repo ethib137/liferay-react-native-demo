@@ -12,7 +12,7 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import Form from '../components/form/Form';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {isNotEmptyString} from '../util/util';
 
 const FormsScreen = ({navigation}) => {
@@ -48,7 +48,7 @@ const FormsScreen = ({navigation}) => {
 			title={item.name}
 		>
 			{isNotEmptyString(item.description) && (
-				<Text style={styles.mb2}>{item.description}</Text>
+				<Text style={gStyles.mb2}>{item.description}</Text>
 			)}
 		</Card>
 	);
@@ -74,7 +74,7 @@ const FormsScreen = ({navigation}) => {
 								items.length === 0 &&
 								status === 'success' && (
 									<Text
-										style={[styles.m2, styles.textCenter]}
+										style={[gStyles.m2, gStyles.textCenter]}
 									>
 										There are no forms to display.
 									</Text>

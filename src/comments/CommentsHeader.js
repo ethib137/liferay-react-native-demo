@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {greys} from '../styles/values';
 
 function CommentsHeader(props) {
@@ -10,7 +10,7 @@ function CommentsHeader(props) {
 
 	return (
 		<View style={[commentsHeaderStyles.container, containerStyle]}>
-			<Text style={[styles.my1, styles.mx2]}>Comments:</Text>
+			<Text style={[gStyles.my1, gStyles.mx2]}>Comments:</Text>
 		</View>
 	);
 }

@@ -14,7 +14,7 @@ import NoAccountSelected from '../components/commerce/NoAccountSelected';
 import Order from '../components/commerce/Order';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {COMMERCE_ORDER_STATUS_OPEN} from '../util/orderConstants';
 
 const MyOrders = ({navigation}) => {
@@ -85,7 +85,7 @@ const MyOrders = ({navigation}) => {
 								items.length === 0 &&
 								status === 'success' && (
 									<Text
-										style={[styles.m2, styles.textCenter]}
+										style={[gStyles.m2, gStyles.textCenter]}
 									>
 										There are no orders to display.
 									</Text>

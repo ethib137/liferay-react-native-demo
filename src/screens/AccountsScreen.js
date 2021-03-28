@@ -12,7 +12,7 @@ import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 
 const PAGE_SIZE = 10;
 
@@ -43,7 +43,7 @@ const Accounts = () => {
 
 		return (
 			<Card
-				containerStyle={index === items.length - 1 ? styles.mb2 : null}
+				containerStyle={index === items.length - 1 ? gStyles.mb2 : null}
 				imageUrl={item.thumbnail}
 				onToggleSelect={() =>
 					dispatch(setAccountAction(selected ? null : item.accountId))
@@ -77,7 +77,7 @@ const Accounts = () => {
 								items.length === 0 &&
 								status === 'success' && (
 									<Text
-										style={[styles.m2, styles.textCenter]}
+										style={[gStyles.m2, gStyles.textCenter]}
 									>
 										There are no accounts to display. Make
 										sure your user has an account. If this

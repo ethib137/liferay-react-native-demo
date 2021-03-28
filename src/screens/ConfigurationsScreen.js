@@ -10,7 +10,7 @@ import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import FormikPicker from '../components/form/FormikPicker';
 import FormikTextInput from '../components/form/FormikTextInput';
 import {useAppState} from '../hooks/appState';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 
 const Configurations = () => {
 	const [state, dispatch] = useAppState();
@@ -74,8 +74,8 @@ const Configurations = () => {
 						<Text
 							style={[
 								configurationStyles.status,
-								styles.p2,
-								styles.mb2,
+								gStyles.p2,
+								gStyles.mb2,
 							]}
 						>
 							{hasUnsavedChanges(formikObj.values)
@@ -132,7 +132,7 @@ const Configurations = () => {
 						/>
 
 						<Button
-							containerStyle={styles.m2}
+							containerStyle={gStyles.m2}
 							disabled={
 								Object.keys(formikObj.errors).length > 0 ||
 								!hasUnsavedChanges(formikObj.values)

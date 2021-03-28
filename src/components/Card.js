@@ -3,7 +3,7 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Card as RNECard, colors} from 'react-native-elements';
 
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import CardImage from './CardImage';
 
 function Card(props) {
@@ -24,13 +24,13 @@ function Card(props) {
 			<RNECard
 				containerStyle={[
 					selected ? cardStyles.selected : {},
-					styles.m2,
-					styles.pRelative,
+					gStyles.m2,
+					gStyles.pRelative,
 					containerStyle,
 				]}
 			>
 				<View style={cardStyles.header}>
-					<RNECard.Title style={styles.mb0}>{title}</RNECard.Title>
+					<RNECard.Title style={gStyles.mb0}>{title}</RNECard.Title>
 
 					{onDelete && (
 						<TouchableOpacity
@@ -48,17 +48,17 @@ function Card(props) {
 
 				{imageValue || imageUrl ? (
 					<CardImage
-						containerStyle={styles.mt2}
+						containerStyle={gStyles.mt2}
 						contentUrl={imageUrl}
 						contentValue={imageValue}
 					/>
 				) : (
 					(children || onToggleSelect) && (
-						<RNECard.Divider style={[styles.mb0, styles.mt2]} />
+						<RNECard.Divider style={[gStyles.mb0, gStyles.mt2]} />
 					)
 				)}
 
-				{children && <View style={styles.mt2}>{children}</View>}
+				{children && <View style={gStyles.mt2}>{children}</View>}
 
 				{onToggleSelect && (
 					<Button
@@ -68,7 +68,7 @@ function Card(props) {
 								: cardStyles.selectbuttonDefault
 						}
 						onPress={onToggleSelect}
-						style={styles.mt2}
+						style={gStyles.mt2}
 						title={selected ? 'Selected' : 'Select'}
 						titleStyle={
 							selected

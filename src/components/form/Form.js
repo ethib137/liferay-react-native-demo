@@ -6,7 +6,7 @@ import {Button} from 'react-native-elements';
 import {useQuery} from 'react-query';
 
 import {useAppState} from '../../hooks/appState';
-import styles from '../../styles/main';
+import gStyles from '../../styles/main';
 import ErrorDisplay from '../ErrorDisplay';
 import Loading from '../Loading';
 import FormContainer from './FormContainer';
@@ -58,7 +58,7 @@ const paragraph = {
 	inputControl: 'paragraph',
 	render: (field) => (
 		<Paragraph
-			containerStyle={[styles.mx2, styles.mb1]}
+			containerStyle={[gStyles.mx2, gStyles.mb1]}
 			key={field.name}
 			label={field.label}
 			text={field.text}
@@ -108,7 +108,7 @@ const textInput = {
 	inputControl: 'text',
 	render: (field, formikObj) => (
 		<FormikTextInput
-			containerStyle={[styles.mb1, {backgroundColor: 'rgba(0,0,0,0.1)'}]}
+			containerStyle={[gStyles.mb1, {backgroundColor: 'rgba(0,0,0,0.1)'}]}
 			key={field.name}
 			multiline={field.displayStyle === 'multiline'}
 			name={field.name}
@@ -260,10 +260,10 @@ function Form({route}) {
 						>
 							{(formikObj) => (
 								<>
-									<Text style={[styles.m2]}>{form.name}</Text>
+									<Text style={[gStyles.m2]}>{form.name}</Text>
 
 									{form.description.length > 0 && (
-										<Text style={[styles.mb2, styles.mx2]}>
+										<Text style={[gStyles.mb2, gStyles.mx2]}>
 											{form.description}
 										</Text>
 									)}
@@ -275,8 +275,8 @@ function Form({route}) {
 													0 && (
 													<Text
 														style={[
-															styles.m2,
-															styles.textCenter,
+															gStyles.m2,
+															gStyles.textCenter,
 														]}
 													>
 														{formPage.headline}
@@ -285,8 +285,8 @@ function Form({route}) {
 												{formPage.text.length > 0 && (
 													<Text
 														style={[
-															styles.m2,
-															styles.textCenter,
+															gStyles.m2,
+															gStyles.textCenter,
 														]}
 													>
 														{formPage.text}
@@ -317,7 +317,7 @@ function Form({route}) {
 										}
 										loading={loading}
 										onPress={formikObj.handleSubmit}
-										style={styles.m2}
+										style={gStyles.m2}
 										title="Submit"
 									/>
 								</>

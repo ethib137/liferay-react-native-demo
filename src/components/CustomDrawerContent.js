@@ -11,7 +11,7 @@ import {colors} from 'react-native-elements';
 import {logoutAction} from '../actions/auth';
 import {asyncKeys} from '../actions/hydrate';
 import {useAppState} from '../hooks/appState';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {asyncMultiRemove} from '../util/async';
 
 function CustomDrawerContent(props) {
@@ -47,7 +47,7 @@ function CustomDrawerContent(props) {
 			contentContainerStyle={{minHeight: '100%'}}
 		>
 			<ScrollView
-				contentContainerStyle={[styles.spaceBetween, styles.mb4]}
+				contentContainerStyle={[gStyles.spaceBetween, gStyles.mb4]}
 			>
 				<View>
 					<DrawerItem

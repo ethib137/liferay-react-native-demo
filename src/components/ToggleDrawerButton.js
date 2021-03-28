@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Button} from 'react-native-elements';
 
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 
 function ToggleDrawerButton({navigation}) {
 	return (
 		<Button
-			buttonStyle={styles.px2}
+			buttonStyle={gStyles.px2}
 			color="#fff"
 			icon={<Ionicons name="ios-menu" size={32} />}
 			onPress={() => navigation.toggleDrawer()}

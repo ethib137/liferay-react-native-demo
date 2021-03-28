@@ -12,7 +12,7 @@ import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {isNotEmptyString} from '../util/util';
 
 const Documents = ({navigation}) => {
@@ -37,7 +37,7 @@ const Documents = ({navigation}) => {
 
 	const renderItem = ({index, item}) => (
 		<Card
-			containerStyle={index === items.length - 1 ? styles.mb2 : null}
+			containerStyle={index === items.length - 1 ? gStyles.mb2 : null}
 			imageUrl={item.adaptedImages[0]?.contentUrl}
 			onPress={() => navigation.navigate('DocumentEntry', item)}
 			title={item.title}
@@ -69,7 +69,7 @@ const Documents = ({navigation}) => {
 								items.length === 0 &&
 								status === 'success' && (
 									<Text
-										style={[styles.m2, styles.textCenter]}
+										style={[gStyles.m2, gStyles.textCenter]}
 									>
 										There are no documents to display.
 									</Text>

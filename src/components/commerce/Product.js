@@ -5,7 +5,7 @@ import {ScrollView, Text, View} from 'react-native';
 import {Button, CheckBox} from 'react-native-elements';
 
 import {useAppState} from '../../hooks/appState';
-import styles from '../../styles/main';
+import gStyles from '../../styles/main';
 import {colors} from '../../styles/values';
 import AuthImage from '../AuthImage';
 import NoCartSelected from './NoCartSelected';
@@ -66,7 +66,7 @@ const Product = ({route}) => {
 			{urlImage && <AuthImage contentUrl={urlImage} />}
 
 			{shortDescription.length > 0 && (
-				<View style={styles.m2}>
+				<View style={gStyles.m2}>
 					<Text>{shortDescription}</Text>
 				</View>
 			)}
@@ -99,7 +99,7 @@ const Product = ({route}) => {
 				<Button
 					loading={loading}
 					onPress={() => addToCart()}
-					style={styles.m2}
+					style={gStyles.m2}
 					title="Add to Cart"
 				/>
 			) : (

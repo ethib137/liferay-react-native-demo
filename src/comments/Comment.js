@@ -6,7 +6,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import HTML from 'react-native-render-html';
 
 import {useAppState} from '../hooks/appState';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {colors, greys, spacing} from '../styles/values';
 
 const Comment = (props) => {
@@ -55,7 +55,7 @@ const Comment = (props) => {
 				<TouchableOpacity
 					onPress={() => navigation.push('CommentThread', {comment})}
 				>
-					<Text style={[styles.link, styles.mt1, styles.textLeft]}>
+					<Text style={[gStyles.link, gStyles.mt1, gStyles.textLeft]}>
 						{numberOfComments === 1
 							? `${numberOfComments} Reply`
 							: `${numberOfComments} Replies`}

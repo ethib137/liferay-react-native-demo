@@ -3,31 +3,31 @@ import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {greys} from '../styles/values';
 
 const Home = () => {
 	return (
-		<View style={[styles.centerContent]}>
+		<View style={[gStyles.centerContent]}>
 			<Image
 				source={require('../../assets/icon.png')}
-				style={[homeStyles.image, styles.mb4]}
+				style={[homeStyles.image, gStyles.mb4]}
 			/>
 
-			<Text style={styles.textCenter}>
+			<Text style={gStyles.textCenter}>
 				Welcome to the Liferay React Native Demo App.
 			</Text>
 
-			<Text style={[homeStyles.version, styles.textCenter, styles.m2]}>
+			<Text style={[homeStyles.version, gStyles.textCenter, gStyles.m2]}>
 				Version: 0.0.4
 			</Text>
-			<Text style={[homeStyles.version, styles.textCenter, styles.m2]}>
+			<Text style={[homeStyles.version, gStyles.textCenter, gStyles.m2]}>
 				Developed Against:
 			</Text>
-			<Text style={[homeStyles.version, styles.textCenter]}>
+			<Text style={[homeStyles.version, gStyles.textCenter]}>
 				7.3 GA1, 7.3 SP2
 			</Text>
-			<Text style={[homeStyles.version, styles.textCenter]}>
+			<Text style={[homeStyles.version, gStyles.textCenter]}>
 				With Commerce
 			</Text>
 		</View>

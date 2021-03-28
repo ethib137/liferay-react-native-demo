@@ -3,7 +3,7 @@ import {Image, StyleSheet, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import useInterval from '../hooks/useInterval';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 
 function Splash() {
 	const [dotNumber, setDotNumber] = useState(1);
@@ -15,13 +15,13 @@ function Splash() {
 	}, 1000);
 
 	return (
-		<SafeAreaView style={[styles.centerContent]}>
+		<SafeAreaView style={[gStyles.centerContent]}>
 			<Image
 				source={require('../../assets/splash.png')}
 				style={splashStyles.image}
 			/>
 
-			<Text style={styles.textCenter}>Loading {dots}</Text>
+			<Text style={gStyles.textCenter}>Loading {dots}</Text>
 		</SafeAreaView>
 	);
 }

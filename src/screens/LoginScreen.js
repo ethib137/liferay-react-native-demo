@@ -6,7 +6,7 @@ import {Button} from 'react-native-elements';
 import Login from '../components/Login';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 
 function LoginScreen({navigation}) {
 	const [state] = useAppState();
@@ -21,10 +21,10 @@ function LoginScreen({navigation}) {
 				<>
 					<Image
 						source={require('../../assets/icon.png')}
-						style={[loginStyles.image, styles.m4]}
+						style={[loginStyles.image, gStyles.m4]}
 					/>
 
-					<Text style={[styles.m4, styles.textCenter]}>
+					<Text style={[gStyles.m4, gStyles.textCenter]}>
 						Your app is currently not connected to a Liferay
 						Instance. You can can connect to a Liferay instance by
 						configuring the Client ID and Liferay URL.
@@ -32,7 +32,7 @@ function LoginScreen({navigation}) {
 
 					<Button
 						onPress={() => navigation.navigate('Configurations')}
-						style={styles.mx5}
+						style={gStyles.mx5}
 						title="Configure Now"
 					/>
 				</>

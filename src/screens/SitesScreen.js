@@ -13,7 +13,7 @@ import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {isNotEmptyString} from '../util/util';
 
 const Sites = () => {
@@ -108,18 +108,18 @@ const Sites = () => {
 					ListHeaderComponent={
 						<>
 							{curSite ? (
-								<Text style={[styles.textCenter, styles.m2]}>
+								<Text style={[gStyles.textCenter, gStyles.m2]}>
 									Current Site: {curSite.name}
 								</Text>
 							) : (
-								<Text style={[styles.textCenter, styles.m2]}>
+								<Text style={[gStyles.textCenter, gStyles.m2]}>
 									Select a Site.
 								</Text>
 							)}
 
 							{infoMessage && (
 								<Alert
-									containerStyle={styles.mx2}
+									containerStyle={gStyles.mx2}
 									displayType={DISPLAY_TYPES.info}
 									text={infoMessage}
 								/>
@@ -136,7 +136,7 @@ const Sites = () => {
 								items.length === 0 &&
 								status === 'success' && (
 									<Text
-										style={[styles.m2, styles.textCenter]}
+										style={[gStyles.m2, gStyles.textCenter]}
 									>
 										There are no sites to display.
 									</Text>

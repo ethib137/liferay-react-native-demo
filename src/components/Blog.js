@@ -5,7 +5,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import Comments from '../comments';
 import {useAppState} from '../hooks/appState';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import AuthImage from './AuthImage';
 import HTML from './HTML';
 
@@ -49,13 +49,13 @@ const Blog = ({navigation, route}) => {
 				<AuthImage contentValue={params.image.contentValue} />
 			)}
 
-			<Text style={[styles.m2, styles.h1]}>{params.headline}</Text>
+			<Text style={[gStyles.m2, gStyles.h1]}>{params.headline}</Text>
 
-			<Text style={[styles.mx2, styles.h4]}>
+			<Text style={[gStyles.mx2, gStyles.h4]}>
 				{params.alternativeHeadline}
 			</Text>
 
-			<View style={styles.m2}>
+			<View style={gStyles.m2}>
 				<HTML html={params.articleBody} />
 			</View>
 

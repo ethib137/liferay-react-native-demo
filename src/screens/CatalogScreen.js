@@ -12,7 +12,7 @@ import NoAccountSelected from '../components/commerce/NoAccountSelected';
 import Product from '../components/commerce/Product';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 
 const Catalog = ({navigation}) => {
 	const [state, , request] = useAppState();
@@ -47,17 +47,17 @@ const Catalog = ({navigation}) => {
 
 	const renderItem = ({index, item}) => (
 		<Card
-			containerStyle={index === items.length - 1 ? styles.mb2 : null}
+			containerStyle={index === items.length - 1 ? gStyles.mb2 : null}
 			imageUrl={item.urlImage}
 			onPress={() => navigation.navigate('Product', item)}
 			title={item.name}
 		>
 			{!!item.shortDescription && (
-				<Text style={styles.mt2}>{item.shortDescription}</Text>
+				<Text style={gStyles.mt2}>{item.shortDescription}</Text>
 			)}
 
 			{!!item.commerceChannelId && (
-				<Text style={styles.mt2}>{item.commerceChannelId}</Text>
+				<Text style={gStyles.mt2}>{item.commerceChannelId}</Text>
 			)}
 		</Card>
 	);
@@ -87,7 +87,7 @@ const Catalog = ({navigation}) => {
 								items.length === 0 &&
 								status === 'success' && (
 									<Text
-										style={[styles.m2, styles.textCenter]}
+										style={[gStyles.m2, gStyles.textCenter]}
 									>
 										There are no products to display.
 									</Text>

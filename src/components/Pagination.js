@@ -4,7 +4,7 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
 
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {greys} from '../styles/values';
 
 function Pagination(props) {
@@ -22,9 +22,9 @@ function Pagination(props) {
 	const end = page === lastPage ? totalCount : start + pageSize - 1;
 
 	return (
-		<View style={[styles.p1, paginationStyles.container, containerStyle]}>
+		<View style={[gStyles.p1, paginationStyles.container, containerStyle]}>
 			<Button
-				buttonStyle={styles.px2}
+				buttonStyle={gStyles.px2}
 				disabled={page <= 1}
 				icon={
 					<Ionicons
@@ -40,7 +40,7 @@ function Pagination(props) {
 			<Text>{`Showing ${start} to ${end} of ${totalCount}`}</Text>
 
 			<Button
-				buttonStyle={styles.px2}
+				buttonStyle={gStyles.px2}
 				disabled={page >= lastPage}
 				icon={
 					<Ionicons

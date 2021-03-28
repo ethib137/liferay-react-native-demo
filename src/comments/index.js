@@ -7,7 +7,7 @@ import {useInfiniteQuery, useMutation, useQueryCache} from 'react-query';
 import ErrorDisplay from '../components/ErrorDisplay';
 import Loading from '../components/Loading';
 import {useAppState} from '../hooks/appState';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import CommentCreator from './CommentCreator';
 import CommentsHeader from './CommentsHeader';
 import CommentsList from './CommentsList';
@@ -176,7 +176,7 @@ function Comments(props) {
 			)}
 
 			{data && data.length === 0 && status === 'success' && (
-				<Text style={[styles.m2, styles.textCenter]}>
+				<Text style={[gStyles.m2, gStyles.textCenter]}>
 					There are no comments to display.
 				</Text>
 			)}

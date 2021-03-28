@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-import styles from '../../styles/main';
+import gStyles from '../../styles/main';
 import {greys, spacing} from '../../styles/values';
 import {isEmptyString} from '../../util/util';
 import Collapsible from '../Collapsible';
@@ -33,12 +33,12 @@ function CollapsibleField(props) {
 							/>
 
 							{isEmptyString(value) && (
-								<Text style={styles.ml2}>{value}</Text>
+								<Text style={gStyles.ml2}>{value}</Text>
 							)}
 						</View>
 					)
 				}
-				headerStyle={styles.mr2}
+				headerStyle={gStyles.mr2}
 			>
 				<View style={fieldStyles.children}>{children}</View>
 			</Collapsible>

@@ -6,7 +6,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import Comments from '../comments';
 import {useAppState} from '../hooks/appState';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import AuthImage from './AuthImage';
 import CardItemRow from './CardItemRow';
 
@@ -50,9 +50,9 @@ const Document = ({navigation, route}) => {
 				<AuthImage contentUrl={params.adaptedImages[0].contentUrl} />
 			)}
 
-			<Text style={[styles.mx2, styles.h4]}>{params.description}</Text>
+			<Text style={[gStyles.mx2, gStyles.h4]}>{params.description}</Text>
 
-			<View style={styles.m2}>
+			<View style={gStyles.m2}>
 				<CardItemRow label="Id" value={params.id} />
 				<CardItemRow
 					label="Date Created"

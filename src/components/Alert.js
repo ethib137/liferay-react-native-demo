@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {colors} from '../styles/values';
 
 export const DISPLAY_TYPES = {
@@ -27,7 +27,7 @@ function Alert(props) {
 		<View
 			style={[
 				alertStyles.container,
-				styles.px2,
+				gStyles.px2,
 				containerStyle,
 				alertStyles[displayType],
 			]}
@@ -46,7 +46,7 @@ function Alert(props) {
 				/>
 			)}
 
-			<Text style={[alertStyles[displayType], styles.ml1]}>{text}</Text>
+			<Text style={[alertStyles[displayType], gStyles.ml1]}>{text}</Text>
 		</View>
 	);
 }

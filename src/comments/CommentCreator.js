@@ -3,7 +3,7 @@ import React, {useCallback, useState} from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
 import {Button} from 'react-native-elements';
 
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {greys, spacing} from '../styles/values';
 
 function CommentCreator(props) {
@@ -22,7 +22,7 @@ function CommentCreator(props) {
 	}, [addComment, setText, text]);
 
 	return (
-		<View style={[commentStyles.container, containerStyle, styles.p2]}>
+		<View style={[commentStyles.container, containerStyle, gStyles.p2]}>
 			<TextInput
 				multiline
 				onChangeText={(value) => setText(value)}

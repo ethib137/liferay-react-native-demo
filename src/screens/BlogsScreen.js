@@ -12,7 +12,7 @@ import Pagination from '../components/Pagination';
 import ToggleDrawerButton from '../components/ToggleDrawerButton';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 
 function Blogs({navigation}) {
 	const [state, , request] = useAppState();
@@ -36,12 +36,12 @@ function Blogs({navigation}) {
 
 	const renderItem = ({index, item}) => (
 		<Card
-			containerStyle={index === items.length - 1 ? styles.mb2 : null}
+			containerStyle={index === items.length - 1 ? gStyles.mb2 : null}
 			imageValue={item.image?.contentValue}
 			onPress={() => navigation.navigate('BlogEntry', item)}
 			title={item.headline}
 		>
-			<Text style={styles.mb2}>{item.alternativeHeadline}</Text>
+			<Text style={gStyles.mb2}>{item.alternativeHeadline}</Text>
 		</Card>
 	);
 
@@ -66,7 +66,7 @@ function Blogs({navigation}) {
 								items.length === 0 &&
 								status === 'success' && (
 									<Text
-										style={[styles.m2, styles.textCenter]}
+										style={[gStyles.m2, gStyles.textCenter]}
 									>
 										There are no blog entries to display.
 									</Text>

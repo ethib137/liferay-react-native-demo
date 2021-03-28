@@ -49,7 +49,7 @@ types.forEach((type) => {
 	});
 });
 
-const styles = StyleSheet.create({
+const gStyles = StyleSheet.create({
 	...stylesObj,
 	centerContent: {
 		flex: 1,
@@ -113,4 +113,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default styles;
+export default gStyles;

@@ -16,7 +16,7 @@ import NoAccountSelected from '../components/commerce/NoAccountSelected';
 import Order from '../components/commerce/Order';
 import {useAppState} from '../hooks/appState';
 import useScrollToTop from '../hooks/useScrollToTop';
-import styles from '../styles/main';
+import gStyles from '../styles/main';
 import {COMMERCE_ORDER_STATUS_OPEN} from '../util/orderConstants';
 
 const Cart = ({navigation}) => {
@@ -87,7 +87,7 @@ const Cart = ({navigation}) => {
 		return (
 			<Card
 				containerStyle={[
-					index === items.length - 1 ? styles.mb2 : null,
+					index === items.length - 1 ? gStyles.mb2 : null,
 				]}
 				onDelete={() => deleteCart(item.id)}
 				onPress={() => navigation.navigate('Cart', item)}
@@ -139,7 +139,7 @@ const Cart = ({navigation}) => {
 								items.length === 0 &&
 								status === 'success' && (
 									<Text
-										style={[styles.m2, styles.textCenter]}
+										style={[gStyles.m2, gStyles.textCenter]}
 									>
 										There are no carts to display.
 									</Text>
@@ -147,7 +147,7 @@ const Cart = ({navigation}) => {
 
 							<Button
 								onPress={() => newCart()}
-								style={[styles.mx2, styles.mt2]}
+								style={[gStyles.mx2, gStyles.mt2]}
 								title="New Cart"
 							/>
 						</>
