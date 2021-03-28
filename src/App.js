@@ -32,7 +32,7 @@ const App = () => {
 
 	useEffect(() => {
 		dispatch(hydrate());
-	}, [dispatch, loggedIn.value]);
+	}, [dispatch]);
 
 	return (
 		<Drawer.Navigator

@@ -46,7 +46,13 @@ export const asyncMultiSet = async (obj) => {
 	const keyValuePairs = [];
 
 	Object.keys(obj).forEach((key) => {
-		keyValuePairs.push([key, JSON.stringify(obj[key])]);
+		const value = obj[key];
+
+		if (value == null || value == undefined) {
+			asyncRemove(key);
+		} else {
+			keyValuePairs.push([key, JSON.stringify(value)]);
+		}
 	});
 
 	return AsyncStorage.multiSet(keyValuePairs).catch((error) => {

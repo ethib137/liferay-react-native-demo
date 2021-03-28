@@ -1,3 +1,7 @@
+import debounce from 'lodash.debounce';
+
+import {asyncMultiSet} from '../util/async';
+
 const initialState = {
 	accountId: null,
 	authenticationType: 'basic',
@@ -65,12 +69,16 @@ const appStateReducer = (state, action) => {
 		case 'LOGGED_OUT': {
 			return {
 				...state,
+				accountId: null,
+				cartId: null,
+				channelId: null,
+				error: undefined,
 				loggedIn: {
 					error: data.error,
 					loading: false,
 					value: false,
 				},
-				panelOpen: false,
+				siteId: null,
 				userId: null,
 			};
 		}
@@ -102,7 +110,12 @@ const appStateReducer = (state, action) => {
 			return {
 				...state,
 				...data,
+				accountId: null,
+				cartId: null,
+				channelId: null,
 				isConfigured: true,
+				siteId: null,
+				userId: null,
 			};
 		}
 		case 'SET_ACCOUNT': {
@@ -143,6 +156,20 @@ const appStateReducer = (state, action) => {
 	}
 };
 
+const debouncedStoreState = debounce((state) => {
+	asyncMultiSet(state);
+}, 200);
+
+const persistanceWrapper = (state, action) => {
+	const newState = appStateReducer(state, action);
+
+	if (action.type != 'HYDRATE') {
+		debouncedStoreState(newState);
+	}
+
+	return newState;
+};
+
 export {initialState};
 
-export default appStateReducer;
+export default persistanceWrapper;

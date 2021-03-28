@@ -1,4 +1,3 @@
-import {asyncMultiSet, asyncRemove} from '../util/async';
 import {statefulLogin} from '../util/request';
 
 export const loginAction = (username, password) => (
@@ -23,8 +22,6 @@ export const loginAction = (username, password) => (
 					dispatch(setUserAction(res.id));
 				}
 			);
-
-			asyncMultiSet({username});
 		})
 		.catch(() => {
 			dispatch({
@@ -37,27 +34,12 @@ export const loginAction = (username, password) => (
 };
 
 export const logoutAction = () => (dispatch) => {
-	dispatch({type: 'LOGGING_OUT'});
-
-	asyncRemove('auth')
-		.then(() => {
-			dispatch({type: 'LOGGED_OUT'});
-		})
-		.catch(() => {
-			dispatch({
-				data: {
-					error: 'There was an error while loggin out.',
-				},
-				type: 'LOGGED_OUT',
-			});
-		});
+	dispatch({type: 'LOGGED_OUT'});
 };
 
 const setUserAction = (userId) => (dispatch) => {
-	asyncMultiSet({userId}).then(() => {
-		dispatch({
-			data: userId,
-			type: 'SET_USER_ID',
-		});
+	dispatch({
+		data: userId,
+		type: 'SET_USER_ID',
 	});
 };

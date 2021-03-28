@@ -23,6 +23,7 @@
     "expo": "^39.0.0",
     "expo-font": "~8.3.0",
     "formik": "^2.1.4",
+    "lodash.debounce": "^4.0.8",
     "luxon": "^1.25.0",
     "moment-timezone": "^0.5.31",
     "prop-types": "^15.7.2",
