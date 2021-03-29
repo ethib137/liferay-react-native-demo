@@ -31,7 +31,9 @@ const imageField = {
 	dataType: 'image',
 	render: (field) =>
 		field.contentFieldValue.image && (
-			<AuthImage contentUrl={field.contentFieldValue.image.contentUrl} />
+			<AuthImage
+				contentValue={field.contentFieldValue.image.contentValue}
+			/>
 		),
 };
 

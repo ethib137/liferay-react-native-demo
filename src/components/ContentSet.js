@@ -23,7 +23,7 @@ const ContentSet = ({navigation, route}) => {
 		contentSetId && ['contentSet', contentSetId, page],
 		() => {
 			return request(
-				`/o/headless-delivery/v1.0/content-sets/${contentSetId}/content-set-elements?page=${page}&pageSize=20`
+				`/o/headless-delivery/v1.0/content-sets/${contentSetId}/content-set-elements?page=${page}&pageSize=20&nestedFields=contentFields.contentFieldValue.image.contentValue`
 			);
 		}
 	);
