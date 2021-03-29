@@ -59,7 +59,7 @@ const App = () => {
 					<Drawer.Screen
 						component={ContentSetsScreen}
 						name="ContentSets"
-						options={{title: 'Content Sets'}}
+						options={{title: 'Collections'}}
 					/>
 					<Drawer.Screen
 						component={DocumentsScreen}

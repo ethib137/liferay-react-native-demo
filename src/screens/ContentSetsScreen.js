@@ -72,7 +72,7 @@ const ContentSets = ({navigation}) => {
 									<Text
 										style={[gStyles.m2, gStyles.textCenter]}
 									>
-										There are no content sets to display.
+										There are no collections to display.
 									</Text>
 								)}
 						</>
@@ -107,7 +107,7 @@ function ContentSetsNavigation({navigation}) {
 			<Stack.Screen
 				component={ContentSets}
 				name="ContentSets"
-				options={{title: 'Content Sets'}}
+				options={{title: 'Collections'}}
 			/>
 			<Stack.Screen
 				component={ContentSet}
