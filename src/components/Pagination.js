@@ -28,7 +28,7 @@ function Pagination(props) {
 				disabled={page <= 1}
 				icon={
 					<Ionicons
-						color={page > 1 ? greys[3] : null}
+						color={page > 1 ? greys[7] : greys[3]}
 						name="ios-arrow-back"
 						size={20}
 					/>
@@ -44,7 +44,7 @@ function Pagination(props) {
 				disabled={page >= lastPage}
 				icon={
 					<Ionicons
-						color={page < lastPage ? greys[3] : null}
+						color={page < lastPage ? greys[7] : greys[3]}
 						name="ios-arrow-forward"
 						size={20}
 					/>
