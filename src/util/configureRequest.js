@@ -94,28 +94,26 @@ export default function (options = {}) {
 			...otherOptions
 		} = options;
 
-		let requestHeaders = headers;
-
 		const request = {method};
 
 		if (method === 'POST') {
 			request.body = body || JSON.stringify(data);
 		}
 
-		if (!requestHeaders) {
-			const auth = await getAuth();
+		const auth = await getAuth();
 
-			if (!auth) {
-				throw new Error('Unable to make request. Please log in.');
-			}
-
-			requestHeaders = {
-				Authorization: `${auth.token_type} ${auth.access_token}`,
-				'Content-Type': contentType,
-			};
+		if (!auth) {
+			throw new Error('Unable to make request. Please log in.');
 		}
 
-		request.headers = requestHeaders;
+		let requestHeaders = {
+			Authorization: `${auth.token_type} ${auth.access_token}`,
+			'Content-Type': contentType,
+		};
+
+		request.headers = {
+			...requestHeaders,
+			...headers};
 
 		const response = await fetch(baseURL + url, {
 			...request,
