@@ -207,6 +207,9 @@ function Form({route}) {
 	const form = data;
 
 	const [submitError, setSubmitError] = useState();
+	const [successfullySubmitted, setSuccessfullySubmitted] = useState(false);
+
+	const formSuccessPage = form?.structure?.formSuccessPage;
 
 	const [loading, setLoading] = useState(false);
 
@@ -219,7 +222,7 @@ function Form({route}) {
 			{submitError && <ErrorDisplay error={submitError} />}
 
 			<Loading loading={status === 'loading'}>
-				{form && (
+				{form && !successfullySubmitted && (
 					<FormContainer>
 						<Formik
 							initialValues={getInitialValues(form)}
@@ -250,6 +253,7 @@ function Form({route}) {
 											resetForm();
 											setSubmitting(false);
 											setLoading(false);
+											setSuccessfullySubmitted(true);
 										})
 										.catch((error) => {
 											setSubmitError(error.title);
@@ -345,6 +349,27 @@ function Form({route}) {
 					</FormContainer>
 				)}
 			</Loading>
+
+			{successfullySubmitted && formSuccessPage && (
+				<View style={gStyles.m3}>
+					<Text style={[gStyles.pb3, gStyles.h2]}>
+						{formSuccessPage.headline
+							? formSuccessPage.headline
+							: 'Thank You.'}
+					</Text>
+
+					<Text style={[gStyles.mb4, gStyles.h6]}>
+						{formSuccessPage.description
+							? formSuccessPage.description
+							: 'Your information was successfully received. Thank you for filling out the form.'}
+					</Text>
+
+					<Button
+						onPress={() => setSuccessfullySubmitted(false)}
+						title="Back to Form"
+					/>
+				</View>
+			)}
 		</View>
 	);
 }

@@ -80,6 +80,7 @@ const gStyles = StyleSheet.create({
 	},
 	h6: {
 		fontSize: 16,
+		lineHeight: 24,
 	},
 	link: {
 		color: colors.blue,
