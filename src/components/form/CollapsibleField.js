@@ -4,7 +4,7 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import gStyles from '../../styles/main';
 import {greys, spacing} from '../../styles/values';
-import {isEmptyString} from '../../util/util';
+import {isNotEmptyString} from '../../util/util';
 import Collapsible from '../Collapsible';
 import FieldContainer from './FieldContainer';
 import FieldError from './FieldError';
@@ -32,7 +32,7 @@ function CollapsibleField(props) {
 								style={fieldStyles.label}
 							/>
 
-							{isEmptyString(value) && (
+							{isNotEmptyString(value) && (
 								<Text style={gStyles.ml2}>{value}</Text>
 							)}
 						</View>
