@@ -29,11 +29,15 @@ export default function (options = {}) {
 	function loginBasic({password, username}) {
 		const access_token = base64.encode(`${username}:${password}`);
 
-		return request('/o/headless-admin-user/v1.0/my-user-account', {
-			headers: {
-				Authorization: `Basic ${access_token}`,
+		return request(
+			'/o/headless-admin-user/v1.0/my-user-account',
+			{
+				headers: {
+					Authorization: `Basic ${access_token}`,
+				},
 			},
-		}).then(() => {
+			false
+		).then(() => {
 			setAuth({
 				access_token,
 				token_type: 'Basic',
@@ -42,18 +46,22 @@ export default function (options = {}) {
 	}
 
 	function loginOAuth({password, username}) {
-		return request(authURL, {
-			body: qs.stringify({
-				client_id: clientId,
-				grant_type: 'password',
-				password,
-				username,
-			}),
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
+		return request(
+			authURL,
+			{
+				body: qs.stringify({
+					client_id: clientId,
+					grant_type: 'password',
+					password,
+					username,
+				}),
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				method: 'POST',
 			},
-			method: 'POST',
-		}).then(setAuth);
+			false
+		).then(setAuth);
 	}
 
 	function setAuth(data) {
@@ -83,7 +91,7 @@ export default function (options = {}) {
 		}).then(setAuth);
 	}
 
-	async function request(url, options = {}) {
+	async function request(url, options = {}, checkAuth = true) {
 		const {
 			body,
 			contentType = 'application/json',
@@ -100,20 +108,24 @@ export default function (options = {}) {
 			request.body = body || JSON.stringify(data);
 		}
 
-		const auth = await getAuth();
-
-		if (!auth) {
-			throw new Error('Unable to make request. Please log in.');
-		}
-
-		let requestHeaders = {
-			Authorization: `${auth.token_type} ${auth.access_token}`,
+		const requestHeaders = {
 			'Content-Type': contentType,
 		};
 
+		if (checkAuth) {
+			const auth = await getAuth();
+
+			if (!auth) {
+				throw new Error('Unable to make request. Please log in.');
+			}
+
+			requestHeaders.Authorization = `${auth.token_type} ${auth.access_token}`;
+		}
+
 		request.headers = {
 			...requestHeaders,
-			...headers};
+			...headers,
+		};
 
 		const response = await fetch(baseURL + url, {
 			...request,
