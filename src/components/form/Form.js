@@ -206,6 +206,8 @@ function Form({route}) {
 
 	const form = data;
 
+	const [submitError, setSubmitError] = useState();
+
 	const [loading, setLoading] = useState(false);
 
 	return (
@@ -213,6 +215,8 @@ function Form({route}) {
 			{status === 'error' && (
 				<ErrorDisplay error={error.message} onRetry={() => refetch()} />
 			)}
+
+			{submitError && <ErrorDisplay error={submitError} />}
 
 			<Loading loading={status === 'loading'}>
 				{form && (
@@ -241,11 +245,16 @@ function Form({route}) {
 											},
 											method: 'POST',
 										}
-									).then(() => {
-										resetForm();
-										setSubmitting(false);
-										setLoading(false);
-									});
+									)
+										.then(() => {
+											resetForm();
+											setSubmitting(false);
+											setLoading(false);
+										})
+										.catch((error) => {
+											setSubmitError(error.title);
+											setLoading(false);
+										});
 								}
 							}}
 							validate={(values) => {

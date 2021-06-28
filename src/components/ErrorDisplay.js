@@ -14,7 +14,7 @@ function ErrorDisplay({error, onRetry}) {
 				text={error ? error : 'There is an error.'}
 			/>
 
-			<Button onPress={onRetry} title="Retry Request" />
+			{onRetry && <Button onPress={onRetry} title="Retry Request" />}
 		</View>
 	);
 }
