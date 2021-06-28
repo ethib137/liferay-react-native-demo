@@ -193,7 +193,7 @@ function prepareValuesForSubmit(values, formPages) {
 }
 
 function Form({route}) {
-	const [state, , request] = useAppState();
+	const [, , request] = useAppState();
 
 	const {formId} = route.params;
 
@@ -233,10 +233,13 @@ function Form({route}) {
 													form.structure.formPages
 												),
 											},
-											method: 'POST',
 											headers: {
-												'Accept-Language': `${state.lang.replace("_","-")}`,
+												'Accept-Language': `${form.defaultLanguage.replace(
+													'_',
+													'-'
+												)}`,
 											},
+											method: 'POST',
 										}
 									).then(() => {
 										resetForm();
