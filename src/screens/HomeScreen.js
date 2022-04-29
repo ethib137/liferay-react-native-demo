@@ -19,7 +19,7 @@ const Home = () => {
 			</Text>
 
 			<Text style={[homeStyles.version, gStyles.textCenter, gStyles.m2]}>
-				Version: 0.0.6
+				Version: 0.0.7
 			</Text>
 			<Text style={[homeStyles.version, gStyles.textCenter, gStyles.m2]}>
 				Developed Against:
