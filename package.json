@@ -27,7 +27,7 @@
     "luxon": "^1.25.0",
     "moment-timezone": "^0.5.31",
     "prop-types": "^15.7.2",
-    "qs": "^6.9.3",
+    "qs": "^6.9.7",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
