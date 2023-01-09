@@ -24,7 +24,7 @@
     "expo-font": "~8.3.0",
     "formik": "^2.1.4",
     "lodash.debounce": "^4.0.8",
-    "luxon": "^1.25.0",
+    "luxon": "^1.28.1",
     "moment-timezone": "^0.5.31",
     "prop-types": "^15.7.2",
     "qs": "^6.9.3",
