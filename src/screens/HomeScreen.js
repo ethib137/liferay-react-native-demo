@@ -19,13 +19,13 @@ const Home = () => {
 			</Text>
 
 			<Text style={[homeStyles.version, gStyles.textCenter, gStyles.m2]}>
-				Version: 0.0.7
+				Version: 0.1.0
 			</Text>
 			<Text style={[homeStyles.version, gStyles.textCenter, gStyles.m2]}>
 				Developed Against:
 			</Text>
 			<Text style={[homeStyles.version, gStyles.textCenter]}>
-				7.3 GA1, 7.3 SP2
+				7.4.13 Update 68
 			</Text>
 			<Text style={[homeStyles.version, gStyles.textCenter]}>
 				With Commerce
