@@ -8,13 +8,11 @@ Please provide feedback for this. If you find anything is missing add an issue t
 
 This is a JavaScript applicaiton so you will need node and npm installed.
 
-This Liferay React Native App is built using [Expo](https://expo.io/) which simplifies the creation of React Native apps.
+This Liferay React Native App is built using [Expo](https://expo.io/) which simplifies the creation of React Native apps. https://docs.expo.dev/get-started/installation/#using-expo-cli
 
-` $ npm install expo-cli --global`
+` $ npx expo install`
 
-` $ expo install`
-
-` $ expo start`
+` $ npx expo start`
 
 ## Authentication
 
